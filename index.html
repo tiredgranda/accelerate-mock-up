@@ -1,9 +1,12 @@
-<!DOCTYPE html>
+from textwrap import dedent
+from pathlib import Path
+
+html = dedent(r'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accelerate Landing Page Demo — Premium Motion v3</title>
+  <title>Accelerate Landing Page Demo — Premium Motion v5</title>
   <style>
     :root {
       --red: #FF1628;
@@ -17,8 +20,10 @@
       --gray-6: #7F8A93;
       --gray-8: #555E66;
       --success: #12B76A;
+      --success-strong: #039855;
       --success-bg: #ECFDF3;
       --success-border: #ABEFC6;
+      --shadow-xl: 0 28px 72px rgba(17, 19, 28, 0.10);
       --shadow-lg: 0 24px 60px rgba(17, 19, 28, 0.08);
       --shadow-md: 0 18px 50px rgba(17, 19, 28, 0.08);
       --shadow-sm: 0 14px 35px rgba(17, 19, 28, 0.04);
@@ -26,10 +31,10 @@
       --radius-lg: 28px;
       --radius-md: 24px;
       --radius-sm: 22px;
-      --motion-fast: 160ms;
-      --motion-base: 260ms;
-      --motion-slow: 420ms;
-      --motion-celebrate: 680ms;
+      --motion-fast: 220ms;
+      --motion-base: 520ms;
+      --motion-slow: 760ms;
+      --motion-celebrate: 1220ms;
       --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
       --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -57,7 +62,8 @@
     .hero-shell,
     .section-shell,
     .addons-shell,
-    .mobile-tabs {
+    .mobile-tabs,
+    .final-journey-shell {
       background: var(--white);
       border-radius: 30px;
       box-shadow: 0 18px 50px rgba(17, 19, 28, 0.06);
@@ -129,7 +135,12 @@
 
     .pill.red { border-color: transparent; background: var(--red); color: white; }
     .pill.dark { border-color: transparent; background: var(--black); color: white; }
-    .pill.success { border-color: var(--success-border); background: var(--success-bg); color: #067647; letter-spacing: 0.08em; }
+    .pill.success {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+      color: #067647;
+      letter-spacing: 0.08em;
+    }
 
     .eyebrow {
       font-size: 12px;
@@ -178,7 +189,8 @@
     .branch-card,
     .module-card,
     .resource-pill,
-    .video-tap {
+    .video-tap,
+    .final-action-btn {
       transition:
         transform var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
@@ -188,7 +200,8 @@
         color var(--motion-fast) var(--ease-standard);
     }
 
-    .btn-primary {
+    .btn-primary,
+    .final-action-btn {
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -200,8 +213,11 @@
       font-weight: 700;
       box-shadow: 0 10px 24px rgba(255, 22, 40, 0.18);
     }
-    .btn-primary:hover { transform: translateY(-1px); background: var(--red-strong); }
-    .btn-primary:active { transform: translateY(0) scale(0.99); }
+
+    .btn-primary:hover,
+    .final-action-btn:hover { transform: translateY(-1px); background: var(--red-strong); }
+    .btn-primary:active,
+    .final-action-btn:active { transform: translateY(0) scale(0.99); }
 
     .btn-secondary {
       display: inline-flex;
@@ -213,8 +229,8 @@
       color: #1d2939;
       font-weight: 700;
     }
-    .btn-secondary:hover { background: #f8faf9; transform: translateY(-1px); }
 
+    .btn-secondary:hover { background: #f8faf9; transform: translateY(-1px); }
     .tap-bounce { transform: scale(0.985) !important; }
 
     .hero-meta-grid,
@@ -239,7 +255,8 @@
     .sidebar-note,
     .module-card,
     .branch-details,
-    .branch-segment-wrap {
+    .branch-segment-wrap,
+    .final-journey-card {
       border-radius: var(--radius-sm);
       border: 1px solid #dde5e4;
     }
@@ -249,9 +266,13 @@
     .progress-card,
     .sidebar-note,
     .branch-details,
-    .branch-segment-wrap { background: white; padding: 16px; }
+    .branch-segment-wrap,
+    .final-journey-card {
+      background: white;
+      padding: 16px;
+    }
 
-    .hero-meta-card { background: #f8faf9; padding: 16px; }
+    .hero-meta-card { background: #f8faf9; }
 
     .meta-label {
       font-size: 11px;
@@ -277,6 +298,7 @@
       background: white;
       box-shadow: var(--shadow-md);
     }
+
     .video.full { min-height: 288px; }
     .video.compact { min-height: 180px; margin-top: 20px; }
     .video::before {
@@ -294,6 +316,7 @@
       height: 2px;
       background: rgba(255,22,40,0.45);
     }
+
     .video-label {
       position: absolute;
       top: 16px;
@@ -308,6 +331,7 @@
       color: #475467;
       box-shadow: 0 4px 12px rgba(17,19,28,0.06);
     }
+
     .video-center {
       position: absolute;
       inset: 0;
@@ -320,6 +344,7 @@
       text-align: center;
       padding: 24px;
     }
+
     .play-shell {
       width: 64px;
       height: 64px;
@@ -332,6 +357,7 @@
       box-shadow: 0 4px 12px rgba(17,19,28,0.06);
       transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
     }
+
     .video:hover .play-shell { transform: scale(1.03); box-shadow: 0 10px 18px rgba(17,19,28,0.1); }
     .play-triangle {
       margin-left: 4px;
@@ -389,6 +415,7 @@
     .sidebar-accent { position: absolute; right: 0; top: 0; padding: 16px; }
     .sidebar-header { padding-right: 56px; margin-bottom: 20px; }
     .sidebar-title { margin-top: 8px; font-size: 24px; font-weight: 700; color: #101828; }
+
     .sidebar-copy,
     .section-copy,
     .module-copy,
@@ -396,13 +423,19 @@
     .sidebar-note-copy,
     .results-copy,
     .addon-copy,
-    .branch-details-copy { color: #667085; line-height: 1.65; }
+    .branch-details-copy,
+    .final-journey-copy,
+    .final-card-copy {
+      color: #667085;
+      line-height: 1.65;
+    }
     .sidebar-copy { margin-top: 8px; font-size: 14px; }
 
-    .progress-card { background: #f8faf9; padding: 16px; }
+    .progress-card { background: #f8faf9; }
     .progress-row,
     .module-readiness-row,
-    .phase-progress-row {
+    .phase-progress-row,
+    .final-progress-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -411,6 +444,7 @@
       color: #667085;
       gap: 12px;
     }
+
     .progress-bar {
       margin-top: 12px;
       width: 100%;
@@ -420,15 +454,17 @@
       overflow: hidden;
       position: relative;
     }
+
     .progress-fill {
       height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--red), #ff5060);
       width: 0;
-      transition: width var(--motion-slow) var(--ease-soft), background var(--motion-fast) var(--ease-standard);
+      transition: width calc(var(--motion-slow) + 160ms) var(--ease-soft), background var(--motion-fast) var(--ease-standard);
       position: relative;
       overflow: hidden;
     }
+
     .progress-fill::after {
       content: "";
       position: absolute;
@@ -437,12 +473,27 @@
       transform: translateX(-100%);
       opacity: 0;
     }
+
     .progress-fill.is-active::after {
-      animation: shimmer 1.1s var(--ease-out) 1;
+      animation: shimmer 1.5s var(--ease-out) 1;
       opacity: 1;
     }
-    @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(120%); } }
-    .progress-note { margin-top: 12px; font-size: 12px; line-height: 1.55; color: #667085; }
+
+    .progress-fill.success {
+      background: linear-gradient(90deg, var(--success), #3ccf89);
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(120%); }
+    }
+
+    .progress-note {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #667085;
+    }
 
     .sidebar-nav { margin-top: 20px; display: grid; gap: 12px; }
     .phase-button {
@@ -455,6 +506,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .phase-button:hover { border-color: #c7d1cf; transform: translateY(-1px); }
     .phase-button.active {
       background: #0f1728;
@@ -462,51 +514,121 @@
       color: white;
       box-shadow: 0 16px 30px rgba(17,19,28,0.12);
     }
-    .phase-button.complete { background: #f7fdf9; border-color: var(--success-border); }
-    .phase-button.complete:not(.active):hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(18,183,106,0.06); }
+    .phase-button.complete {
+      background: #f7fdf9;
+      border-color: var(--success-border);
+    }
+    .phase-button.complete:not(.active):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(18,183,106,0.06);
+    }
 
     .phase-button-row { display: flex; gap: 12px; align-items: flex-start; }
     .phase-dot {
-      width: 20px; height: 20px; border-radius: 999px; border: 1px solid #c7d1cf;
-      flex: 0 0 auto; margin-top: 2px; position: relative; background: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 1px solid #c7d1cf;
+      flex: 0 0 auto;
+      margin-top: 2px;
+      position: relative;
+      background: white;
     }
+
     .phase-dot::after {
-      content: ""; position: absolute; inset: 4px; border-radius: 999px;
-      background: transparent; transform: scale(0.5);
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: transparent;
+      transform: scale(0.5);
       transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
     }
-    .phase-button.active .phase-dot { border-color: transparent; background: rgba(255,255,255,0.12); }
+
+    .phase-button.active .phase-dot {
+      border-color: transparent;
+      background: rgba(255,255,255,0.12);
+    }
     .phase-button.active .phase-dot::after { background: var(--red); transform: scale(1); }
-    .phase-button.complete .phase-dot { border-color: var(--success); background: var(--success-bg); }
+
+    .phase-button.complete .phase-dot {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
     .phase-button.complete .phase-dot::after { background: var(--success); transform: scale(1); }
 
-    .phase-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #667085; }
+    .phase-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #667085;
+    }
     .phase-button.active .phase-eyebrow { color: #cbd5e1; }
     .phase-button.complete .phase-eyebrow { color: #067647; }
-    .phase-button-title { margin-top: 4px; font-size: 14px; font-weight: 700; color: #101828; }
+
+    .phase-button-title {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #101828;
+    }
     .phase-button.active .phase-button-title { color: white; }
     .phase-button.complete .phase-button-title { color: #05603A; }
-    .phase-button-copy { margin-top: 4px; font-size: 12px; line-height: 1.5; color: #667085; }
+
+    .phase-button-copy {
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #667085;
+    }
     .phase-button.active .phase-button-copy { color: #cbd5e1; }
     .phase-button.complete .phase-button-copy { color: #067647; }
-    .phase-complete-chip {
-      margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px;
-      padding: 7px 10px; background: var(--success-bg); border: 1px solid var(--success-border);
-      color: #05603A; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+
+    .phase-complete-chip,
+    .final-chip {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #05603A;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .sidebar-note { margin-top: 20px; }
-    .sidebar-note-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #101828; }
-    .sidebar-note-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--red); display: inline-block; }
+    .sidebar-note-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #101828;
+    }
+    .sidebar-note-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--red);
+      display: inline-block;
+    }
     .sidebar-note-copy { margin-top: 8px; font-size: 12px; }
 
     .main { display: grid; gap: 24px; }
+
     .section-shell {
       border-radius: var(--radius-xl);
       position: relative;
       overflow: hidden;
       isolation: isolate;
     }
+
     .section-shell.phase-complete::before {
       content: "";
       position: absolute;
@@ -517,193 +639,629 @@
       pointer-events: none;
       z-index: 1;
     }
-    @keyframes phaseSweep { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+
+    .journey-complete .addons-shell::before,
+    .journey-complete .final-journey-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 0%, rgba(18,183,106,0.14) 35%, rgba(255,255,255,0.24) 52%, rgba(18,183,106,0.12) 68%, transparent 100%);
+      transform: translateX(-120%);
+      animation: journeySweep calc(var(--motion-celebrate) + 240ms) var(--ease-out) 1;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes phaseSweep {
+      from { transform: translateX(-110%); }
+      to { transform: translateX(110%); }
+    }
+
+    @keyframes journeySweep {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(120%); }
+    }
 
     .section-head {
-      display: flex; flex-direction: column; gap: 24px; justify-content: space-between;
-      padding: 28px 36px; border-bottom: 1px solid #eef2f1;
-      background: linear-gradient(180deg, #ffffff 0%, #f9fbfa 100%); position: relative; z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      justify-content: space-between;
+      padding: 28px 36px;
+      border-bottom: 1px solid #eef2f1;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbfa 100%);
+      position: relative;
+      z-index: 2;
     }
-    .section-head-grid {
-      display: flex; gap: 24px; align-items: flex-end; justify-content: space-between;
-    }
-    .section-title-row {
-      display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap;
-    }
-    .section-title {
-      font-size: clamp(32px, 4.2vw, 44px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #101828;
-    }
-    .section-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
-    .phase-progress-box {
-      min-width: 280px; max-width: 340px; border-radius: var(--radius-md); border: 1px solid #dde5e4;
-      background: white; padding: 16px; position: relative; overflow: hidden;
-    }
-    .phase-progress-box.complete { border-color: var(--success-border); background: linear-gradient(180deg, #fff, #f7fdf9); }
 
-    .sync-link,.quiet-link,.branch-link,.text-link { border: 0; background: transparent; padding: 0; }
-    .sync-link,.quiet-link,.text-link {
-      color: #475467; text-decoration: underline; text-underline-offset: 4px;
-      text-decoration-color: #cdd5d3; font-weight: 700;
+    .section-head-grid {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .section-title-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4.2vw, 44px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .section-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
+
+    .phase-progress-box {
+      min-width: 280px;
+      max-width: 340px;
+      border-radius: var(--radius-md);
+      border: 1px solid #dde5e4;
+      background: white;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-progress-box.complete {
+      border-color: var(--success-border);
+      background: linear-gradient(180deg, #fff, #f7fdf9);
+    }
+
+    .sync-link,
+    .quiet-link,
+    .branch-link,
+    .text-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+    .sync-link,
+    .quiet-link,
+    .text-link {
+      color: #475467;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: #cdd5d3;
+      font-weight: 700;
     }
     .sync-link { margin-top: 12px; font-size: 12px; }
     .quiet-link { font-size: 14px; }
     .text-link { font-size: 12px; }
 
-    .section-body { padding: 28px 36px 36px; position: relative; z-index: 2; }
+    .section-body {
+      padding: 28px 36px 36px;
+      position: relative;
+      z-index: 2;
+    }
+
     .module-card {
-      overflow: hidden; border: 1px solid rgba(221,229,228,0.92); border-radius: var(--radius-lg);
-      background: white; position: relative; transform-origin: center;
+      overflow: hidden;
+      border: 1px solid rgba(221,229,228,0.92);
+      border-radius: var(--radius-lg);
+      background: white;
+      position: relative;
+      transform-origin: center;
     }
     .module-card.featured { box-shadow: var(--shadow-lg); }
     .module-card.standard { background: #fbfcfc; box-shadow: var(--shadow-sm); }
     .module-card:hover { transform: translateY(-2px); }
+
     .module-card.is-complete {
-      border-color: var(--success-border); background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%);
+      border-color: var(--success-border);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%);
       box-shadow: 0 18px 36px rgba(18,183,106,0.06);
     }
+
     .module-card.is-complete::after {
-      content: ""; position: absolute; inset: 0;
+      content: "";
+      position: absolute;
+      inset: 0;
       background: linear-gradient(120deg, transparent 0%, rgba(18,183,106,0.12) 45%, transparent 100%);
-      transform: translateX(-120%); opacity: 0; pointer-events: none;
+      transform: translateX(-120%);
+      opacity: 0;
+      pointer-events: none;
     }
-    .module-card.just-completed::after { animation: moduleSweep var(--motion-celebrate) var(--ease-out) 1; opacity: 1; }
-    @keyframes moduleSweep { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
-    .module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 24px 24px 0; }
+
+    .module-card.just-completed::after {
+      animation: moduleSweep calc(var(--motion-celebrate) - 120ms) var(--ease-out) 1;
+      opacity: 1;
+    }
+
+    @keyframes moduleSweep {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(120%); }
+    }
+
+    .module-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 24px 24px 0;
+    }
+
     .module-content { padding: 16px 24px 24px; }
-    .module-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+
+    .module-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
     .module-title {
-      font-size: 24px; line-height: 1.15; font-weight: 700; color: #101828; letter-spacing: -0.02em;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 700;
+      color: #101828;
+      letter-spacing: -0.02em;
     }
-    .module-checkbox { border: 0; background: transparent; padding: 0; flex: 0 0 auto; margin-top: 2px; }
+
+    .module-checkbox {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
     .checkbox-ui {
-      width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
-      border-radius: 999px; border: 1.5px solid #c7d1cf; background: white;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1.5px solid #c7d1cf;
+      background: white;
       box-shadow: 0 3px 8px rgba(17,19,28,0.04);
-      transition: transform var(--motion-fast) var(--ease-standard),
-                  border-color var(--motion-fast) var(--ease-standard),
-                  background-color var(--motion-fast) var(--ease-standard),
-                  box-shadow var(--motion-fast) var(--ease-standard);
+      transition:
+        transform calc(var(--motion-fast) + 40ms) var(--ease-soft),
+        border-color calc(var(--motion-fast) + 20ms) var(--ease-standard),
+        background-color calc(var(--motion-fast) + 20ms) var(--ease-standard),
+        box-shadow calc(var(--motion-fast) + 40ms) var(--ease-standard);
     }
+
     .module-checkbox:hover .checkbox-ui {
       border-color: var(--red);
       box-shadow: 0 0 0 5px rgba(255,22,40,0.08), 0 6px 14px rgba(17,19,28,0.06);
       transform: translateY(-1px);
     }
+
     .module-checkbox.checked .checkbox-ui {
-      border-color: var(--success); background: var(--success);
+      border-color: var(--success);
+      background: var(--success);
       box-shadow: 0 0 0 5px rgba(18,183,106,0.08), 0 8px 16px rgba(18,183,106,0.14);
       transform: scale(1.02);
     }
+
     .checkbox-check {
-      color: white; font-size: 14px; font-weight: 800; line-height: 1; transform: scale(0.6); opacity: 0;
-      transition: transform var(--motion-fast) var(--ease-out), opacity var(--motion-fast) var(--ease-standard);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1;
+      transform: scale(0.6);
+      opacity: 0;
+      transition:
+        transform calc(var(--motion-fast) + 60ms) var(--ease-out),
+        opacity calc(var(--motion-fast) + 30ms) var(--ease-standard);
     }
-    .module-checkbox.checked .checkbox-check { transform: scale(1); opacity: 1; }
+
+    .module-checkbox.checked .checkbox-check {
+      transform: scale(1);
+      opacity: 1;
+    }
+
     .module-copy { margin-top: 12px; font-size: 14px; }
-    .module-actions { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .module-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
     .module-readiness {
-      margin-top: 18px; padding: 14px 14px 12px; border-radius: 18px; border: 1px solid #edf1ef; background: #fbfcfc;
+      margin-top: 18px;
+      padding: 14px 14px 12px;
+      border-radius: 18px;
+      border: 1px solid #edf1ef;
+      background: #fbfcfc;
     }
+
     .module-status-row {
-      margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
+
     .module-status {
-      display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #667085;
-      letter-spacing: 0.05em; text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #667085;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
-    .status-dot { width: 8px; height: 8px; border-radius: 999px; background: #c7d1cf; }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #c7d1cf;
+    }
+
     .module-status.complete { color: #067647; }
     .module-status.complete .status-dot { background: var(--success); }
+
     .resource-pill {
-      letter-spacing: 0; font-size: 11px; text-transform: none; font-weight: 500; padding: 8px 12px;
-      border-radius: 999px; border: 1px solid #dde5e4; background: white; color: #475467;
+      letter-spacing: 0;
+      font-size: 11px;
+      text-transform: none;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #dde5e4;
+      background: white;
+      color: #475467;
     }
     .resource-pill:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(17,19,28,0.06); }
+
     .module-complete-badge {
-      display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 8px 12px;
-      background: var(--success-bg); color: #05603A; border: 1px solid var(--success-border);
-      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: var(--success-bg);
+      color: #05603A;
+      border: 1px solid var(--success-border);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .branch-shell {
-      margin-top: 24px; border-radius: var(--radius-lg); background: #0f1728; color: white;
-      box-shadow: 0 20px 60px rgba(17,19,28,0.12); overflow: hidden;
+      margin-top: 24px;
+      border-radius: var(--radius-lg);
+      background: #0f1728;
+      color: white;
+      box-shadow: 0 20px 60px rgba(17,19,28,0.12);
+      overflow: hidden;
     }
+
     .branch-inner { padding: 24px 28px 28px; }
-    .branch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
-    .branch-chip {
-      display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05); padding: 6px 12px; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase; color: #cbd5e1;
+    .branch-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
     }
+
+    .branch-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
+
     .branch-title { margin-top: 12px; font-size: 32px; line-height: 1.08; font-weight: 700; }
     .branch-copy { margin-top: 12px; max-width: 760px; font-size: 14px; color: #cbd5e1; }
+
     .branch-card {
-      background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); padding: 16px;
-      backdrop-filter: blur(4px); text-align: left; cursor: pointer; width: 100%;
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+      padding: 16px;
+      backdrop-filter: blur(4px);
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
     }
+
     .branch-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
     .branch-card.selected {
-      background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28);
-      transform: translateY(-2px) scale(1.01); box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.28);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.16);
     }
     .branch-card.dimmed { opacity: 0.72; }
+
     .branch-card-pill {
-      display: inline-flex; align-items: center; border-radius: 999px; background: rgba(255,255,255,0.1);
-      padding: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9);
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
     }
+
     .branch-card-title { margin-top: 12px; font-size: 14px; font-weight: 700; color: white; }
     .branch-card-copy { margin-top: 8px; font-size: 12px; line-height: 1.55; color: #cbd5e1; }
     .branch-link { margin-top: 16px; color: white; font-size: 12px; font-weight: 700; }
+
     .branch-segment-wrap {
-      display: none; margin-top: 24px; padding: 6px; border-color: rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06); backdrop-filter: blur(4px); gap: 6px;
+      display: none;
+      margin-top: 24px;
+      padding: 6px;
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(4px);
+      gap: 6px;
     }
+
     .branch-segment {
-      flex: 1 1 0; border-radius: 16px; border: 0; background: transparent; color: #cbd5e1;
-      padding: 10px 12px; font-size: 12px; font-weight: 700;
+      flex: 1 1 0;
+      border-radius: 16px;
+      border: 0;
+      background: transparent;
+      color: #cbd5e1;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
     }
-    .branch-segment.active { background: rgba(255,255,255,0.12); color: white; box-shadow: 0 6px 12px rgba(0,0,0,0.14); }
+
+    .branch-segment.active {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.14);
+    }
+
     .branch-details {
-      margin-top: 18px; border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
-      color: white; position: relative; overflow: hidden;
+      margin-top: 18px;
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      position: relative;
+      overflow: hidden;
     }
+
     .branch-details::before {
-      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red);
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--red);
     }
+
     .branch-details-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #cbd5e1;
     }
     .branch-details-title { margin-top: 8px; font-size: 18px; font-weight: 700; }
     .branch-details-copy { margin-top: 8px; font-size: 14px; color: #d7dee8; }
 
     .phase-complete-banner {
-      margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px;
-      padding: 10px 14px; background: var(--success-bg); color: #05603A; border: 1px solid var(--success-border);
-      font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-      box-shadow: 0 12px 26px rgba(18,183,106,0.1); animation: fadeLift var(--motion-slow) var(--ease-out) 1;
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--success-bg);
+      color: #05603A;
+      border: 1px solid var(--success-border);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 30px rgba(18,183,106,0.10);
+      animation: fadeLift calc(var(--motion-slow) + 220ms) var(--ease-out) 1;
     }
-    @keyframes fadeLift { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .addons-shell { border-radius: var(--radius-xl); }
-    .addons-inner { padding: 28px 36px 36px; }
-    .addons-head { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    @keyframes fadeLift {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .final-journey-shell {
+      position: relative;
+      border-color: rgba(18,183,106,0.18);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .final-journey-inner {
+      position: relative;
+      z-index: 2;
+      padding: 28px 36px 34px;
+      background:
+        radial-gradient(circle at top right, rgba(18,183,106,0.08), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #f7fdf9 100%);
+    }
+
+    .final-journey-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-end;
+    }
+
+    .final-journey-title {
+      margin-top: 12px;
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .final-journey-copy {
+      margin-top: 14px;
+      max-width: 760px;
+      font-size: 16px;
+    }
+
+    .final-journey-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .final-journey-card {
+      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .final-card-copy {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .final-progress-bar {
+      margin-top: 16px;
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #dfe8e2;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .final-progress-fill {
+      height: 100%;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--success), #3ccf89);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-progress-fill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 1.8s var(--ease-out) 1;
+    }
+
+    .final-check-cluster {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .final-check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      border: 1px solid var(--success-border);
+      background: var(--success-bg);
+      color: #05603A;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .final-check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--success);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .final-action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .final-support-text {
+      font-size: 12px;
+      color: #667085;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .addons-shell {
+      border-radius: var(--radius-xl);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .addons-shell.elevated {
+      border-color: rgba(18,183,106,0.18);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .addons-inner { position: relative; z-index: 2; padding: 28px 36px 36px; }
+    .addons-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
     .addons-title { margin-top: 12px; font-size: 36px; line-height: 1.08; font-weight: 700; color: #101828; }
     .results-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
+
     .addon-card { background: #f8faf9; padding: 20px; }
     .addon-card:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(17,19,28,0.06); }
     .addon-title { font-size: 14px; font-weight: 700; color: #101828; }
     .addon-copy { margin-top: 8px; font-size: 12px; }
 
-    /* Popup-style reveal instead of plain fade-up */
     .reveal {
       opacity: 0;
-      transform: translateY(12px) scale(0.985);
+      transform: translateY(16px) scale(0.982);
       transform-origin: center top;
-      transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-soft);
+      transition:
+        opacity calc(var(--motion-base) + 120ms) var(--ease-standard),
+        transform calc(var(--motion-base) + 120ms) var(--ease-soft);
       will-change: opacity, transform;
     }
-    .reveal.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
 
     @media (max-width: 1279px) {
       .content-grid { grid-template-columns: 1fr; }
@@ -714,10 +1272,23 @@
     @media (max-width: 1100px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero-media { border-left: 0; border-top: 1px solid #eef2f1; }
-      .hero-copy,.hero-media,.section-head,.section-body,.addons-inner { padding: 28px 24px; }
-      .section-head-grid,.addons-head,.branch-head { flex-direction: column; align-items: stretch; }
-      .phase-progress-box { max-width: none; }
-      .hero-meta-grid,.media-meta-grid,.module-grid,.addons-grid { grid-template-columns: 1fr; }
+      .hero-copy,
+      .hero-media,
+      .section-head,
+      .section-body,
+      .addons-inner,
+      .final-journey-inner { padding: 28px 24px; }
+      .section-head-grid,
+      .addons-head,
+      .branch-head,
+      .final-journey-head { flex-direction: column; align-items: stretch; }
+      .phase-progress-box,
+      .final-journey-grid { max-width: none; }
+      .hero-meta-grid,
+      .media-meta-grid,
+      .module-grid,
+      .addons-grid,
+      .final-journey-grid { grid-template-columns: 1fr; }
       .branch-grid { display: none; }
       .branch-segment-wrap { display: flex; }
       .module-title-row { gap: 12px; }
@@ -728,13 +1299,25 @@
 
     @media (max-width: 700px) {
       .page { padding-left: 12px; padding-right: 12px; }
-      .hero-copy,.hero-media,.section-head,.section-body,.addons-inner { padding: 22px 18px; }
+      .hero-copy,
+      .hero-media,
+      .section-head,
+      .section-body,
+      .addons-inner,
+      .final-journey-inner { padding: 22px 18px; }
       .hero-title { font-size: 40px; }
-      .section-title,.branch-title,.addons-title { font-size: 30px; }
-      .module-actions { flex-direction: column; align-items: stretch; }
-      .btn-primary,.btn-secondary { justify-content: center; }
+      .section-title,
+      .branch-title,
+      .addons-title,
+      .final-journey-title { font-size: 30px; }
+      .module-actions,
+      .final-action-row { flex-direction: column; align-items: stretch; }
+      .btn-primary,
+      .btn-secondary,
+      .final-action-btn { justify-content: center; }
       .module-status-row { align-items: stretch; }
       .module-complete-badge { width: fit-content; }
+      .final-check-cluster { flex-direction: column; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -745,20 +1328,31 @@
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
       }
-      .reveal, .reveal.in-view {
+      .reveal,
+      .reveal.in-view {
         opacity: 1 !important;
         transform: none !important;
         will-change: auto !important;
       }
-      .module-card:hover,.branch-card:hover,.btn-primary:hover,.btn-secondary:hover,.addon-card:hover,.phase-button:hover,.resource-pill:hover {
-        transform: none !important;
-      }
-      .progress-fill::after,.section-shell.phase-complete::before,.module-card.just-completed::after { display: none !important; }
+      .module-card:hover,
+      .branch-card:hover,
+      .btn-primary:hover,
+      .btn-secondary:hover,
+      .addon-card:hover,
+      .phase-button:hover,
+      .resource-pill:hover,
+      .final-action-btn:hover { transform: none !important; }
+      .progress-fill::after,
+      .section-shell.phase-complete::before,
+      .module-card.just-completed::after,
+      .journey-complete .addons-shell::before,
+      .journey-complete .final-journey-shell::before,
+      .final-progress-fill::after { display: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="page" id="page-root">
     <section class="hero-shell reveal">
       <div class="hero-grid">
         <div class="hero-copy">
@@ -767,26 +1361,40 @@
             <span class="accent-box" style="width:48px;height:20px;opacity:.08"></span>
             <span class="accent-box" style="width:20px;height:40px;opacity:.05;align-self:flex-end"></span>
           </div>
+
           <div class="pill-row">
             <span class="pill">Wireframe</span>
             <span class="pill red">Strong brand layer</span>
             <span class="pill">Desktop-first concept</span>
           </div>
+
           <p class="eyebrow">Accelerate onboarding hub</p>
           <h1 class="hero-title">Great Starts Here</h1>
           <p class="hero-subtitle">
-            A premium-but-practical landing page mockup designed as a guided onboarding journey, upgraded with completion controls, phase progression, and motion that feels polished without breaking usability.
+            A premium-but-practical landing page mockup designed as a guided onboarding journey, upgraded with calm completion controls, premium motion timing, and a final inline completion moment that keeps add-ons visible.
           </p>
+
           <div class="button-row">
-            <button class="btn-primary js-tap-only">Primary onboarding action <span aria-hidden="true">→</span></button>
-            <button class="btn-secondary js-tap-only">Secondary resource</button>
+            <button class="btn-primary js-tap-only" type="button">Primary onboarding action <span aria-hidden="true">→</span></button>
+            <button class="btn-secondary js-tap-only" type="button">Secondary resource</button>
           </div>
+
           <div class="hero-meta-grid">
-            <div class="meta-card hero-meta-card"><div class="meta-label">Architecture</div><div class="meta-value">Shared journey + inline branches</div></div>
-            <div class="meta-card hero-meta-card"><div class="meta-label">Progress UX</div><div class="meta-value">Checkboxes drive completion</div></div>
-            <div class="meta-card hero-meta-card"><div class="meta-label">Motion approach</div><div class="meta-value">Premium, calm, accessibility-first</div></div>
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Architecture</div>
+              <div class="meta-value">Shared journey + inline branches</div>
+            </div>
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Progress UX</div>
+              <div class="meta-value">Checkboxes drive completion</div>
+            </div>
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Motion approach</div>
+              <div class="meta-value">Premium, calm, accessibility-first</div>
+            </div>
           </div>
         </div>
+
         <div class="hero-media">
           <div class="video full video-tap js-tap-only">
             <div class="video-label">Video placeholder</div>
@@ -798,6 +1406,7 @@
               </div>
             </div>
           </div>
+
           <div class="media-meta-grid">
             <div class="meta-card">
               <div class="meta-label">Current phase</div>
@@ -825,23 +1434,28 @@
             <span class="accent-box" style="width:16px;height:16px;opacity:.16"></span>
             <span class="accent-box" style="width:40px;height:16px;opacity:.08"></span>
           </div>
+
           <div class="sidebar-header">
             <p class="eyebrow" style="letter-spacing:.18em">Progress rail</p>
             <h3 class="sidebar-title">Onboarding journey</h3>
             <p class="sidebar-copy">Only phase navigation and completion checkboxes update page state. Primary actions are safe tap interactions.</p>
           </div>
+
           <div class="progress-card">
             <div class="progress-row"><span>Journey progress</span><span id="journey-progress-label">0%</span></div>
             <div class="progress-bar"><div class="progress-fill" id="journey-progress-fill" style="width:0%"></div></div>
-            <p class="progress-note">Desktop auto-advances after a phase completion moment. Mobile unlocks the next phase and keeps the user in control.</p>
+            <p class="progress-note">Desktop auto-advances after a phase completion moment. The final journey-complete moment appears inline above add-ons instead of as a popup.</p>
           </div>
+
           <div class="sidebar-nav" id="sidebar-nav"></div>
+
           <div class="sidebar-note">
             <div class="sidebar-note-title"><span class="sidebar-note-dot"></span> Safer interaction model</div>
             <p class="sidebar-note-copy">Buttons animate, branches switch locally, and re-renders keep content visible instead of resetting sections to hidden.</p>
           </div>
         </div>
       </aside>
+
       <main class="main" id="main-content"></main>
     </div>
   </div>
@@ -849,65 +1463,65 @@
   <script>
     const phases = [
       {
-        id: "before",
-        eyebrow: "Phase 01",
-        title: "Before you launch",
-        blurb: "A clean setup phase for leadership alignment, portal access, employee data prep, and launch communications.",
+        id: 'before',
+        eyebrow: 'Phase 01',
+        title: 'Before you launch',
+        blurb: 'A clean setup phase for leadership alignment, portal access, employee data prep, and launch communications.',
         modules: [
-          { title: "Align your leadership", body: "Use this space for launch alignment, leadership readiness, and the supporting resources customers need before survey setup begins.", primary: "Review alignment resources", secondary: ["Leadership guide", "Launch checklist"] },
-          { title: "Log in and set up access", body: "A practical onboarding module for portal access, primary users, permissions, and early setup tasks.", primary: "Set up access", secondary: ["Portal guide", "Support article"] },
-          { title: "Build your employee data file", body: "A more prominent operational module for preparing the employee data file and connecting users to the most important setup actions.", video: true, featured: true, primary: "Start employee data file", secondary: ["File requirements", "Download template"] },
-          { title: "Prepare employee communications", body: "A module for launch messaging, internal comms, and communication templates to support employee awareness.", primary: "View communication tools", secondary: ["Email template", "Messaging tips"] }
+          { title: 'Align your leadership', body: 'Use this space for launch alignment, leadership readiness, and the supporting resources customers need before survey setup begins.', primary: 'Review alignment resources', secondary: ['Leadership guide', 'Launch checklist'] },
+          { title: 'Log in and set up access', body: 'A practical onboarding module for portal access, primary users, permissions, and early setup tasks.', primary: 'Set up access', secondary: ['Portal guide', 'Support article'] },
+          { title: 'Build your employee data file', body: 'A more prominent operational module for preparing the employee data file and connecting users to the most important setup actions.', video: true, featured: true, primary: 'Start employee data file', secondary: ['File requirements', 'Download template'] },
+          { title: 'Prepare employee communications', body: 'A module for launch messaging, internal comms, and communication templates to support employee awareness.', primary: 'View communication tools', secondary: ['Email template', 'Messaging tips'] }
         ],
         branch: {
-          title: "Regional guidance and deadlines",
-          body: "This branch moment shows where U.S., Global, and UKG-specific content appears only when needed — without splitting the entire experience into separate pages.",
+          title: 'Regional guidance and deadlines',
+          body: 'This branch moment shows where U.S., Global, and UKG-specific content appears only when needed — without splitting the entire experience into separate pages.',
           options: [
-            { id: "us", label: "U.S.", title: "U.S. deadline path", copy: "Prominent launch dates, employee file timing, and communications guardrails tailored for the U.S. motion without breaking the shared journey." },
-            { id: "global", label: "Global", title: "Global deadline path", copy: "A variation for region-by-region timing, translation planning, and shared launch governance across broader rollout needs." },
-            { id: "ukg", label: "UKG", title: "UKG guidance path", copy: "A targeted guidance path for UKG-integrated customers, keeping setup-specific notes obvious but contained." }
+            { id: 'us', label: 'U.S.', title: 'U.S. deadline path', copy: 'Prominent launch dates, employee file timing, and communications guardrails tailored for the U.S. motion without breaking the shared journey.' },
+            { id: 'global', label: 'Global', title: 'Global deadline path', copy: 'A variation for region-by-region timing, translation planning, and shared launch governance across broader rollout needs.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG guidance path', copy: 'A targeted guidance path for UKG-integrated customers, keeping setup-specific notes obvious but contained.' }
           ]
         }
       },
       {
-        id: "live",
-        eyebrow: "Phase 02",
-        title: "While your survey is live",
-        blurb: "A participation-focused phase for monitoring progress, keeping momentum up, and supporting optional live-survey programs.",
+        id: 'live',
+        eyebrow: 'Phase 02',
+        title: 'While your survey is live',
+        blurb: 'A participation-focused phase for monitoring progress, keeping momentum up, and supporting optional live-survey programs.',
         modules: [
-          { title: "Monitor and drive participation", body: "A featured module for reminders, participation tracking, issue-spotting, and keeping the survey window moving smoothly.", featured: true, primary: "Monitor participation", secondary: ["Reminder plan", "Participation tips", "Escalation support"] },
-          { title: "Complete the Culture Brief", body: "A lighter module for the Culture Brief and the resources that help customers complete it at the right time.", primary: "Complete Culture Brief", secondary: ["Brief overview"] },
-          { title: "Culture Audit (optional)", body: "An optional module for list-related content and supporting actions tied to live survey activity.", primary: "Explore Culture Audit", secondary: ["Program overview", "Eligibility notes"] }
+          { title: 'Monitor and drive participation', body: 'A featured module for reminders, participation tracking, issue-spotting, and keeping the survey window moving smoothly.', featured: true, primary: 'Monitor participation', secondary: ['Reminder plan', 'Participation tips', 'Escalation support'] },
+          { title: 'Complete the Culture Brief', body: 'A lighter module for the Culture Brief and the resources that help customers complete it at the right time.', primary: 'Complete Culture Brief', secondary: ['Brief overview'] },
+          { title: 'Culture Audit (optional)', body: 'An optional module for list-related content and supporting actions tied to live survey activity.', primary: 'Explore Culture Audit', secondary: ['Program overview', 'Eligibility notes'] }
         ],
         branch: {
-          title: "Live-survey variations",
-          body: "Use this branch pattern when live-survey instructions or support motions differ by audience.",
+          title: 'Live-survey variations',
+          body: 'Use this branch pattern when live-survey instructions or support motions differ by audience.',
           options: [
-            { id: "us", label: "U.S.", title: "U.S. variation", copy: "Participation pushes, cadence reminders, and escalation timing aligned to the U.S. operating model." },
-            { id: "global", label: "Global", title: "Global variation", copy: "Guidance for multi-region timing, timezone communication, and launch support adapted to global coordination." },
-            { id: "ukg", label: "UKG", title: "UKG variation", copy: "Targeted notes for UKG-supported workflows so live-survey support feels integrated rather than bolted on." }
+            { id: 'us', label: 'U.S.', title: 'U.S. variation', copy: 'Participation pushes, cadence reminders, and escalation timing aligned to the U.S. operating model.' },
+            { id: 'global', label: 'Global', title: 'Global variation', copy: 'Guidance for multi-region timing, timezone communication, and launch support adapted to global coordination.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG variation', copy: 'Targeted notes for UKG-supported workflows so live-survey support feels integrated rather than bolted on.' }
           ]
         }
       },
       {
-        id: "after",
-        eyebrow: "Phase 03",
-        title: "After your survey closes",
-        blurb: "A post-survey phase focused on results, next steps, action planning, and long-term value after closeout.",
+        id: 'after',
+        eyebrow: 'Phase 03',
+        title: 'After your survey closes',
+        blurb: 'A post-survey phase focused on results, next steps, action planning, and long-term value after closeout.',
         video: true,
         modules: [
-          { title: "Certification results", body: "A clean results module that introduces timing, what happens next, and how customers should prepare for review.", primary: "View results overview", secondary: ["Results FAQ"] },
-          { title: "Turn feedback into action", body: "A featured action-planning module for interpreting results, enabling leaders, and helping customers take the right next step.", featured: true, primary: "Start action planning", secondary: ["Action plan guide", "Leader enablement"] },
-          { title: "Culture and business insights", body: "A supporting module for deeper facilitated sessions, guidance, and optional follow-on insight work.", primary: "Explore insights", secondary: ["Insights overview", "Session options"] },
-          { title: "Join the community", body: "An ongoing engagement module for events, learning, and keeping the relationship active after onboarding ends.", primary: "Join the community", secondary: ["Upcoming events", "Learning hub", "Community resources"] }
+          { title: 'Certification results', body: 'A clean results module that introduces timing, what happens next, and how customers should prepare for review.', primary: 'View results overview', secondary: ['Results FAQ'] },
+          { title: 'Turn feedback into action', body: 'A featured action-planning module for interpreting results, enabling leaders, and helping customers take the right next step.', featured: true, primary: 'Start action planning', secondary: ['Action plan guide', 'Leader enablement'] },
+          { title: 'Culture and business insights', body: 'A supporting module for deeper facilitated sessions, guidance, and optional follow-on insight work.', primary: 'Explore insights', secondary: ['Insights overview', 'Session options'] },
+          { title: 'Join the community', body: 'An ongoing engagement module for events, learning, and keeping the relationship active after onboarding ends.', primary: 'Join the community', secondary: ['Upcoming events', 'Learning hub', 'Community resources'] }
         ],
         branch: {
-          title: "Post-survey next steps",
-          body: "Audience-specific next steps can appear here without forcing a top-level page toggle across the whole onboarding experience.",
+          title: 'Post-survey next steps',
+          body: 'Audience-specific next steps can appear here without forcing a top-level page toggle across the whole onboarding experience.',
           options: [
-            { id: "us", label: "U.S.", title: "U.S. next steps", copy: "A U.S.-specific results interpretation and activation path, keeping the next action obvious and forward-moving." },
-            { id: "global", label: "Global", title: "Global next steps", copy: "Region-aware next steps for distributed teams that need local nuance while staying in the same overall framework." },
-            { id: "ukg", label: "UKG", title: "UKG next steps", copy: "A contained handoff for UKG-specific follow-through, preserving clarity at a moment where timelines matter most." }
+            { id: 'us', label: 'U.S.', title: 'U.S. next steps', copy: 'A U.S.-specific results interpretation and activation path, keeping the next action obvious and forward-moving.' },
+            { id: 'global', label: 'Global', title: 'Global next steps', copy: 'Region-aware next steps for distributed teams that need local nuance while staying in the same overall framework.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG next steps', copy: 'A contained handoff for UKG-specific follow-through, preserving clarity at a moment where timelines matter most.' }
           ]
         }
       }
@@ -918,6 +1532,7 @@
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
       branchSelections: { before: 'us', live: 'us', after: 'us' },
       phaseCompletionBanners: {},
+      allCompleteShown: false,
       modules: {}
     };
 
@@ -933,6 +1548,7 @@
     const phaseLabel = document.getElementById('current-phase-label');
     const journeyLabel = document.getElementById('journey-progress-label');
     const journeyFill = document.getElementById('journey-progress-fill');
+    const pageRoot = document.getElementById('page-root');
 
     function accentGroupHTML(variant) {
       const sets = {
@@ -977,6 +1593,10 @@
       return getPhaseCompletionPercent(phaseId) === 100;
     }
 
+    function isJourneyComplete() {
+      return phases.every(phase => isPhaseComplete(phase.id));
+    }
+
     function getJourneyProgress() {
       const keys = Object.keys(appState.modules);
       const checked = keys.filter(key => appState.modules[key]?.checked).length;
@@ -999,6 +1619,7 @@
       const key = `${phaseId}-${index}`;
       const checked = !!appState.modules[key]?.checked;
       const status = getModuleStatus(key);
+
       return `
         <article class="module-card ${module.featured ? 'featured' : 'standard'} ${checked ? 'is-complete' : ''} ${appState.modules[key]?.justCompleted ? 'just-completed' : ''} reveal" data-module-key="${key}">
           <div class="module-top">
@@ -1016,7 +1637,7 @@
             ${module.video ? videoHTML(true) : ''}
             <div class="module-readiness">
               <div class="module-readiness-row"><span>Completion</span><span>${checked ? '100%' : '0%'}</span></div>
-              <div class="progress-bar"><div class="progress-fill ${checked ? 'is-active' : ''}" style="width:${checked ? 100 : 0}%;${checked ? 'background: linear-gradient(90deg, #12B76A, #3ccf89);' : ''}"></div></div>
+              <div class="progress-bar"><div class="progress-fill ${checked ? 'is-active success' : ''}" style="width:${checked ? 100 : 0}%"></div></div>
             </div>
             <div class="module-actions">
               <button class="btn-primary js-tap-only" type="button">${module.primary} <span aria-hidden="true">→</span></button>
@@ -1037,6 +1658,7 @@
     function branchHTML(branch, phaseId) {
       const selected = appState.branchSelections[phaseId] || branch.options[0].id;
       const option = branch.options.find(item => item.id === selected) || branch.options[0];
+
       return `
         <div class="branch-shell reveal">
           <div class="branch-inner">
@@ -1071,7 +1693,54 @@
       `;
     }
 
+    function finalJourneyHTML() {
+      if (!isJourneyComplete()) return '';
+
+      return `
+        <section class="final-journey-shell reveal" id="final-journey-shell">
+          <div class="final-journey-inner">
+            <div class="final-journey-head">
+              <div>
+                <div class="final-chip">All onboarding phases complete</div>
+                <h2 class="final-journey-title">Everything is in place — now explore what comes next.</h2>
+                <p class="final-journey-copy">This final completion moment stays in the page flow so the add-ons below remain visible and discoverable. The animation is meant to feel like a premium finish line, not a modal interruption.</p>
+              </div>
+              <div>${accentGroupHTML('default')}</div>
+            </div>
+
+            <div class="final-journey-grid">
+              <div class="final-journey-card">
+                <div class="meta-label">Journey status</div>
+                <div class="final-card-title" style="margin-top:10px;">Onboarding complete</div>
+                <p class="final-card-copy">All core onboarding phases have been resolved. The add-ons section below is now visually elevated as the natural next area to explore.</p>
+                <div class="final-progress-row" style="margin-top:16px;"><span>Overall progress</span><span>100%</span></div>
+                <div class="final-progress-bar"><div class="final-progress-fill"></div></div>
+                <div class="final-check-cluster">
+                  <span class="final-check-pill"><span class="final-check-icon">✓</span> Before you launch</span>
+                  <span class="final-check-pill"><span class="final-check-icon">✓</span> While your survey is live</span>
+                  <span class="final-check-pill"><span class="final-check-icon">✓</span> After your survey closes</span>
+                </div>
+              </div>
+
+              <div class="final-journey-card">
+                <div class="meta-label">Next step</div>
+                <div class="final-card-title" style="margin-top:10px;">Explore available add-ons</div>
+                <p class="final-card-copy">Use the add-ons section as the next conversation surface for optional programs, premium support layers, or extension services.</p>
+                <div class="final-action-row">
+                  <button class="final-action-btn" type="button" id="scroll-to-addons">Explore add-ons <span aria-hidden="true">↓</span></button>
+                  <span class="final-support-text">Inline celebration • no popup interruption</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
     function renderMain() {
+      const journeyComplete = isJourneyComplete();
+      pageRoot.classList.toggle('journey-complete', journeyComplete);
+
       mainContent.innerHTML = phases.map(phase => {
         const phaseProgress = getPhaseCompletionPercent(phase.id);
         const complete = isPhaseComplete(phase.id);
@@ -1091,7 +1760,7 @@
                 </div>
                 <div class="phase-progress-box ${complete ? 'complete' : ''} reveal">
                   <div class="phase-progress-row"><span>Phase progress</span><span>${phaseProgress}%</span></div>
-                  <div class="progress-bar"><div class="progress-fill ${phaseProgress ? 'is-active' : ''}" style="width:${phaseProgress}%;${complete ? 'background: linear-gradient(90deg, #12B76A, #3ccf89);' : ''}"></div></div>
+                  <div class="progress-bar"><div class="progress-fill ${phaseProgress ? 'is-active' : ''} ${complete ? 'success' : ''}" style="width:${phaseProgress}%"></div></div>
                   <button class="sync-link" type="button" data-phase="${phase.id}">Sync sidebar state to this phase</button>
                   ${complete ? '<div class="phase-complete-chip">Ready for next step</div>' : ''}
                 </div>
@@ -1107,13 +1776,14 @@
           </section>
         `;
       }).join('') + `
-        <section class="addons-shell reveal">
+        ${finalJourneyHTML()}
+        <section class="addons-shell ${journeyComplete ? 'elevated' : ''} reveal" id="addons-section">
           <div class="addons-inner">
             <div class="addons-head">
               <div>
                 <p class="eyebrow" style="letter-spacing:.2em">Lower-page area</p>
                 <h2 class="addons-title">Available add-ons</h2>
-                <p class="results-copy">Placeholder presentation for add-on opportunities and sales/support conversation points, intentionally quieter than the primary onboarding flow.</p>
+                <p class="results-copy">Placeholder presentation for add-on opportunities and sales/support conversation points, intentionally quieter than the primary onboarding flow${journeyComplete ? ', but now elevated as the next natural step.' : '.'}</p>
               </div>
               <div>${accentGroupHTML('default')}</div>
             </div>
@@ -1163,6 +1833,7 @@
       phaseLabel.textContent = phase.title;
       journeyLabel.textContent = `${journey}%`;
       journeyFill.style.width = `${journey}%`;
+      journeyFill.classList.toggle('success', journey === 100);
       maybePulseFill(journeyFill);
     }
 
@@ -1171,7 +1842,7 @@
       el.classList.remove('tap-bounce');
       void el.offsetWidth;
       el.classList.add('tap-bounce');
-      window.setTimeout(() => el.classList.remove('tap-bounce'), 170);
+      window.setTimeout(() => el.classList.remove('tap-bounce'), 210);
     }
 
     function bindEvents() {
@@ -1184,12 +1855,24 @@
       });
 
       document.querySelectorAll('[data-branch-select]').forEach(btn => {
-        btn.addEventListener('click', () => setBranchSelection(...btn.dataset.branchSelect.split(':')));
+        btn.addEventListener('click', () => {
+          const [phaseId, value] = btn.dataset.branchSelect.split(':');
+          setBranchSelection(phaseId, value);
+        });
       });
 
       document.querySelectorAll('.js-tap-only').forEach(btn => {
         btn.addEventListener('click', () => playTapFeedback(btn));
       });
+
+      const finalBtn = document.getElementById('scroll-to-addons');
+      if (finalBtn) {
+        finalBtn.addEventListener('click', () => {
+          playTapFeedback(finalBtn);
+          const target = document.getElementById('addons-section');
+          if (target) target.scrollIntoView({ behavior: appState.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        });
+      }
     }
 
     let revealObserver;
@@ -1199,6 +1882,7 @@
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
         return;
       }
+
       revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -1209,7 +1893,7 @@
       }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
       document.querySelectorAll('.reveal').forEach((el, index) => {
-        el.style.transitionDelay = `${Math.min(index * 30, 220)}ms`;
+        el.style.transitionDelay = `${Math.min(index * 70, 420)}ms`;
         revealObserver.observe(el);
       });
     }
@@ -1226,7 +1910,7 @@
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
       }
       document.querySelectorAll('.just-completed').forEach(el => {
-        setTimeout(() => el.classList.remove('just-completed'), 760);
+        setTimeout(() => el.classList.remove('just-completed'), 1360);
       });
     }
 
@@ -1259,19 +1943,45 @@
       }
     }
 
-    function checkPhaseCompletion(phaseId) {
-      const allComplete = getPhaseModuleKeys(phaseId).every(key => appState.modules[key]?.checked);
-      if (!allComplete) return;
-      appState.phaseCompletionBanners[phaseId] = true;
+    function triggerJourneyCompleteMoment() {
+      if (appState.allCompleteShown) return;
+      appState.allCompleteShown = true;
       renderAll(false);
-      const nextPhase = phases[phases.findIndex(p => p.id === phaseId) + 1];
-      const isMobile = window.innerWidth <= 1100;
-      if (nextPhase && !isMobile && !appState.reducedMotion) {
-        setTimeout(() => setActivePhase(nextPhase.id, true), 920);
+
+      if (!appState.reducedMotion) {
+        const shell = document.getElementById('final-journey-shell');
+        if (shell) {
+          shell.classList.add('in-view');
+          setTimeout(() => {
+            shell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 220);
+        }
       }
     }
 
-    function handleResize() { renderAll(false); }
+    function checkPhaseCompletion(phaseId) {
+      const allComplete = getPhaseModuleKeys(phaseId).every(key => appState.modules[key]?.checked);
+      if (!allComplete) return;
+
+      appState.phaseCompletionBanners[phaseId] = true;
+      renderAll(false);
+
+      if (isJourneyComplete()) {
+        triggerJourneyCompleteMoment();
+        return;
+      }
+
+      const nextPhase = phases[phases.findIndex(p => p.id === phaseId) + 1];
+      const isMobile = window.innerWidth <= 1100;
+      if (nextPhase && !isMobile && !appState.reducedMotion) {
+        setTimeout(() => setActivePhase(nextPhase.id, true), 1680);
+      }
+    }
+
+    function handleResize() {
+      renderAll(false);
+    }
+
     function handleReducedMotionChange(e) {
       appState.reducedMotion = e.matches;
       renderAll(true);
@@ -1289,3 +1999,17 @@
   </script>
 </body>
 </html>
+''')
+
+out = Path('/mnt/data/accelerate_onboarding_premium_v5_full.html')
+out.write_text(html, encoding='utf-8')
+
+checks = {
+    'file_exists': out.exists(),
+    'has_final_inline_completion': 'final-journey-shell' in html,
+    'has_addons_scroll_cta': 'scroll-to-addons' in html,
+    'has_safe_rerender': "document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));" in html,
+    'has_popup_free_completion': 'Inline celebration' in html,
+    'has_slowed_motion': '--motion-celebrate: 1220ms;' in html,
+    'has_full_code': len(html),
+}
