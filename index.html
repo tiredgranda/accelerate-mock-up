@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accelerate Landing Page Demo</title>
+  <style>
+    :root {
+      --red: #FF1628;
+      --black: #11131C;
+      --white: #FFFFFF;
+      --gray-1: #F5F8F6;
+      --gray-2: #EDF1EF;
+      --gray-3: #DEE5E4;
+      --gray-8: #555E66;
+      --shadow-lg: 0 24px 60px rgba(17, 19, 28, 0.08);
+      --shadow-md: 0 18px 50px rgba(17, 19, 28, 0.08);
+      --shadow-sm: 0 14px 35px rgba(17, 19, 28, 0.04);
+      --radius-xl: 34px;
+      --radius-lg: 28px;
+      --radius-md: 24px;
+      --radius-sm: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--gray-1);
+      color: var(--black);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero-shell,
+    .section-shell,
+    .addons-shell,
+    .mobile-tabs {
+      background: var(--white);
+      border-radius: 30px;
+      box-shadow: 0 18px 50px rgba(17, 19, 28, 0.06);
+      border: 1px solid rgba(17, 19, 28, 0.06);
+      overflow: hidden;
+    }
+
+    .hero-shell { margin-bottom: 24px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.95fr;
+    }
+
+    .hero-copy,
+    .hero-media {
+      padding: 40px 48px;
+      position: relative;
+    }
+
+    .hero-media {
+      border-left: 1px solid #eef2f1;
+      background: linear-gradient(180deg, #fafbfb 0%, #ffffff 100%);
+    }
+
+    .accent-group {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .accent-box {
+      background: var(--red);
+      border-radius: 8px;
+    }
+
+    .accent-hero {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid #dde5e4;
+      background: #f8faf9;
+      color: #475467;
+      white-space: nowrap;
+    }
+
+    .pill.red {
+      border-color: transparent;
+      background: var(--red);
+      color: white;
+    }
+
+    .pill.dark {
+      border-color: transparent;
+      background: var(--black);
+      color: white;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #667085;
+    }
+
+    h1, h2, h3, h4, p { margin: 0; }
+
+    .hero-title {
+      margin-top: 12px;
+      max-width: 760px;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .hero-subtitle {
+      margin-top: 20px;
+      max-width: 680px;
+      font-size: 19px;
+      line-height: 1.7;
+      color: #667085;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .quiet-link,
+    .branch-link,
+    .text-link {
+      transition: 180ms ease;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--red);
+      color: white;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover { opacity: 0.95; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      padding: 14px 20px;
+      border: 1px solid #cfd8d6;
+      border-radius: 999px;
+      background: white;
+      color: #1d2939;
+      font-weight: 700;
+    }
+
+    .btn-secondary:hover { background: #f8faf9; }
+
+    .hero-meta-grid,
+    .media-meta-grid,
+    .module-grid,
+    .branch-grid,
+    .addons-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-meta-grid { margin-top: 28px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .media-meta-grid { margin-top: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .branch-grid { margin-top: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .addons-grid { margin-top: 28px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .meta-card,
+    .addon-card,
+    .branch-card,
+    .progress-card,
+    .sidebar-note,
+    .module-card {
+      border-radius: var(--radius-sm);
+      border: 1px solid #dde5e4;
+    }
+
+    .meta-card,
+    .addon-card,
+    .progress-card,
+    .sidebar-note {
+      background: white;
+      padding: 16px;
+    }
+
+    .hero-meta-card {
+      background: #f8faf9;
+      padding: 16px;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #667085;
+    }
+
+    .meta-value {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .video {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      border: 1px solid #dde5e4;
+      background: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .video.full { min-height: 288px; }
+    .video.compact { min-height: 160px; margin-top: 20px; }
+
+    .video::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,22,40,0.03), rgba(17,19,28,0.02));
+    }
+
+    .video::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 2px;
+      background: rgba(255,22,40,0.45);
+    }
+
+    .video-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      border-radius: 999px;
+      border: 1px solid #dde5e4;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #475467;
+      box-shadow: 0 4px 12px rgba(17,19,28,0.06);
+    }
+
+    .video-center {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .play-shell {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      border: 1px solid #dde5e4;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(17,19,28,0.06);
+    }
+
+    .play-triangle {
+      margin-left: 4px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid var(--red);
+    }
+
+    .video-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .video-copy {
+      max-width: 520px;
+      margin-top: 4px;
+      font-size: 14px;
+      color: #667085;
+      line-height: 1.6;
+    }
+
+    .mobile-tabs {
+      display: none;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .mobile-tab-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border-radius: 20px;
+      background: #eef2f1;
+    }
+
+    .mobile-tab {
+      border: 0;
+      border-radius: 16px;
+      background: transparent;
+      color: #667085;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mobile-tab.active {
+      background: white;
+      color: #101828;
+      box-shadow: 0 2px 8px rgba(17,19,28,0.06);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(17,19,28,0.08);
+      overflow: hidden;
+    }
+
+    .sidebar-inner { position: relative; padding: 20px; }
+    .sidebar-accent { position: absolute; right: 0; top: 0; padding: 16px; }
+    .sidebar-header { padding-right: 56px; margin-bottom: 20px; }
+
+    .sidebar-title {
+      margin-top: 8px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .sidebar-copy,
+    .section-copy,
+    .module-copy,
+    .branch-copy,
+    .sidebar-note-copy,
+    .results-copy,
+    .addon-copy {
+      color: #667085;
+      line-height: 1.65;
+    }
+
+    .sidebar-copy { margin-top: 8px; font-size: 14px; }
+
+    .progress-card {
+      background: #f8faf9;
+      padding: 16px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #667085;
+    }
+
+    .progress-bar {
+      margin-top: 12px;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e4e9e8;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--red);
+      transition: width 240ms ease;
+    }
+
+    .progress-note {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #667085;
+    }
+
+    .sidebar-nav { margin-top: 20px; display: grid; gap: 12px; }
+
+    .phase-button {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      border: 1px solid #dde5e4;
+      background: white;
+      text-align: left;
+      padding: 16px;
+      transition: 180ms ease;
+    }
+
+    .phase-button:hover { border-color: #c7d1cf; }
+    .phase-button.active {
+      background: #0f1728;
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 16px 30px rgba(17,19,28,0.12);
+    }
+
+    .phase-button-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .phase-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 1px solid #c7d1cf;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .phase-button.active .phase-dot {
+      border-color: transparent;
+      background: var(--red);
+    }
+
+    .phase-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #667085;
+    }
+
+    .phase-button.active .phase-eyebrow { color: #cbd5e1; }
+
+    .phase-button-title {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .phase-button.active .phase-button-title { color: white; }
+
+    .phase-button-copy {
+      margin-top: 4px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #667085;
+    }
+
+    .phase-button.active .phase-button-copy { color: #cbd5e1; }
+
+    .sidebar-note { margin-top: 20px; }
+    .sidebar-note-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .sidebar-note-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--red);
+      display: inline-block;
+    }
+
+    .sidebar-note-copy { margin-top: 8px; font-size: 12px; }
+
+    .main { display: grid; gap: 24px; }
+
+    .section-shell { border-radius: var(--radius-xl); }
+
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      justify-content: space-between;
+      padding: 28px 36px;
+      border-bottom: 1px solid #eef2f1;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbfa 100%);
+    }
+
+    .section-head-grid {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .section-title-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4.2vw, 44px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .section-copy {
+      margin-top: 16px;
+      max-width: 760px;
+      font-size: 16px;
+    }
+
+    .phase-progress-box {
+      min-width: 280px;
+      max-width: 340px;
+      border-radius: var(--radius-md);
+      border: 1px solid #dde5e4;
+      background: white;
+      padding: 16px;
+    }
+
+    .sync-link,
+    .quiet-link,
+    .branch-link,
+    .text-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .sync-link,
+    .quiet-link,
+    .text-link {
+      color: #475467;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: #cdd5d3;
+      font-weight: 700;
+    }
+
+    .sync-link { margin-top: 12px; font-size: 12px; }
+    .quiet-link { font-size: 14px; }
+    .text-link { font-size: 12px; }
+
+    .section-body { padding: 28px 36px 36px; }
+
+    .module-card {
+      overflow: hidden;
+      border: 0;
+      border-radius: var(--radius-lg);
+      background: white;
+    }
+
+    .module-card.featured { box-shadow: var(--shadow-lg); }
+    .module-card.standard {
+      background: #fbfcfc;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .module-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 24px 24px 0;
+    }
+
+    .module-content { padding: 16px 24px 24px; }
+    .module-title {
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .module-copy { margin-top: 12px; font-size: 14px; }
+    .module-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .branch-shell {
+      margin-top: 24px;
+      border-radius: var(--radius-lg);
+      background: #0f1728;
+      color: white;
+      box-shadow: 0 20px 60px rgba(17,19,28,0.12);
+    }
+
+    .branch-inner { padding: 24px 28px 28px; }
+
+    .branch-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+    }
+
+    .branch-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
+
+    .branch-title { margin-top: 12px; font-size: 32px; line-height: 1.08; font-weight: 700; }
+    .branch-copy { margin-top: 12px; max-width: 760px; font-size: 14px; color: #cbd5e1; }
+
+    .branch-card {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .branch-card-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .branch-card-title { margin-top: 12px; font-size: 14px; font-weight: 700; color: white; }
+    .branch-card-copy { margin-top: 8px; font-size: 12px; line-height: 1.55; color: #cbd5e1; }
+    .branch-link { margin-top: 16px; color: white; font-size: 12px; font-weight: 700; }
+
+    .addons-shell { border-radius: var(--radius-xl); }
+    .addons-inner { padding: 28px 36px 36px; }
+
+    .addons-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .addons-title { margin-top: 12px; font-size: 36px; line-height: 1.08; font-weight: 700; color: #101828; }
+    .results-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
+
+    .addon-card {
+      background: #f8faf9;
+      padding: 20px;
+    }
+
+    .addon-title { font-size: 14px; font-weight: 700; color: #101828; }
+    .addon-copy { margin-top: 8px; font-size: 12px; }
+
+    @media (max-width: 1279px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .mobile-tabs { display: block; }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-media {
+        border-left: 0;
+        border-top: 1px solid #eef2f1;
+      }
+      .hero-copy,
+      .hero-media,
+      .section-head,
+      .section-body,
+      .addons-inner { padding: 28px 24px; }
+      .section-head-grid,
+      .addons-head,
+      .branch-head { flex-direction: column; align-items: stretch; }
+      .phase-progress-box { max-width: none; }
+      .hero-meta-grid,
+      .media-meta-grid,
+      .module-grid,
+      .branch-grid,
+      .addons-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .page { padding-left: 12px; padding-right: 12px; }
+      .hero-copy,
+      .hero-media,
+      .section-head,
+      .section-body,
+      .addons-inner { padding: 22px 18px; }
+      .hero-title { font-size: 40px; }
+      .section-title, .branch-title, .addons-title { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="accent-hero accent-group" aria-hidden="true">
+            <span class="accent-box" style="width:20px;height:20px;opacity:.14"></span>
+            <span class="accent-box" style="width:48px;height:20px;opacity:.08"></span>
+            <span class="accent-box" style="width:20px;height:40px;opacity:.05;align-self:flex-end"></span>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill">Wireframe</span>
+            <span class="pill red">Strong brand layer</span>
+            <span class="pill">Desktop-first concept</span>
+          </div>
+
+          <p class="eyebrow">Accelerate onboarding hub</p>
+          <h1 class="hero-title">Great Starts Here</h1>
+          <p class="hero-subtitle">
+            A premium-but-practical landing page mockup designed as a guided onboarding journey, with realistic CTA hierarchy, inline audience branch moments, and lightweight interaction patterns.
+          </p>
+
+          <div class="button-row">
+            <button class="btn-primary">Primary onboarding action <span aria-hidden="true">→</span></button>
+            <button class="btn-secondary">Secondary resource</button>
+          </div>
+
+          <div class="hero-meta-grid">
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Architecture</div>
+              <div class="meta-value">Shared journey + inline branches</div>
+            </div>
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Progress UX</div>
+              <div class="meta-value">Sticky rail + lightweight slider cue</div>
+            </div>
+            <div class="meta-card hero-meta-card">
+              <div class="meta-label">Copy approach</div>
+              <div class="meta-value">Placeholder text for spacing + design intent</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <div class="video full">
+            <div class="video-label">Video placeholder</div>
+            <div class="video-center">
+              <div class="play-shell"><div class="play-triangle"></div></div>
+              <div>
+                <div class="video-title">Simple embedded media treatment</div>
+                <div class="video-copy">Placeholder area for filmed onboarding content — sized to communicate hierarchy without over-designing the wireframe.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="media-meta-grid">
+            <div class="meta-card">
+              <div class="meta-label">Current phase</div>
+              <div class="meta-value" id="current-phase-label">Before you launch</div>
+              <p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Hero balances emotional welcome with immediate practical orientation.</p>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Brand expression</div>
+              <div class="meta-value">Box/grid influence</div>
+              <p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Uses restrained red accents, crisp typography, and clean hierarchy to feel recognizably on-brand even as a wireframe.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mobile-tabs">
+      <div class="mobile-tab-row" id="mobile-tabs"></div>
+    </section>
+
+    <div class="content-grid">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-accent accent-group" aria-hidden="true">
+            <span class="accent-box" style="width:16px;height:16px;opacity:.16"></span>
+            <span class="accent-box" style="width:40px;height:16px;opacity:.08"></span>
+          </div>
+
+          <div class="sidebar-header">
+            <p class="eyebrow" style="letter-spacing:.18em">Progress rail</p>
+            <h3 class="sidebar-title">Onboarding journey</h3>
+            <p class="sidebar-copy">Lightweight sticky rail showing section progress and major journey moments.</p>
+          </div>
+
+          <div class="progress-card">
+            <div class="progress-row"><span>Journey progress</span><span id="journey-progress-label">22%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="journey-progress-fill" style="width:22%"></div></div>
+            <p class="progress-note">Designed as a realistic scroll-linked / section-based progress moment rather than saved user-specific checklist state.</p>
+          </div>
+
+          <div class="sidebar-nav" id="sidebar-nav"></div>
+
+          <div class="sidebar-note">
+            <div class="sidebar-note-title"><span class="sidebar-note-dot"></span> Tiered CTA logic</div>
+            <p class="sidebar-note-copy">Primary actions receive stronger treatment. Supporting resources stay quieter to keep the page premium, focused, and easy to scan.</p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main" id="main-content"></main>
+    </div>
+  </div>
+
+  <script>
+    const phases = [
+      {
+        id: "before",
+        eyebrow: "Phase 01",
+        title: "Before you launch",
+        blurb: "A clean setup phase for leadership alignment, portal access, employee data prep, and launch communications.",
+        journeyProgress: 22,
+        progress: 28,
+        modules: [
+          {
+            title: "Align your leadership",
+            body: "Use this space for launch alignment, leadership readiness, and the supporting resources customers need before survey setup begins.",
+            primary: "Review alignment resources",
+            secondary: ["Leadership guide", "Launch checklist"]
+          },
+          {
+            title: "Log in and set up access",
+            body: "A practical onboarding module for portal access, primary users, permissions, and early setup tasks.",
+            primary: "Set up access",
+            secondary: ["Portal guide", "Support article"]
+          },
+          {
+            title: "Build your employee data file",
+            body: "A more prominent operational module for preparing the employee data file and connecting users to the most important setup actions.",
+            video: true,
+            featured: true,
+            primary: "Start employee data file",
+            secondary: ["File requirements", "Download template"]
+          },
+          {
+            title: "Prepare employee communications",
+            body: "A module for launch messaging, internal comms, and communication templates to support employee awareness.",
+            primary: "View communication tools",
+            secondary: ["Email template", "Messaging tips"]
+          }
+        ],
+        branch: {
+          title: "Regional guidance and deadlines",
+          body: "This branch moment shows where U.S., Global, and UKG-specific content appears only when needed — without splitting the entire experience into separate pages.",
+          options: ["U.S. deadline path", "Global deadline path", "UKG guidance path"]
+        }
+      },
+      {
+        id: "live",
+        eyebrow: "Phase 02",
+        title: "While your survey is live",
+        blurb: "A participation-focused phase for monitoring progress, keeping momentum up, and supporting optional live-survey programs.",
+        journeyProgress: 58,
+        progress: 63,
+        modules: [
+          {
+            title: "Monitor and drive participation",
+            body: "A featured module for reminders, participation tracking, issue-spotting, and keeping the survey window moving smoothly.",
+            featured: true,
+            primary: "Monitor participation",
+            secondary: ["Reminder plan", "Participation tips", "Escalation support"]
+          },
+          {
+            title: "Complete the Culture Brief",
+            body: "A lighter module for the Culture Brief and the resources that help customers complete it at the right time.",
+            primary: "Complete Culture Brief",
+            secondary: ["Brief overview"]
+          },
+          {
+            title: "Culture Audit (optional)",
+            body: "An optional module for list-related content and supporting actions tied to live survey activity.",
+            primary: "Explore Culture Audit",
+            secondary: ["Program overview", "Eligibility notes"]
+          }
+        ],
+        branch: {
+          title: "Live-survey variations",
+          body: "Use this branch pattern when live-survey instructions or support motions differ by audience.",
+          options: ["U.S. variation", "Global variation", "UKG variation"]
+        }
+      },
+      {
+        id: "after",
+        eyebrow: "Phase 03",
+        title: "After your survey closes",
+        blurb: "A post-survey phase focused on results, next steps, action planning, and long-term value after closeout.",
+        journeyProgress: 92,
+        progress: 100,
+        video: true,
+        modules: [
+          {
+            title: "Certification results",
+            body: "A clean results module that introduces timing, what happens next, and how customers should prepare for review.",
+            primary: "View results overview",
+            secondary: ["Results FAQ"]
+          },
+          {
+            title: "Turn feedback into action",
+            body: "A featured action-planning module for interpreting results, enabling leaders, and helping customers take the right next step.",
+            featured: true,
+            primary: "Start action planning",
+            secondary: ["Action plan guide", "Leader enablement"]
+          },
+          {
+            title: "Culture and business insights",
+            body: "A supporting module for deeper facilitated sessions, guidance, and optional follow-on insight work.",
+            primary: "Explore insights",
+            secondary: ["Insights overview", "Session options"]
+          },
+          {
+            title: "Join the community",
+            body: "An ongoing engagement module for events, learning, and keeping the relationship active after onboarding ends.",
+            primary: "Join the community",
+            secondary: ["Upcoming events", "Learning hub", "Community resources"]
+          }
+        ],
+        branch: {
+          title: "Post-survey next steps",
+          body: "Audience-specific next steps can appear here without forcing a top-level page toggle across the whole onboarding experience.",
+          options: ["U.S. next steps", "Global next steps", "UKG next steps"]
+        }
+      }
+    ];
+
+    let activePhase = "before";
+
+    const mainContent = document.getElementById("main-content");
+    const sidebarNav = document.getElementById("sidebar-nav");
+    const mobileTabs = document.getElementById("mobile-tabs");
+    const phaseLabel = document.getElementById("current-phase-label");
+    const journeyLabel = document.getElementById("journey-progress-label");
+    const journeyFill = document.getElementById("journey-progress-fill");
+
+    function accentGroupHTML(variant) {
+      const sets = {
+        default: [
+          { w: 16, h: 16, o: 0.16 },
+          { w: 40, h: 16, o: 0.08 }
+        ],
+        subtle: [
+          { w: 12, h: 12, o: 0.12 },
+          { w: 28, h: 12, o: 0.07 }
+        ],
+        branch: [
+          { w: 20, h: 20, o: 0.12 },
+          { w: 40, h: 20, o: 0.07 }
+        ]
+      };
+      return `<div class="accent-group">${sets[variant].map(item => `<span class="accent-box" style="width:${item.w}px;height:${item.h}px;opacity:${item.o}"></span>`).join("")}</div>`;
+    }
+
+    function videoHTML(compact = false) {
+      return `
+        <div class="video ${compact ? "compact" : "full"}">
+          <div class="video-label">Video placeholder</div>
+          <div class="video-center">
+            <div class="play-shell"><div class="play-triangle"></div></div>
+            <div>
+              <div class="video-title">Simple embedded media treatment</div>
+              <div class="video-copy">Placeholder area for filmed onboarding content — sized to communicate hierarchy without over-designing the wireframe.</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function pillHTML(text, tone = "light") {
+      return `<span class="pill ${tone === "light" ? "" : tone}">${text}</span>`;
+    }
+
+    function moduleHTML(module) {
+      return `
+        <article class="module-card ${module.featured ? "featured" : "standard"}">
+          <div class="module-top">
+            ${pillHTML("Module")}
+            ${accentGroupHTML("subtle")}
+          </div>
+          <div class="module-content">
+            <h4 class="module-title">${module.title}</h4>
+            <p class="module-copy">${module.body}</p>
+            ${module.video ? videoHTML(true) : ""}
+            <div class="module-actions">
+              <button class="btn-primary">${module.primary} <span aria-hidden="true">→</span></button>
+              <button class="quiet-link">Quiet secondary link</button>
+            </div>
+            <div class="resource-links">
+              <div class="resource-links-inner"></div>
+            </div>
+            <div class="resource-links mt-4" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;">
+              ${module.secondary.map(item => `<span class="pill" style="letter-spacing:0;font-size:11px;text-transform:none;font-weight:500;padding:8px 12px;">${item}</span>`).join("")}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function branchHTML(branch) {
+      return `
+        <div class="branch-shell">
+          <div class="branch-inner">
+            <div class="branch-head">
+              <div>
+                <div class="branch-chip">Inline branch moment</div>
+                <h4 class="branch-title">${branch.title}</h4>
+                <p class="branch-copy">${branch.body}</p>
+              </div>
+              <div style="display:none" class="branch-desktop-accent">${accentGroupHTML("branch")}</div>
+            </div>
+            <div class="branch-grid">
+              ${branch.options.map((item, idx) => `
+                <div class="branch-card">
+                  <div class="branch-card-pill">${idx === 0 ? "U.S." : idx === 1 ? "Global" : "UKG"}</div>
+                  <div class="branch-card-title">${item}</div>
+                  <div class="branch-card-copy">Placeholder content showing how audience-specific guidance can branch inline without changing the whole page architecture.</div>
+                  <button class="branch-link">View path <span aria-hidden="true">→</span></button>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMain() {
+      mainContent.innerHTML = phases.map(phase => `
+        <section class="section-shell" id="${phase.id}">
+          <div class="section-head">
+            <div class="section-head-grid">
+              <div>
+                <p class="eyebrow" style="letter-spacing:.2em">${phase.eyebrow}</p>
+                <div class="section-title-row">
+                  <h2 class="section-title">${phase.title}</h2>
+                  ${activePhase === phase.id ? pillHTML("Current focus", "dark") : ""}
+                </div>
+                <p class="section-copy">${phase.blurb}</p>
+              </div>
+              <div class="phase-progress-box">
+                <div class="progress-row"><span>Phase progress cue</span><span>${phase.progress}%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${phase.progress}%"></div></div>
+                <button class="sync-link" data-phase="${phase.id}">Sync sidebar state to this phase</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-body">
+            ${phase.video ? videoHTML(false) : ""}
+            <div class="module-grid" style="margin-top:${phase.video ? 28 : 0}px;">
+              ${phase.modules.map(moduleHTML).join("")}
+            </div>
+            ${branchHTML(phase.branch)}
+          </div>
+        </section>
+      `).join("") + `
+        <section class="addons-shell">
+          <div class="addons-inner">
+            <div class="addons-head">
+              <div>
+                <p class="eyebrow" style="letter-spacing:.2em">Lower-page area</p>
+                <h2 class="addons-title">Available add-ons</h2>
+                <p class="results-copy">Placeholder presentation for add-on opportunities and sales/support conversation points, intentionally quieter than the primary onboarding flow.</p>
+              </div>
+              <div>${accentGroupHTML("default")}</div>
+            </div>
+            <div class="addons-grid">
+              ${Array.from({ length: 4 }).map(() => `
+                <article class="addon-card">
+                  <div class="addon-title">Add-on concept</div>
+                  <div class="addon-copy">Placeholder detail for optional extensions that should not overpower the core onboarding phases.</div>
+                  <button class="text-link" style="margin-top:16px;display:inline-flex;align-items:center;gap:4px;">Learn more <span aria-hidden="true">→</span></button>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </section>
+      `;
+
+      document.querySelectorAll(".sync-link").forEach(btn => {
+        btn.addEventListener("click", () => setActivePhase(btn.dataset.phase, true));
+      });
+
+      if (window.innerWidth >= 1101) {
+        document.querySelectorAll('.branch-desktop-accent').forEach(el => { el.style.display = 'block'; });
+      }
+    }
+
+    function renderSidebar() {
+      sidebarNav.innerHTML = phases.map(phase => {
+        const active = activePhase === phase.id;
+        return `
+          <button class="phase-button ${active ? "active" : ""}" data-phase="${phase.id}">
+            <div class="phase-button-row">
+              <span class="phase-dot"></span>
+              <div>
+                <div class="phase-eyebrow">${phase.eyebrow}</div>
+                <div class="phase-button-title">${phase.title}</div>
+                <div class="phase-button-copy">${phase.blurb}</div>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join("");
+
+      sidebarNav.querySelectorAll(".phase-button").forEach(btn => {
+        btn.addEventListener("click", () => setActivePhase(btn.dataset.phase, true));
+      });
+    }
+
+    function renderMobileTabs() {
+      mobileTabs.innerHTML = phases.map(phase => `
+        <button class="mobile-tab ${activePhase === phase.id ? "active" : ""}" data-phase="${phase.id}">${phase.eyebrow}</button>
+      `).join("");
+
+      mobileTabs.querySelectorAll(".mobile-tab").forEach(btn => {
+        btn.addEventListener("click", () => setActivePhase(btn.dataset.phase, true));
+      });
+    }
+
+    function setActivePhase(phaseId, scrollToSection = false) {
+      activePhase = phaseId;
+      const phase = phases.find(p => p.id === phaseId) || phases[0];
+      phaseLabel.textContent = phase.title;
+      journeyLabel.textContent = `${phase.journeyProgress}%`;
+      journeyFill.style.width = `${phase.journeyProgress}%`;
+      renderSidebar();
+      renderMobileTabs();
+      renderMain();
+      if (scrollToSection) {
+        const target = document.getElementById(phaseId);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function init() {
+      setActivePhase(activePhase, false);
+    }
+
+    window.addEventListener("resize", () => {
+      // re-render only when branch accent visibility needs to update
+      renderMain();
+    });
+
+    init();
+  </script>
+</body>
+</html>
