@@ -1,12 +1,9 @@
-from textwrap import dedent
-from pathlib import Path
-
-html = dedent(r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accelerate Landing Page Demo — Premium Motion v5</title>
+  <title>Accelerate Onboarding Hub — Review Wireframe</title>
   <style>
     :root {
       --red: #FF1628;
@@ -20,7 +17,6 @@ html = dedent(r'''<!DOCTYPE html>
       --gray-6: #7F8A93;
       --gray-8: #555E66;
       --success: #12B76A;
-      --success-strong: #039855;
       --success-bg: #ECFDF3;
       --success-border: #ABEFC6;
       --shadow-xl: 0 28px 72px rgba(17, 19, 28, 0.10);
@@ -31,10 +27,11 @@ html = dedent(r'''<!DOCTYPE html>
       --radius-lg: 28px;
       --radius-md: 24px;
       --radius-sm: 22px;
-      --motion-fast: 220ms;
-      --motion-base: 520ms;
-      --motion-slow: 760ms;
-      --motion-celebrate: 1220ms;
+      --motion-fast: 240ms;
+      --motion-checkbox: 560ms;
+      --motion-base: 560ms;
+      --motion-slow: 860ms;
+      --motion-celebrate: 1320ms;
       --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
       --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -50,8 +47,9 @@ html = dedent(r'''<!DOCTYPE html>
       line-height: 1.5;
     }
 
-    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4, p { margin: 0; }
     button { font: inherit; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
 
     .page {
       max-width: 1600px;
@@ -59,11 +57,20 @@ html = dedent(r'''<!DOCTYPE html>
       padding: 24px 16px 40px;
     }
 
+    .surface {
+      background: var(--white);
+      border-radius: 30px;
+      box-shadow: 0 18px 50px rgba(17, 19, 28, 0.06);
+      border: 1px solid rgba(17, 19, 28, 0.06);
+      overflow: hidden;
+    }
+
     .hero-shell,
     .section-shell,
     .addons-shell,
     .mobile-tabs,
-    .final-journey-shell {
+    .final-journey-shell,
+    .review-notes-shell {
       background: var(--white);
       border-radius: 30px;
       box-shadow: 0 18px 50px rgba(17, 19, 28, 0.06);
@@ -89,22 +96,9 @@ html = dedent(r'''<!DOCTYPE html>
       background: linear-gradient(180deg, #fafbfb 0%, #ffffff 100%);
     }
 
-    .accent-group {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-    }
-
-    .accent-box {
-      background: var(--red);
-      border-radius: 8px;
-    }
-
-    .accent-hero {
-      position: absolute;
-      right: 24px;
-      top: 24px;
-    }
+    .accent-group { display: flex; gap: 8px; align-items: flex-start; }
+    .accent-box { background: var(--red); border-radius: 8px; }
+    .accent-hero { position: absolute; right: 24px; top: 24px; }
 
     .pill-row {
       display: flex;
@@ -117,6 +111,7 @@ html = dedent(r'''<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      white-space: nowrap;
       border-radius: 999px;
       padding: 8px 12px;
       font-size: 11px;
@@ -126,21 +121,12 @@ html = dedent(r'''<!DOCTYPE html>
       border: 1px solid #dde5e4;
       background: #f8faf9;
       color: #475467;
-      white-space: nowrap;
-      transition: background-color var(--motion-fast) var(--ease-standard),
-                  border-color var(--motion-fast) var(--ease-standard),
-                  transform var(--motion-fast) var(--ease-standard),
-                  box-shadow var(--motion-fast) var(--ease-standard);
+      transition: background-color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard), opacity var(--motion-fast) var(--ease-standard);
     }
 
     .pill.red { border-color: transparent; background: var(--red); color: white; }
     .pill.dark { border-color: transparent; background: var(--black); color: white; }
-    .pill.success {
-      border-color: var(--success-border);
-      background: var(--success-bg);
-      color: #067647;
-      letter-spacing: 0.08em;
-    }
+    .pill.success { border-color: var(--success-border); background: var(--success-bg); color: #067647; letter-spacing: 0.08em; }
 
     .eyebrow {
       font-size: 12px;
@@ -149,8 +135,6 @@ html = dedent(r'''<!DOCTYPE html>
       text-transform: uppercase;
       color: #667085;
     }
-
-    h1, h2, h3, h4, p { margin: 0; }
 
     .hero-title {
       margin-top: 12px;
@@ -179,25 +163,16 @@ html = dedent(r'''<!DOCTYPE html>
 
     .btn-primary,
     .btn-secondary,
-    .quiet-link,
-    .branch-link,
-    .text-link,
     .phase-button,
-    .module-checkbox,
     .mobile-tab,
-    .branch-segment,
     .branch-card,
-    .module-card,
+    .branch-segment,
     .resource-pill,
-    .video-tap,
-    .final-action-btn {
-      transition:
-        transform var(--motion-fast) var(--ease-standard),
-        box-shadow var(--motion-fast) var(--ease-standard),
-        border-color var(--motion-fast) var(--ease-standard),
-        background-color var(--motion-fast) var(--ease-standard),
-        opacity var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard);
+    .module-card,
+    .module-checkbox,
+    .final-action-btn,
+    .review-note-card {
+      transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard), opacity var(--motion-fast) var(--ease-standard);
     }
 
     .btn-primary,
@@ -237,7 +212,9 @@ html = dedent(r'''<!DOCTYPE html>
     .media-meta-grid,
     .module-grid,
     .branch-grid,
-    .addons-grid {
+    .addons-grid,
+    .final-grid,
+    .review-notes-grid {
       display: grid;
       gap: 16px;
     }
@@ -247,27 +224,19 @@ html = dedent(r'''<!DOCTYPE html>
     .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .branch-grid { margin-top: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .addons-grid { margin-top: 28px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .final-grid { margin-top: 24px; grid-template-columns: 1.12fr 0.88fr; }
+    .review-notes-grid { margin-top: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
     .meta-card,
-    .addon-card,
-    .branch-card,
     .progress-card,
     .sidebar-note,
-    .module-card,
     .branch-details,
     .branch-segment-wrap,
-    .final-journey-card {
+    .final-card,
+    .addon-card,
+    .review-note-card {
       border-radius: var(--radius-sm);
       border: 1px solid #dde5e4;
-    }
-
-    .meta-card,
-    .addon-card,
-    .progress-card,
-    .sidebar-note,
-    .branch-details,
-    .branch-segment-wrap,
-    .final-journey-card {
       background: white;
       padding: 16px;
     }
@@ -301,21 +270,8 @@ html = dedent(r'''<!DOCTYPE html>
 
     .video.full { min-height: 288px; }
     .video.compact { min-height: 180px; margin-top: 20px; }
-    .video::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,22,40,0.03), rgba(17,19,28,0.02));
-    }
-    .video::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 2px;
-      background: rgba(255,22,40,0.45);
-    }
+    .video::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,22,40,0.03), rgba(17,19,28,0.02)); }
+    .video::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: rgba(255,22,40,0.45); }
 
     .video-label {
       position: absolute;
@@ -355,45 +311,32 @@ html = dedent(r'''<!DOCTYPE html>
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(17,19,28,0.06);
-      transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
     }
 
-    .video:hover .play-shell { transform: scale(1.03); box-shadow: 0 10px 18px rgba(17,19,28,0.1); }
-    .play-triangle {
-      margin-left: 4px;
-      width: 0;
-      height: 0;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 16px solid var(--red);
-    }
+    .video:hover .play-shell { transform: scale(1.03); box-shadow: 0 10px 18px rgba(17,19,28,0.10); }
+    .play-triangle { margin-left: 4px; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 16px solid var(--red); }
     .video-title { font-size: 16px; font-weight: 700; color: #101828; }
-    .video-copy {
-      max-width: 520px;
-      margin-top: 4px;
-      font-size: 14px;
+
+    .video-copy,
+    .results-copy,
+    .sidebar-copy,
+    .section-copy,
+    .module-copy,
+    .branch-copy,
+    .sidebar-note-copy,
+    .addon-copy,
+    .final-copy,
+    .final-card-copy,
+    .review-note-copy {
       color: #667085;
-      line-height: 1.6;
+      line-height: 1.65;
     }
+
+    .video-copy { max-width: 520px; margin-top: 4px; font-size: 14px; }
 
     .mobile-tabs { display: none; padding: 16px; margin-bottom: 24px; }
-    .mobile-tab-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      padding: 4px;
-      border-radius: 20px;
-      background: #eef2f1;
-    }
-    .mobile-tab {
-      border: 0;
-      border-radius: 16px;
-      background: transparent;
-      color: #667085;
-      padding: 10px 12px;
-      font-size: 12px;
-      font-weight: 700;
-    }
+    .mobile-tab-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 20px; background: #eef2f1; }
+    .mobile-tab { border: 0; border-radius: 16px; background: transparent; color: #667085; padding: 10px 12px; font-size: 12px; font-weight: 700; }
     .mobile-tab.active { background: white; color: #101828; box-shadow: 0 2px 8px rgba(17,19,28,0.06); }
 
     .content-grid {
@@ -411,27 +354,13 @@ html = dedent(r'''<!DOCTYPE html>
       box-shadow: 0 20px 60px rgba(17,19,28,0.08);
       overflow: hidden;
     }
+
     .sidebar-inner { position: relative; padding: 20px; }
     .sidebar-accent { position: absolute; right: 0; top: 0; padding: 16px; }
     .sidebar-header { padding-right: 56px; margin-bottom: 20px; }
     .sidebar-title { margin-top: 8px; font-size: 24px; font-weight: 700; color: #101828; }
-
-    .sidebar-copy,
-    .section-copy,
-    .module-copy,
-    .branch-copy,
-    .sidebar-note-copy,
-    .results-copy,
-    .addon-copy,
-    .branch-details-copy,
-    .final-journey-copy,
-    .final-card-copy {
-      color: #667085;
-      line-height: 1.65;
-    }
     .sidebar-copy { margin-top: 8px; font-size: 14px; }
 
-    .progress-card { background: #f8faf9; }
     .progress-row,
     .module-readiness-row,
     .phase-progress-row,
@@ -445,7 +374,8 @@ html = dedent(r'''<!DOCTYPE html>
       gap: 12px;
     }
 
-    .progress-bar {
+    .progress-bar,
+    .final-progress-bar {
       margin-top: 12px;
       width: 100%;
       height: 8px;
@@ -455,38 +385,40 @@ html = dedent(r'''<!DOCTYPE html>
       position: relative;
     }
 
-    .progress-fill {
+    .final-progress-bar { height: 10px; background: #dfe8e2; }
+
+    .progress-fill,
+    .final-progress-fill {
       height: 100%;
+      width: 0;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--red), #ff5060);
-      width: 0;
-      transition: width calc(var(--motion-slow) + 160ms) var(--ease-soft), background var(--motion-fast) var(--ease-standard);
-      position: relative;
       overflow: hidden;
+      position: relative;
+      transition: width calc(var(--motion-slow) + 160ms) var(--ease-soft), background var(--motion-fast) var(--ease-standard);
     }
 
-    .progress-fill::after {
+    .progress-fill.success,
+    .final-progress-fill { background: linear-gradient(90deg, var(--success), #3ccf89); }
+    .final-progress-fill { width: 100%; }
+
+    .progress-fill::after,
+    .final-progress-fill::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent);
       transform: translateX(-100%);
       opacity: 0;
     }
 
-    .progress-fill.is-active::after {
-      animation: shimmer 1.5s var(--ease-out) 1;
+    .progress-fill.is-active::after,
+    .final-progress-fill::after {
+      animation: shimmer 1.7s var(--ease-out) 1;
       opacity: 1;
     }
 
-    .progress-fill.success {
-      background: linear-gradient(90deg, var(--success), #3ccf89);
-    }
-
-    @keyframes shimmer {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(120%); }
-    }
+    @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(120%); } }
 
     .progress-note {
       margin-top: 12px;
@@ -496,6 +428,7 @@ html = dedent(r'''<!DOCTYPE html>
     }
 
     .sidebar-nav { margin-top: 20px; display: grid; gap: 12px; }
+
     .phase-button {
       width: 100%;
       border-radius: var(--radius-sm);
@@ -508,126 +441,52 @@ html = dedent(r'''<!DOCTYPE html>
     }
 
     .phase-button:hover { border-color: #c7d1cf; transform: translateY(-1px); }
-    .phase-button.active {
-      background: #0f1728;
-      border-color: transparent;
-      color: white;
-      box-shadow: 0 16px 30px rgba(17,19,28,0.12);
-    }
-    .phase-button.complete {
-      background: #f7fdf9;
-      border-color: var(--success-border);
-    }
-    .phase-button.complete:not(.active):hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(18,183,106,0.06);
-    }
+    .phase-button.active { background: #0f1728; border-color: transparent; color: white; box-shadow: 0 16px 30px rgba(17,19,28,0.12); }
+    .phase-button.complete { background: #f7fdf9; border-color: var(--success-border); }
+    .phase-button.complete:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(18,183,106,0.06); }
+    .phase-button.complete.current-complete { border-color: var(--success); box-shadow: 0 12px 24px rgba(18,183,106,0.10); }
 
     .phase-button-row { display: flex; gap: 12px; align-items: flex-start; }
-    .phase-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      border: 1px solid #c7d1cf;
-      flex: 0 0 auto;
-      margin-top: 2px;
-      position: relative;
-      background: white;
-    }
-
-    .phase-dot::after {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      border-radius: 999px;
-      background: transparent;
-      transform: scale(0.5);
-      transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
-    }
-
-    .phase-button.active .phase-dot {
-      border-color: transparent;
-      background: rgba(255,255,255,0.12);
-    }
+    .phase-dot { width: 20px; height: 20px; border-radius: 999px; border: 1px solid #c7d1cf; flex: 0 0 auto; margin-top: 2px; position: relative; background: white; }
+    .phase-dot::after { content: ""; position: absolute; inset: 4px; border-radius: 999px; background: transparent; transform: scale(0.5); transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard); }
+    .phase-button.active .phase-dot { border-color: transparent; background: rgba(255,255,255,0.12); }
     .phase-button.active .phase-dot::after { background: var(--red); transform: scale(1); }
-
-    .phase-button.complete .phase-dot {
-      border-color: var(--success);
-      background: var(--success-bg);
-    }
+    .phase-button.complete .phase-dot { border-color: var(--success); background: var(--success-bg); }
     .phase-button.complete .phase-dot::after { background: var(--success); transform: scale(1); }
 
-    .phase-eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #667085;
-    }
+    .phase-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #667085; }
     .phase-button.active .phase-eyebrow { color: #cbd5e1; }
     .phase-button.complete .phase-eyebrow { color: #067647; }
-
-    .phase-button-title {
-      margin-top: 4px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #101828;
-    }
+    .phase-button-title { margin-top: 4px; font-size: 14px; font-weight: 700; color: #101828; }
     .phase-button.active .phase-button-title { color: white; }
     .phase-button.complete .phase-button-title { color: #05603A; }
-
-    .phase-button-copy {
-      margin-top: 4px;
-      font-size: 12px;
-      line-height: 1.5;
-      color: #667085;
-    }
+    .phase-button-copy { margin-top: 4px; font-size: 12px; line-height: 1.5; color: #667085; }
     .phase-button.active .phase-button-copy { color: #cbd5e1; }
     .phase-button.complete .phase-button-copy { color: #067647; }
 
-    .phase-complete-chip,
-    .final-chip {
-      margin-top: 10px;
+    .phase-chip,
+    .final-chip,
+    .module-complete-badge,
+    .final-check-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       border-radius: 999px;
-      padding: 7px 10px;
+      padding: 8px 12px;
       background: var(--success-bg);
-      border: 1px solid var(--success-border);
       color: #05603A;
+      border: 1px solid var(--success-border);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .sidebar-note { margin-top: 20px; }
-    .sidebar-note-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #101828;
-    }
-    .sidebar-note-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--red);
-      display: inline-block;
-    }
-    .sidebar-note-copy { margin-top: 8px; font-size: 12px; }
+    .final-check-pill { padding: 10px 14px; font-size: 12px; letter-spacing: 0.04em; text-transform: none; }
+    .final-check-icon { width: 18px; height: 18px; border-radius: 999px; background: var(--success); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
 
     .main { display: grid; gap: 24px; }
-
-    .section-shell {
-      border-radius: var(--radius-xl);
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-    }
+    .section-shell, .addons-shell, .final-journey-shell { position: relative; isolation: isolate; }
 
     .section-shell.phase-complete::before {
       content: "";
@@ -645,22 +504,15 @@ html = dedent(r'''<!DOCTYPE html>
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(110deg, transparent 0%, rgba(18,183,106,0.14) 35%, rgba(255,255,255,0.24) 52%, rgba(18,183,106,0.12) 68%, transparent 100%);
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.45) 32%, rgba(18,183,106,0.10) 50%, rgba(255,255,255,0.28) 66%, transparent 100%);
       transform: translateX(-120%);
       animation: journeySweep calc(var(--motion-celebrate) + 240ms) var(--ease-out) 1;
       pointer-events: none;
       z-index: 1;
     }
 
-    @keyframes phaseSweep {
-      from { transform: translateX(-110%); }
-      to { transform: translateX(110%); }
-    }
-
-    @keyframes journeySweep {
-      from { transform: translateX(-120%); }
-      to { transform: translateX(120%); }
-    }
+    @keyframes phaseSweep { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+    @keyframes journeySweep { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 
     .section-head {
       display: flex;
@@ -681,22 +533,8 @@ html = dedent(r'''<!DOCTYPE html>
       justify-content: space-between;
     }
 
-    .section-title-row {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .section-title {
-      font-size: clamp(32px, 4.2vw, 44px);
-      line-height: 1.04;
-      letter-spacing: -0.03em;
-      font-weight: 700;
-      color: #101828;
-    }
-
+    .section-title-row { display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+    .section-title { font-size: clamp(32px, 4.2vw, 44px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #101828; }
     .section-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
 
     .phase-progress-box {
@@ -709,10 +547,7 @@ html = dedent(r'''<!DOCTYPE html>
       position: relative;
       overflow: hidden;
     }
-    .phase-progress-box.complete {
-      border-color: var(--success-border);
-      background: linear-gradient(180deg, #fff, #f7fdf9);
-    }
+    .phase-progress-box.complete { border-color: var(--success-border); background: linear-gradient(180deg, #fff, #f7fdf9); }
 
     .sync-link,
     .quiet-link,
@@ -721,10 +556,6 @@ html = dedent(r'''<!DOCTYPE html>
       border: 0;
       background: transparent;
       padding: 0;
-    }
-    .sync-link,
-    .quiet-link,
-    .text-link {
       color: #475467;
       text-decoration: underline;
       text-underline-offset: 4px;
@@ -735,11 +566,7 @@ html = dedent(r'''<!DOCTYPE html>
     .quiet-link { font-size: 14px; }
     .text-link { font-size: 12px; }
 
-    .section-body {
-      padding: 28px 36px 36px;
-      position: relative;
-      z-index: 2;
-    }
+    .section-body { padding: 28px 36px 36px; position: relative; z-index: 2; }
 
     .module-card {
       overflow: hidden;
@@ -749,69 +576,21 @@ html = dedent(r'''<!DOCTYPE html>
       position: relative;
       transform-origin: center;
     }
+
     .module-card.featured { box-shadow: var(--shadow-lg); }
     .module-card.standard { background: #fbfcfc; box-shadow: var(--shadow-sm); }
     .module-card:hover { transform: translateY(-2px); }
+    .module-card.is-complete { border-color: var(--success-border); background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%); box-shadow: 0 18px 36px rgba(18,183,106,0.06); }
+    .module-card.is-complete::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 0%, rgba(18,183,106,0.12) 45%, transparent 100%); transform: translateX(-120%); opacity: 0; pointer-events: none; }
+    .module-card.just-completed::after { animation: moduleSweep calc(var(--motion-celebrate) - 60ms) var(--ease-out) 1; opacity: 1; }
+    @keyframes moduleSweep { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 
-    .module-card.is-complete {
-      border-color: var(--success-border);
-      background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%);
-      box-shadow: 0 18px 36px rgba(18,183,106,0.06);
-    }
-
-    .module-card.is-complete::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 0%, rgba(18,183,106,0.12) 45%, transparent 100%);
-      transform: translateX(-120%);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .module-card.just-completed::after {
-      animation: moduleSweep calc(var(--motion-celebrate) - 120ms) var(--ease-out) 1;
-      opacity: 1;
-    }
-
-    @keyframes moduleSweep {
-      from { transform: translateX(-120%); }
-      to { transform: translateX(120%); }
-    }
-
-    .module-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 24px 24px 0;
-    }
-
+    .module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 24px 24px 0; }
     .module-content { padding: 16px 24px 24px; }
+    .module-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .module-title { font-size: 22px; line-height: 1.15; font-weight: 700; color: #101828; letter-spacing: -0.02em; }
 
-    .module-title-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .module-title {
-      font-size: 24px;
-      line-height: 1.15;
-      font-weight: 700;
-      color: #101828;
-      letter-spacing: -0.02em;
-    }
-
-    .module-checkbox {
-      border: 0;
-      background: transparent;
-      padding: 0;
-      flex: 0 0 auto;
-      margin-top: 2px;
-    }
-
+    .module-checkbox { border: 0; background: transparent; padding: 0; flex: 0 0 auto; margin-top: 2px; }
     .checkbox-ui {
       width: 28px;
       height: 28px;
@@ -822,87 +601,29 @@ html = dedent(r'''<!DOCTYPE html>
       border: 1.5px solid #c7d1cf;
       background: white;
       box-shadow: 0 3px 8px rgba(17,19,28,0.04);
-      transition:
-        transform calc(var(--motion-fast) + 40ms) var(--ease-soft),
-        border-color calc(var(--motion-fast) + 20ms) var(--ease-standard),
-        background-color calc(var(--motion-fast) + 20ms) var(--ease-standard),
-        box-shadow calc(var(--motion-fast) + 40ms) var(--ease-standard);
+      transition: transform var(--motion-checkbox) var(--ease-soft), border-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), background-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), box-shadow var(--motion-checkbox) var(--ease-standard);
     }
 
-    .module-checkbox:hover .checkbox-ui {
-      border-color: var(--red);
-      box-shadow: 0 0 0 5px rgba(255,22,40,0.08), 0 6px 14px rgba(17,19,28,0.06);
-      transform: translateY(-1px);
-    }
-
-    .module-checkbox.checked .checkbox-ui {
-      border-color: var(--success);
-      background: var(--success);
-      box-shadow: 0 0 0 5px rgba(18,183,106,0.08), 0 8px 16px rgba(18,183,106,0.14);
-      transform: scale(1.02);
-    }
+    .module-checkbox:hover .checkbox-ui { border-color: var(--red); box-shadow: 0 0 0 5px rgba(255,22,40,0.08), 0 6px 14px rgba(17,19,28,0.06); transform: translateY(-1px); }
+    .module-checkbox.checked .checkbox-ui { border-color: var(--success); background: var(--success); box-shadow: 0 0 0 5px rgba(18,183,106,0.08), 0 10px 18px rgba(18,183,106,0.12); transform: scale(1.03); }
 
     .checkbox-check {
       color: white;
       font-size: 14px;
       font-weight: 800;
       line-height: 1;
-      transform: scale(0.6);
+      transform: scale(0.55);
       opacity: 0;
-      transition:
-        transform calc(var(--motion-fast) + 60ms) var(--ease-out),
-        opacity calc(var(--motion-fast) + 30ms) var(--ease-standard);
+      transition: transform calc(var(--motion-checkbox) - 80ms) var(--ease-out), opacity calc(var(--motion-checkbox) - 160ms) var(--ease-standard);
     }
-
-    .module-checkbox.checked .checkbox-check {
-      transform: scale(1);
-      opacity: 1;
-    }
+    .module-checkbox.checked .checkbox-check { transform: scale(1); opacity: 1; }
 
     .module-copy { margin-top: 12px; font-size: 14px; }
-    .module-actions {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .module-readiness {
-      margin-top: 18px;
-      padding: 14px 14px 12px;
-      border-radius: 18px;
-      border: 1px solid #edf1ef;
-      background: #fbfcfc;
-    }
-
-    .module-status-row {
-      margin-top: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .module-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #667085;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #c7d1cf;
-    }
-
+    .module-actions { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .module-readiness { margin-top: 18px; padding: 14px 14px 12px; border-radius: 18px; border: 1px solid #edf1ef; background: #fbfcfc; }
+    .module-status-row { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .module-status { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #667085; letter-spacing: 0.05em; text-transform: uppercase; }
+    .status-dot { width: 8px; height: 8px; border-radius: 999px; background: #c7d1cf; }
     .module-status.complete { color: #067647; }
     .module-status.complete .status-dot { background: var(--success); }
 
@@ -919,144 +640,27 @@ html = dedent(r'''<!DOCTYPE html>
     }
     .resource-pill:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(17,19,28,0.06); }
 
-    .module-complete-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: var(--success-bg);
-      color: #05603A;
-      border: 1px solid var(--success-border);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .branch-shell {
-      margin-top: 24px;
-      border-radius: var(--radius-lg);
-      background: #0f1728;
-      color: white;
-      box-shadow: 0 20px 60px rgba(17,19,28,0.12);
-      overflow: hidden;
-    }
-
+    .branch-shell { margin-top: 24px; border-radius: var(--radius-lg); background: #0f1728; color: white; box-shadow: 0 20px 60px rgba(17,19,28,0.12); overflow: hidden; }
     .branch-inner { padding: 24px 28px 28px; }
-    .branch-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 24px;
-    }
-
-    .branch-chip {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #cbd5e1;
-    }
-
+    .branch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+    .branch-chip { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); padding: 6px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #cbd5e1; }
     .branch-title { margin-top: 12px; font-size: 32px; line-height: 1.08; font-weight: 700; }
     .branch-copy { margin-top: 12px; max-width: 760px; font-size: 14px; color: #cbd5e1; }
-
-    .branch-card {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.1);
-      padding: 16px;
-      backdrop-filter: blur(4px);
-      text-align: left;
-      cursor: pointer;
-      width: 100%;
-    }
-
+    .branch-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); padding: 16px; backdrop-filter: blur(4px); text-align: left; width: 100%; }
     .branch-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
-    .branch-card.selected {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.28);
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.16);
-    }
+    .branch-card.selected { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); transform: translateY(-2px) scale(1.01); box-shadow: 0 18px 40px rgba(0,0,0,0.16); }
     .branch-card.dimmed { opacity: 0.72; }
-
-    .branch-card-pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.1);
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.9);
-    }
-
+    .branch-card-pill { display: inline-flex; align-items: center; border-radius: 999px; background: rgba(255,255,255,0.1); padding: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); }
     .branch-card-title { margin-top: 12px; font-size: 14px; font-weight: 700; color: white; }
     .branch-card-copy { margin-top: 8px; font-size: 12px; line-height: 1.55; color: #cbd5e1; }
     .branch-link { margin-top: 16px; color: white; font-size: 12px; font-weight: 700; }
-
-    .branch-segment-wrap {
-      display: none;
-      margin-top: 24px;
-      padding: 6px;
-      border-color: rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(4px);
-      gap: 6px;
-    }
-
-    .branch-segment {
-      flex: 1 1 0;
-      border-radius: 16px;
-      border: 0;
-      background: transparent;
-      color: #cbd5e1;
-      padding: 10px 12px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .branch-segment.active {
-      background: rgba(255,255,255,0.12);
-      color: white;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.14);
-    }
-
-    .branch-details {
-      margin-top: 18px;
-      border-color: rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .branch-details::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--red);
-    }
-
-    .branch-details-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #cbd5e1;
-    }
+    .branch-segment-wrap { display: none; margin-top: 24px; padding: 6px; border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); backdrop-filter: blur(4px); gap: 6px; }
+    .branch-segment { flex: 1 1 0; border-radius: 16px; border: 0; background: transparent; color: #cbd5e1; padding: 10px 12px; font-size: 12px; font-weight: 700; }
+    .branch-segment.active { background: rgba(255,255,255,0.12); color: white; box-shadow: 0 6px 12px rgba(0,0,0,0.14); }
+    .branch-details { margin-top: 18px; border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: white; position: relative; overflow: hidden; }
+    .branch-details::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red); }
+    .branch-details-label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #cbd5e1; }
     .branch-details-title { margin-top: 8px; font-size: 18px; font-weight: 700; }
-    .branch-details-copy { margin-top: 8px; font-size: 14px; color: #d7dee8; }
 
     .phase-complete-banner {
       margin-top: 16px;
@@ -1073,195 +677,46 @@ html = dedent(r'''<!DOCTYPE html>
       letter-spacing: 0.08em;
       text-transform: uppercase;
       box-shadow: 0 14px 30px rgba(18,183,106,0.10);
-      animation: fadeLift calc(var(--motion-slow) + 220ms) var(--ease-out) 1;
+      animation: fadeLift calc(var(--motion-slow) + 240ms) var(--ease-out) 1;
     }
 
-    @keyframes fadeLift {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeLift { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .final-journey-shell {
-      position: relative;
-      border-color: rgba(18,183,106,0.18);
-      box-shadow: var(--shadow-xl);
-      overflow: hidden;
-      isolation: isolate;
-    }
+    .final-journey-shell { border-color: rgba(17,19,28,0.06); box-shadow: 0 22px 56px rgba(17,19,28,0.08); }
+    .final-inner { position: relative; z-index: 2; padding: 28px 36px 34px; background: radial-gradient(circle at top right, rgba(255,255,255,0.92), rgba(18,183,106,0.04) 24%, transparent 42%), linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%); }
+    .final-head { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; }
+    .final-title { margin-top: 12px; font-size: clamp(30px, 4vw, 42px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #101828; }
+    .final-copy { margin-top: 14px; max-width: 760px; font-size: 16px; }
+    .final-card-title { font-size: 16px; font-weight: 700; color: #101828; }
+    .final-check-cluster { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .final-action-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 18px; }
+    .final-support-text { font-size: 12px; color: #667085; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 
-    .final-journey-inner {
-      position: relative;
-      z-index: 2;
-      padding: 28px 36px 34px;
-      background:
-        radial-gradient(circle at top right, rgba(18,183,106,0.08), transparent 30%),
-        linear-gradient(180deg, #ffffff 0%, #f7fdf9 100%);
-    }
-
-    .final-journey-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      align-items: flex-end;
-    }
-
-    .final-journey-title {
-      margin-top: 12px;
-      font-size: clamp(30px, 4vw, 42px);
-      line-height: 1.04;
-      letter-spacing: -0.03em;
-      font-weight: 700;
-      color: #101828;
-    }
-
-    .final-journey-copy {
-      margin-top: 14px;
-      max-width: 760px;
-      font-size: 16px;
-    }
-
-    .final-journey-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .final-journey-card {
-      background: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .final-card-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #101828;
-    }
-
-    .final-card-copy {
-      margin-top: 8px;
-      font-size: 14px;
-    }
-
-    .final-progress-bar {
-      margin-top: 16px;
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      background: #dfe8e2;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .final-progress-fill {
-      height: 100%;
-      width: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--success), #3ccf89);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .final-progress-fill::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-      transform: translateX(-100%);
-      animation: shimmer 1.8s var(--ease-out) 1;
-    }
-
-    .final-check-cluster {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-
-    .final-check-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 10px 14px;
-      border: 1px solid var(--success-border);
-      background: var(--success-bg);
-      color: #05603A;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .final-check-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: var(--success);
-      color: white;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .final-action-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-top: 18px;
-    }
-
-    .final-support-text {
-      font-size: 12px;
-      color: #667085;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .addons-shell {
-      border-radius: var(--radius-xl);
-      position: relative;
-      isolation: isolate;
-    }
-
-    .addons-shell.elevated {
-      border-color: rgba(18,183,106,0.18);
-      box-shadow: var(--shadow-xl);
-    }
-
+    .addons-shell.elevated { border-color: rgba(17,19,28,0.06); box-shadow: 0 22px 56px rgba(17,19,28,0.08); }
     .addons-inner { position: relative; z-index: 2; padding: 28px 36px 36px; }
-    .addons-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
-    }
+    .addons-head { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
     .addons-title { margin-top: 12px; font-size: 36px; line-height: 1.08; font-weight: 700; color: #101828; }
-    .results-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
-
-    .addon-card { background: #f8faf9; padding: 20px; }
+    .addon-card { background: #f8faf9; }
     .addon-card:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(17,19,28,0.06); }
     .addon-title { font-size: 14px; font-weight: 700; color: #101828; }
     .addon-copy { margin-top: 8px; font-size: 12px; }
+
+    .review-notes-shell { margin-top: 24px; }
+    .review-notes-inner { padding: 24px 28px 28px; }
+    .review-notes-title { margin-top: 10px; font-size: 24px; font-weight: 700; color: #101828; }
+    .review-note-card { background: #fbfcfc; }
+    .review-note-title { font-size: 14px; font-weight: 700; color: #101828; }
+    .review-note-copy { margin-top: 8px; font-size: 13px; }
 
     .reveal {
       opacity: 0;
       transform: translateY(16px) scale(0.982);
       transform-origin: center top;
-      transition:
-        opacity calc(var(--motion-base) + 120ms) var(--ease-standard),
-        transform calc(var(--motion-base) + 120ms) var(--ease-soft);
+      transition: opacity calc(var(--motion-base) + 120ms) var(--ease-standard), transform calc(var(--motion-base) + 120ms) var(--ease-soft);
       will-change: opacity, transform;
     }
 
-    .reveal.in-view {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+    .reveal.in-view { opacity: 1; transform: translateY(0) scale(1); }
 
     @media (max-width: 1279px) {
       .content-grid { grid-template-columns: 1fr; }
@@ -1272,23 +727,10 @@ html = dedent(r'''<!DOCTYPE html>
     @media (max-width: 1100px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero-media { border-left: 0; border-top: 1px solid #eef2f1; }
-      .hero-copy,
-      .hero-media,
-      .section-head,
-      .section-body,
-      .addons-inner,
-      .final-journey-inner { padding: 28px 24px; }
-      .section-head-grid,
-      .addons-head,
-      .branch-head,
-      .final-journey-head { flex-direction: column; align-items: stretch; }
-      .phase-progress-box,
-      .final-journey-grid { max-width: none; }
-      .hero-meta-grid,
-      .media-meta-grid,
-      .module-grid,
-      .addons-grid,
-      .final-journey-grid { grid-template-columns: 1fr; }
+      .hero-copy, .hero-media, .section-head, .section-body, .addons-inner, .final-inner, .review-notes-inner { padding: 28px 24px; }
+      .section-head-grid, .addons-head, .branch-head, .final-head { flex-direction: column; align-items: stretch; }
+      .phase-progress-box, .final-grid { max-width: none; }
+      .hero-meta-grid, .media-meta-grid, .module-grid, .addons-grid, .final-grid, .review-notes-grid { grid-template-columns: 1fr; }
       .branch-grid { display: none; }
       .branch-segment-wrap { display: flex; }
       .module-title-row { gap: 12px; }
@@ -1299,60 +741,26 @@ html = dedent(r'''<!DOCTYPE html>
 
     @media (max-width: 700px) {
       .page { padding-left: 12px; padding-right: 12px; }
-      .hero-copy,
-      .hero-media,
-      .section-head,
-      .section-body,
-      .addons-inner,
-      .final-journey-inner { padding: 22px 18px; }
+      .hero-copy, .hero-media, .section-head, .section-body, .addons-inner, .final-inner, .review-notes-inner { padding: 22px 18px; }
       .hero-title { font-size: 40px; }
-      .section-title,
-      .branch-title,
-      .addons-title,
-      .final-journey-title { font-size: 30px; }
-      .module-actions,
-      .final-action-row { flex-direction: column; align-items: stretch; }
-      .btn-primary,
-      .btn-secondary,
-      .final-action-btn { justify-content: center; }
+      .section-title, .branch-title, .addons-title, .final-title { font-size: 30px; }
+      .module-actions, .final-action-row { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-secondary, .final-action-btn { justify-content: center; }
       .module-status-row { align-items: stretch; }
-      .module-complete-badge { width: fit-content; }
       .final-check-cluster { flex-direction: column; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-      .reveal,
-      .reveal.in-view {
-        opacity: 1 !important;
-        transform: none !important;
-        will-change: auto !important;
-      }
-      .module-card:hover,
-      .branch-card:hover,
-      .btn-primary:hover,
-      .btn-secondary:hover,
-      .addon-card:hover,
-      .phase-button:hover,
-      .resource-pill:hover,
-      .final-action-btn:hover { transform: none !important; }
-      .progress-fill::after,
-      .section-shell.phase-complete::before,
-      .module-card.just-completed::after,
-      .journey-complete .addons-shell::before,
-      .journey-complete .final-journey-shell::before,
-      .final-progress-fill::after { display: none !important; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      .reveal, .reveal.in-view { opacity: 1 !important; transform: none !important; will-change: auto !important; }
+      .module-card:hover, .branch-card:hover, .btn-primary:hover, .btn-secondary:hover, .addon-card:hover, .phase-button:hover, .resource-pill:hover, .final-action-btn:hover { transform: none !important; }
+      .progress-fill::after, .final-progress-fill::after, .section-shell.phase-complete::before, .module-card.just-completed::after, .journey-complete .addons-shell::before, .journey-complete .final-journey-shell::before { display: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="page" id="page-root">
+  <div class="page" id="pageRoot">
     <section class="hero-shell reveal">
       <div class="hero-grid">
         <div class="hero-copy">
@@ -1361,71 +769,44 @@ html = dedent(r'''<!DOCTYPE html>
             <span class="accent-box" style="width:48px;height:20px;opacity:.08"></span>
             <span class="accent-box" style="width:20px;height:40px;opacity:.05;align-self:flex-end"></span>
           </div>
-
           <div class="pill-row">
             <span class="pill">Wireframe</span>
-            <span class="pill red">Strong brand layer</span>
-            <span class="pill">Desktop-first concept</span>
+            <span class="pill red">Balanced review build</span>
+            <span class="pill">Prototype</span>
           </div>
-
           <p class="eyebrow">Accelerate onboarding hub</p>
           <h1 class="hero-title">Great Starts Here</h1>
-          <p class="hero-subtitle">
-            A premium-but-practical landing page mockup designed as a guided onboarding journey, upgraded with calm completion controls, premium motion timing, and a final inline completion moment that keeps add-ons visible.
-          </p>
-
+          <p class="hero-subtitle">Welcome to Accelerate — this page is your one-stop hub to confidently launch your survey, move through onboarding, and find the right resources at the right time.</p>
           <div class="button-row">
             <button class="btn-primary js-tap-only" type="button">Primary onboarding action <span aria-hidden="true">→</span></button>
             <button class="btn-secondary js-tap-only" type="button">Secondary resource</button>
           </div>
-
           <div class="hero-meta-grid">
-            <div class="meta-card hero-meta-card">
-              <div class="meta-label">Architecture</div>
-              <div class="meta-value">Shared journey + inline branches</div>
-            </div>
-            <div class="meta-card hero-meta-card">
-              <div class="meta-label">Progress UX</div>
-              <div class="meta-value">Checkboxes drive completion</div>
-            </div>
-            <div class="meta-card hero-meta-card">
-              <div class="meta-label">Motion approach</div>
-              <div class="meta-value">Premium, calm, accessibility-first</div>
-            </div>
+            <div class="meta-card hero-meta-card"><div class="meta-label">Architecture</div><div class="meta-value">Single onboarding hub + inline audience variations</div></div>
+            <div class="meta-card hero-meta-card"><div class="meta-label">Progress UX</div><div class="meta-value">Sticky rail + phase completion states</div></div>
+            <div class="meta-card hero-meta-card"><div class="meta-label">Review mode</div><div class="meta-value">Wireframe-ready with light placeholder cues</div></div>
           </div>
         </div>
-
         <div class="hero-media">
-          <div class="video full video-tap js-tap-only">
+          <div class="video full js-tap-only" role="button" tabindex="0">
             <div class="video-label">Video placeholder</div>
             <div class="video-center">
               <div class="play-shell"><div class="play-triangle"></div></div>
               <div>
-                <div class="video-title">Simple embedded media treatment</div>
-                <div class="video-copy">Placeholder area for filmed onboarding content — sized to communicate hierarchy without over-designing the wireframe.</div>
+                <div class="video-title">Hero video placement</div>
+                <div class="video-copy">Placeholder area for filmed onboarding content. Final media treatment and file can be swapped in later without changing the page structure.</div>
               </div>
             </div>
           </div>
-
           <div class="media-meta-grid">
-            <div class="meta-card">
-              <div class="meta-label">Current phase</div>
-              <div class="meta-value" id="current-phase-label">Before you launch</div>
-              <p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Hero balances emotional welcome with immediate practical orientation.</p>
-            </div>
-            <div class="meta-card">
-              <div class="meta-label">Brand expression</div>
-              <div class="meta-value">Box/grid influence</div>
-              <p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Uses restrained red accents, crisp typography, and clean hierarchy to feel recognizably on-brand even as a wireframe.</p>
-            </div>
+            <div class="meta-card"><div class="meta-label">Current phase</div><div class="meta-value" id="currentPhaseLabel">Before you launch</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">The rail below updates as the reviewer scrolls through the page.</p></div>
+            <div class="meta-card"><div class="meta-label">Support line</div><div class="meta-value">Questions along the way?</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Reach out to your Customer Success Manager or explore the Knowledge Base.</p></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="mobile-tabs reveal">
-      <div class="mobile-tab-row" id="mobile-tabs"></div>
-    </section>
+    <section class="mobile-tabs reveal"><div class="mobile-tab-row" id="mobileTabs"></div></section>
 
     <div class="content-grid">
       <aside class="sidebar reveal">
@@ -1434,29 +815,21 @@ html = dedent(r'''<!DOCTYPE html>
             <span class="accent-box" style="width:16px;height:16px;opacity:.16"></span>
             <span class="accent-box" style="width:40px;height:16px;opacity:.08"></span>
           </div>
-
           <div class="sidebar-header">
             <p class="eyebrow" style="letter-spacing:.18em">Progress rail</p>
             <h3 class="sidebar-title">Onboarding journey</h3>
-            <p class="sidebar-copy">Only phase navigation and completion checkboxes update page state. Primary actions are safe tap interactions.</p>
+            <p class="sidebar-copy">The rail reflects both the phase currently being viewed and the phases that have already been completed.</p>
           </div>
-
           <div class="progress-card">
-            <div class="progress-row"><span>Journey progress</span><span id="journey-progress-label">0%</span></div>
-            <div class="progress-bar"><div class="progress-fill" id="journey-progress-fill" style="width:0%"></div></div>
-            <p class="progress-note">Desktop auto-advances after a phase completion moment. The final journey-complete moment appears inline above add-ons instead of as a popup.</p>
+            <div class="progress-row"><span>Journey progress</span><span id="journeyProgressLabel">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="journeyProgressFill" style="width:0%"></div></div>
+            <p class="progress-note">Completion states are preserved. Scroll position updates the viewed phase without overpowering completed phases.</p>
           </div>
-
-          <div class="sidebar-nav" id="sidebar-nav"></div>
-
-          <div class="sidebar-note">
-            <div class="sidebar-note-title"><span class="sidebar-note-dot"></span> Safer interaction model</div>
-            <p class="sidebar-note-copy">Buttons animate, branches switch locally, and re-renders keep content visible instead of resetting sections to hidden.</p>
-          </div>
+          <div class="sidebar-nav" id="sidebarNav"></div>
+          <div class="sidebar-note"><div class="meta-label">Interaction model</div><p class="sidebar-note-copy" style="margin-top:8px;">Phase navigation and checkboxes update the page state. Other buttons are safe tap interactions for review.</p></div>
         </div>
       </aside>
-
-      <main class="main" id="main-content"></main>
+      <main class="main" id="mainContent"></main>
     </div>
   </div>
 
@@ -1466,20 +839,25 @@ html = dedent(r'''<!DOCTYPE html>
         id: 'before',
         eyebrow: 'Phase 01',
         title: 'Before you launch',
-        blurb: 'A clean setup phase for leadership alignment, portal access, employee data prep, and launch communications.',
+        blurb: 'The decisions you make before launch shape everything that follows — this section helps customers get oriented, set up access, and prepare the key inputs they need before launch.',
         modules: [
-          { title: 'Align your leadership', body: 'Use this space for launch alignment, leadership readiness, and the supporting resources customers need before survey setup begins.', primary: 'Review alignment resources', secondary: ['Leadership guide', 'Launch checklist'] },
-          { title: 'Log in and set up access', body: 'A practical onboarding module for portal access, primary users, permissions, and early setup tasks.', primary: 'Set up access', secondary: ['Portal guide', 'Support article'] },
-          { title: 'Build your employee data file', body: 'A more prominent operational module for preparing the employee data file and connecting users to the most important setup actions.', video: true, featured: true, primary: 'Start employee data file', secondary: ['File requirements', 'Download template'] },
-          { title: 'Prepare employee communications', body: 'A module for launch messaging, internal comms, and communication templates to support employee awareness.', primary: 'View communication tools', secondary: ['Email template', 'Messaging tips'] }
+          { title: 'Align your leadership', body: 'Early alignment creates stronger participation and faster action later. This card represents leadership alignment and executive sponsorship guidance.', primary: 'Leadership alignment guide', secondary: ['CSM alignment discussion'] },
+          { title: 'Log in and set up access', body: 'Use this module for portal access, password reset support, and portal user management.', primary: 'Account set up', secondary: ['Manage portal users'] },
+          { title: 'Understand Certification and the Great Place To Work model', body: 'This card introduces orientation resources that explain Certification and the underlying model. It is contextual rather than task-heavy.', primary: 'Certification overview', secondary: ['Model overview'] },
+          { title: 'Decide who to survey', body: 'This module represents audience selection, inclusion guidance, and guardrails that affect results and eligibility.', primary: 'Who to include', secondary: ['Eligibility considerations'] },
+          { title: 'Technical setup', body: 'Use this space for access method selection, IT checklist work, and setup considerations that reduce launch-day issues.', primary: 'Survey access methods', secondary: ['IT checklist'] },
+          { title: 'Build your employee data file', body: 'This remains a featured operational card because it is one of the highest-impact setup moments in the full onboarding flow.', primary: 'Employee data file guidance', featured: true, video: true, secondary: ['Audit EDF data', 'Precoding demographics'] },
+          { title: 'Prepare employee communications', body: 'This module supports launch messaging and pre-survey communication planning.', primary: 'Pre-survey communications', secondary: ['Communications library'] },
+          { title: 'Add custom survey content (optional but recommended)', body: 'This module represents optional custom content and demographics that can create more useful downstream insights.', primary: 'Custom survey content', secondary: ['Standard survey content'] },
+          { title: 'Award deadlines', body: 'A final planning module for list timing and recognition deadlines.', primary: 'Award deadlines', secondary: ['US deadlines', 'Global deadlines'] }
         ],
         branch: {
-          title: 'Regional guidance and deadlines',
-          body: 'This branch moment shows where U.S., Global, and UKG-specific content appears only when needed — without splitting the entire experience into separate pages.',
+          title: 'Regional guidance and timing',
+          body: 'This inline branch area shows where U.S., Global, and UKG-specific variations could appear without splitting the whole page architecture.',
           options: [
-            { id: 'us', label: 'U.S.', title: 'U.S. deadline path', copy: 'Prominent launch dates, employee file timing, and communications guardrails tailored for the U.S. motion without breaking the shared journey.' },
-            { id: 'global', label: 'Global', title: 'Global deadline path', copy: 'A variation for region-by-region timing, translation planning, and shared launch governance across broader rollout needs.' },
-            { id: 'ukg', label: 'UKG', title: 'UKG guidance path', copy: 'A targeted guidance path for UKG-integrated customers, keeping setup-specific notes obvious but contained.' }
+            { id: 'us', label: 'U.S.', title: 'U.S. path', copy: 'Use this path for U.S.-specific timing, list alignment, and launch guidance.' },
+            { id: 'global', label: 'Global', title: 'Global path', copy: 'Use this path for multi-country variations, timelines, and shared rollout needs.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG path', copy: 'Use this path for UKG-specific guidance where implementation details differ.' }
           ]
         }
       },
@@ -1487,19 +865,19 @@ html = dedent(r'''<!DOCTYPE html>
         id: 'live',
         eyebrow: 'Phase 02',
         title: 'While your survey is live',
-        blurb: 'A participation-focused phase for monitoring progress, keeping momentum up, and supporting optional live-survey programs.',
+        blurb: 'Keep momentum going and complete the certification application while the survey window is open.',
         modules: [
-          { title: 'Monitor and drive participation', body: 'A featured module for reminders, participation tracking, issue-spotting, and keeping the survey window moving smoothly.', featured: true, primary: 'Monitor participation', secondary: ['Reminder plan', 'Participation tips', 'Escalation support'] },
-          { title: 'Complete the Culture Brief', body: 'A lighter module for the Culture Brief and the resources that help customers complete it at the right time.', primary: 'Complete Culture Brief', secondary: ['Brief overview'] },
-          { title: 'Culture Audit (optional)', body: 'An optional module for list-related content and supporting actions tied to live survey activity.', primary: 'Explore Culture Audit', secondary: ['Program overview', 'Eligibility notes'] }
+          { title: 'Monitor and drive participation', body: 'This featured module represents participation monitoring, momentum building, reminder planning, and troubleshooting access issues.', primary: 'Participation guidance', featured: true, secondary: ['Participation thresholds', 'Monitoring guidance', 'Invitation troubleshooting'] },
+          { title: 'Complete the Culture Brief', body: 'This module represents the Culture Brief area of the onboarding journey and helps keep closeout on schedule.', primary: 'Culture Brief overview', secondary: ['Culture Brief articles'] },
+          { title: 'Culture Audit (optional)', body: 'This optional module represents list-related and Culture Audit guidance for customers who need it.', primary: 'Culture Audit overview', secondary: ['Lists overview', 'Best Workplaces guidance'] }
         ],
         branch: {
           title: 'Live-survey variations',
-          body: 'Use this branch pattern when live-survey instructions or support motions differ by audience.',
+          body: 'Use this branch pattern where live-survey instructions vary by audience or selling motion.',
           options: [
-            { id: 'us', label: 'U.S.', title: 'U.S. variation', copy: 'Participation pushes, cadence reminders, and escalation timing aligned to the U.S. operating model.' },
-            { id: 'global', label: 'Global', title: 'Global variation', copy: 'Guidance for multi-region timing, timezone communication, and launch support adapted to global coordination.' },
-            { id: 'ukg', label: 'UKG', title: 'UKG variation', copy: 'Targeted notes for UKG-supported workflows so live-survey support feels integrated rather than bolted on.' }
+            { id: 'us', label: 'U.S.', title: 'U.S. live path', copy: 'A U.S.-specific view for participation pushes, reminders, and issue handling.' },
+            { id: 'global', label: 'Global', title: 'Global live path', copy: 'A global view for timing, timezone coverage, and coordination patterns.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG live path', copy: 'A UKG-aligned view for any support variations tied to the sold experience.' }
           ]
         }
       },
@@ -1507,50 +885,53 @@ html = dedent(r'''<!DOCTYPE html>
         id: 'after',
         eyebrow: 'Phase 03',
         title: 'After your survey closes',
-        blurb: 'A post-survey phase focused on results, next steps, action planning, and long-term value after closeout.',
+        blurb: 'Shift from measurement to understanding to action. This is where the long-term value of the program begins.',
         video: true,
         modules: [
-          { title: 'Certification results', body: 'A clean results module that introduces timing, what happens next, and how customers should prepare for review.', primary: 'View results overview', secondary: ['Results FAQ'] },
-          { title: 'Turn feedback into action', body: 'A featured action-planning module for interpreting results, enabling leaders, and helping customers take the right next step.', featured: true, primary: 'Start action planning', secondary: ['Action plan guide', 'Leader enablement'] },
-          { title: 'Culture and business insights', body: 'A supporting module for deeper facilitated sessions, guidance, and optional follow-on insight work.', primary: 'Explore insights', secondary: ['Insights overview', 'Session options'] },
-          { title: 'Join the community', body: 'An ongoing engagement module for events, learning, and keeping the relationship active after onboarding ends.', primary: 'Join the community', secondary: ['Upcoming events', 'Learning hub', 'Community resources'] }
+          { title: 'Your Certification results', body: 'A results-oriented card that represents status notification and the first interpretation moment after close.', primary: 'Certification results', secondary: ['Score thresholds'] },
+          { title: 'Turn feedback into action', body: 'This featured module represents post-survey communication, action planning, and people leader enablement.', primary: 'Action planning guidance', featured: true, secondary: ['Post-survey communications', 'Toolkit for people leaders'] },
+          { title: 'Culture and business insights (if applicable)', body: 'This module stands in for facilitated sessions and deeper insight work where applicable.', primary: 'Insight session overview', secondary: ['Preparing for your session', 'Effect playbook'] },
+          { title: 'Join the community', body: 'This card represents ongoing community and learning moments after onboarding is complete.', primary: 'Community opportunities', secondary: ['For All Summit', 'Upcoming webinars', 'Certification Nation Day'] }
         ],
         branch: {
           title: 'Post-survey next steps',
-          body: 'Audience-specific next steps can appear here without forcing a top-level page toggle across the whole onboarding experience.',
+          body: 'This branch area shows where audience-specific next steps can appear without forcing a separate page pattern.',
           options: [
-            { id: 'us', label: 'U.S.', title: 'U.S. next steps', copy: 'A U.S.-specific results interpretation and activation path, keeping the next action obvious and forward-moving.' },
-            { id: 'global', label: 'Global', title: 'Global next steps', copy: 'Region-aware next steps for distributed teams that need local nuance while staying in the same overall framework.' },
-            { id: 'ukg', label: 'UKG', title: 'UKG next steps', copy: 'A contained handoff for UKG-specific follow-through, preserving clarity at a moment where timelines matter most.' }
+            { id: 'us', label: 'U.S.', title: 'U.S. next steps', copy: 'Use this for U.S.-specific post-survey actions and follow-through.' },
+            { id: 'global', label: 'Global', title: 'Global next steps', copy: 'Use this for global follow-through and regional result-sharing variations.' },
+            { id: 'ukg', label: 'UKG', title: 'UKG next steps', copy: 'Use this where UKG-specific sold experience details affect the post-survey journey.' }
           ]
         }
       }
     ];
 
-    const appState = {
-      activePhase: 'before',
+    const state = {
+      viewedPhase: 'before',
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
       branchSelections: { before: 'us', live: 'us', after: 'us' },
-      phaseCompletionBanners: {},
+      phaseBanners: {},
       allCompleteShown: false,
       modules: {}
     };
 
-    phases.forEach(phase => {
-      phase.modules.forEach((_, idx) => {
-        appState.modules[`${phase.id}-${idx}`] = { checked: false, justCompleted: false };
-      });
-    });
+    phases.forEach(phase => phase.modules.forEach((_, i) => {
+      state.modules[`${phase.id}-${i}`] = { checked: false, justCompleted: false };
+    }));
 
-    const mainContent = document.getElementById('main-content');
-    const sidebarNav = document.getElementById('sidebar-nav');
-    const mobileTabs = document.getElementById('mobile-tabs');
-    const phaseLabel = document.getElementById('current-phase-label');
-    const journeyLabel = document.getElementById('journey-progress-label');
-    const journeyFill = document.getElementById('journey-progress-fill');
-    const pageRoot = document.getElementById('page-root');
+    const els = {
+      pageRoot: document.getElementById('pageRoot'),
+      main: document.getElementById('mainContent'),
+      sidebarNav: document.getElementById('sidebarNav'),
+      mobileTabs: document.getElementById('mobileTabs'),
+      currentPhaseLabel: document.getElementById('currentPhaseLabel'),
+      journeyLabel: document.getElementById('journeyProgressLabel'),
+      journeyFill: document.getElementById('journeyProgressFill')
+    };
 
-    function accentGroupHTML(variant) {
+    let revealObserver;
+    let phaseObserver;
+
+    function accentGroupHTML(variant = 'default') {
       const sets = {
         default: [{ w: 16, h: 16, o: 0.16 }, { w: 40, h: 16, o: 0.08 }],
         subtle: [{ w: 12, h: 12, o: 0.12 }, { w: 28, h: 12, o: 0.07 }],
@@ -1561,69 +942,71 @@ html = dedent(r'''<!DOCTYPE html>
 
     function videoHTML(compact = false) {
       return `
-        <button class="video ${compact ? 'compact' : 'full'} video-tap js-tap-only" type="button" style="width:100%;text-align:left;border-width:1px;">
+        <button class="video ${compact ? 'compact' : 'full'} js-tap-only" type="button" style="width:100%;text-align:left;border-width:1px;">
           <div class="video-label">Video placeholder</div>
           <div class="video-center">
             <div class="play-shell"><div class="play-triangle"></div></div>
             <div>
-              <div class="video-title">Simple embedded media treatment</div>
-              <div class="video-copy">Placeholder area for filmed onboarding content — sized to communicate hierarchy without over-designing the wireframe.</div>
+              <div class="video-title">Video placement</div>
+              <div class="video-copy">Placeholder area for filmed onboarding content. Final media can replace this later without changing layout.</div>
             </div>
           </div>
         </button>
       `;
     }
 
-    function pillHTML(text, tone = 'light') {
-      return `<span class="pill ${tone === 'light' ? '' : tone}">${text}</span>`;
-    }
-
-    function getPhaseModuleKeys(phaseId) {
+    function phaseCompletionPercent(phaseId) {
       const phase = phases.find(p => p.id === phaseId);
-      return phase ? phase.modules.map((_, i) => `${phaseId}-${i}`) : [];
+      const keys = phase.modules.map((_, i) => `${phaseId}-${i}`);
+      const checked = keys.filter(key => state.modules[key].checked).length;
+      return Math.round((checked / keys.length) * 100);
     }
 
-    function getPhaseCompletionPercent(phaseId) {
-      const keys = getPhaseModuleKeys(phaseId);
-      const checked = keys.filter(key => appState.modules[key]?.checked).length;
-      return keys.length ? Math.round((checked / keys.length) * 100) : 0;
+    function phaseComplete(phaseId) { return phaseCompletionPercent(phaseId) === 100; }
+    function journeyComplete() { return phases.every(p => phaseComplete(p.id)); }
+
+    function journeyProgress() {
+      const keys = Object.keys(state.modules);
+      const checked = keys.filter(key => state.modules[key].checked).length;
+      return Math.round((checked / keys.length) * 100);
     }
 
-    function isPhaseComplete(phaseId) {
-      return getPhaseCompletionPercent(phaseId) === 100;
+    function phaseButtonHTML(phase) {
+      const isComplete = phaseComplete(phase.id);
+      const isCurrent = state.viewedPhase === phase.id;
+      const classes = [
+        'phase-button',
+        isComplete ? 'complete' : '',
+        (!isComplete && isCurrent) ? 'active' : '',
+        (isComplete && isCurrent) ? 'current-complete' : ''
+      ].filter(Boolean).join(' ');
+
+      return `
+        <button class="${classes}" type="button" data-phase="${phase.id}">
+          <div class="phase-button-row">
+            <span class="phase-dot"></span>
+            <div>
+              <div class="phase-eyebrow">${phase.eyebrow}</div>
+              <div class="phase-button-title">${phase.title}</div>
+              <div class="phase-button-copy">${phase.blurb}</div>
+              ${isComplete ? '<div class="phase-chip" style="margin-top:10px;">Complete</div>' : ''}
+            </div>
+          </div>
+        </button>
+      `;
     }
 
-    function isJourneyComplete() {
-      return phases.every(phase => isPhaseComplete(phase.id));
-    }
-
-    function getJourneyProgress() {
-      const keys = Object.keys(appState.modules);
-      const checked = keys.filter(key => appState.modules[key]?.checked).length;
-      return keys.length ? Math.round((checked / keys.length) * 100) : 0;
-    }
-
-    function maybePulseFill(el) {
-      if (!el || appState.reducedMotion) return;
-      el.classList.remove('is-active');
-      void el.offsetWidth;
-      el.classList.add('is-active');
-    }
-
-    function getModuleStatus(key) {
-      const checked = !!appState.modules[key]?.checked;
-      return checked ? { label: 'Completed', cls: 'complete' } : { label: 'Not started', cls: '' };
+    function mobileTabHTML(phase) {
+      return `<button class="mobile-tab ${state.viewedPhase === phase.id ? 'active' : ''}" type="button" data-phase="${phase.id}">${phase.eyebrow}</button>`;
     }
 
     function moduleHTML(module, phaseId, index) {
       const key = `${phaseId}-${index}`;
-      const checked = !!appState.modules[key]?.checked;
-      const status = getModuleStatus(key);
-
+      const checked = state.modules[key].checked;
       return `
-        <article class="module-card ${module.featured ? 'featured' : 'standard'} ${checked ? 'is-complete' : ''} ${appState.modules[key]?.justCompleted ? 'just-completed' : ''} reveal" data-module-key="${key}">
+        <article class="module-card ${module.featured ? 'featured' : 'standard'} ${checked ? 'is-complete' : ''} ${state.modules[key].justCompleted ? 'just-completed' : ''} reveal">
           <div class="module-top">
-            ${pillHTML(checked ? 'Module complete' : 'Module')}
+            <span class="pill ${checked ? 'success' : ''}">${checked ? 'Module complete' : 'Module'}</span>
             ${accentGroupHTML('subtle')}
           </div>
           <div class="module-content">
@@ -1643,11 +1026,11 @@ html = dedent(r'''<!DOCTYPE html>
               <button class="btn-primary js-tap-only" type="button">${module.primary} <span aria-hidden="true">→</span></button>
               <button class="quiet-link js-tap-only" type="button">Quiet secondary link</button>
             </div>
-            <div class="resource-links" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;">
+            <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;">
               ${module.secondary.map(item => `<button class="resource-pill js-tap-only" type="button">${item}</button>`).join('')}
             </div>
             <div class="module-status-row">
-              <div class="module-status ${status.cls}"><span class="status-dot"></span>${status.label}</div>
+              <div class="module-status ${checked ? 'complete' : ''}"><span class="status-dot"></span>${checked ? 'Completed' : 'Not started'}</div>
               ${checked ? '<span class="module-complete-badge">✓ Completed</span>' : ''}
             </div>
           </div>
@@ -1656,9 +1039,8 @@ html = dedent(r'''<!DOCTYPE html>
     }
 
     function branchHTML(branch, phaseId) {
-      const selected = appState.branchSelections[phaseId] || branch.options[0].id;
-      const option = branch.options.find(item => item.id === selected) || branch.options[0];
-
+      const selected = state.branchSelections[phaseId] || branch.options[0].id;
+      const selectedOption = branch.options.find(option => option.id === selected) || branch.options[0];
       return `
         <div class="branch-shell reveal">
           <div class="branch-inner">
@@ -1671,22 +1053,22 @@ html = dedent(r'''<!DOCTYPE html>
               <div>${accentGroupHTML('branch')}</div>
             </div>
             <div class="branch-grid">
-              ${branch.options.map(item => `
-                <button class="branch-card ${selected === item.id ? 'selected' : 'dimmed'}" type="button" data-branch-select="${phaseId}:${item.id}">
-                  <div class="branch-card-pill">${item.label}</div>
-                  <div class="branch-card-title">${item.title}</div>
-                  <div class="branch-card-copy">${item.copy}</div>
+              ${branch.options.map(option => `
+                <button class="branch-card ${selected === option.id ? 'selected' : 'dimmed'}" type="button" data-branch-select="${phaseId}:${option.id}">
+                  <div class="branch-card-pill">${option.label}</div>
+                  <div class="branch-card-title">${option.title}</div>
+                  <div class="branch-card-copy">${option.copy}</div>
                   <div class="branch-link">View path <span aria-hidden="true">→</span></div>
                 </button>
               `).join('')}
             </div>
             <div class="branch-segment-wrap">
-              ${branch.options.map(item => `<button class="branch-segment ${selected === item.id ? 'active' : ''}" type="button" data-branch-select="${phaseId}:${item.id}">${item.label}</button>`).join('')}
+              ${branch.options.map(option => `<button class="branch-segment ${selected === option.id ? 'active' : ''}" type="button" data-branch-select="${phaseId}:${option.id}">${option.label}</button>`).join('')}
             </div>
             <div class="branch-details reveal">
               <div class="branch-details-label">Selected audience path</div>
-              <div class="branch-details-title">${option.title}</div>
-              <div class="branch-details-copy">${option.copy}</div>
+              <div class="branch-details-title">${selectedOption.title}</div>
+              <div class="branch-copy" style="margin-top:8px; color:#d7dee8;">${selectedOption.copy}</div>
             </div>
           </div>
         </div>
@@ -1694,25 +1076,23 @@ html = dedent(r'''<!DOCTYPE html>
     }
 
     function finalJourneyHTML() {
-      if (!isJourneyComplete()) return '';
-
+      if (!journeyComplete()) return '';
       return `
-        <section class="final-journey-shell reveal" id="final-journey-shell">
-          <div class="final-journey-inner">
-            <div class="final-journey-head">
+        <section class="final-journey-shell reveal" id="finalJourney">
+          <div class="final-inner">
+            <div class="final-head">
               <div>
                 <div class="final-chip">All onboarding phases complete</div>
-                <h2 class="final-journey-title">Everything is in place — now explore what comes next.</h2>
-                <p class="final-journey-copy">This final completion moment stays in the page flow so the add-ons below remain visible and discoverable. The animation is meant to feel like a premium finish line, not a modal interruption.</p>
+                <h2 class="final-title">Everything is in place — now explore what comes next.</h2>
+                <p class="final-copy">This completion moment stays in the page flow so the add-ons below remain visible and discoverable. It is intentionally more restrained and product-like than a popup or interruption.</p>
               </div>
               <div>${accentGroupHTML('default')}</div>
             </div>
-
-            <div class="final-journey-grid">
-              <div class="final-journey-card">
+            <div class="final-grid">
+              <div class="final-card">
                 <div class="meta-label">Journey status</div>
-                <div class="final-card-title" style="margin-top:10px;">Onboarding complete</div>
-                <p class="final-card-copy">All core onboarding phases have been resolved. The add-ons section below is now visually elevated as the natural next area to explore.</p>
+                <div class="final-card-title" style="margin-top:10px;">Journey complete</div>
+                <p class="final-card-copy">All three onboarding phases have been resolved. The lower add-ons area is now elevated as the natural next step.</p>
                 <div class="final-progress-row" style="margin-top:16px;"><span>Overall progress</span><span>100%</span></div>
                 <div class="final-progress-bar"><div class="final-progress-fill"></div></div>
                 <div class="final-check-cluster">
@@ -1721,14 +1101,13 @@ html = dedent(r'''<!DOCTYPE html>
                   <span class="final-check-pill"><span class="final-check-icon">✓</span> After your survey closes</span>
                 </div>
               </div>
-
-              <div class="final-journey-card">
+              <div class="final-card">
                 <div class="meta-label">Next step</div>
                 <div class="final-card-title" style="margin-top:10px;">Explore available add-ons</div>
                 <p class="final-card-copy">Use the add-ons section as the next conversation surface for optional programs, premium support layers, or extension services.</p>
                 <div class="final-action-row">
-                  <button class="final-action-btn" type="button" id="scroll-to-addons">Explore add-ons <span aria-hidden="true">↓</span></button>
-                  <span class="final-support-text">Inline celebration • no popup interruption</span>
+                  <button class="final-action-btn" type="button" id="scrollToAddons">Explore add-ons <span aria-hidden="true">↓</span></button>
+                  <span class="final-support-text">Inline completion • no popup interruption</span>
                 </div>
               </div>
             </div>
@@ -1737,13 +1116,31 @@ html = dedent(r'''<!DOCTYPE html>
       `;
     }
 
-    function renderMain() {
-      const journeyComplete = isJourneyComplete();
-      pageRoot.classList.toggle('journey-complete', journeyComplete);
+    function reviewNotesHTML() {
+      return `
+        <section class="review-notes-shell reveal" id="reviewNotes">
+          <div class="review-notes-inner">
+            <div class="meta-label">Review notes</div>
+            <h3 class="review-notes-title">Audience-specific guidance</h3>
+            <div class="review-notes-grid">
+              <div class="review-note-card">
+                <div class="review-note-title">Customer Success</div>
+                <p class="review-note-copy">Use this file to review journey flow, resource grouping, and where regional or sold-experience variations should become visible. This is a wireframe; actual approved copy should be reviewed in the Accelerate Landing Page .docx.</p>
+              </div>
+              <div class="review-note-card">
+                <div class="review-note-title">Web Dev</div>
+                <p class="review-note-copy">This file is a single-page prototype intended for review. Video areas remain placeholders, the interaction model is intentionally lightweight, and the sticky rail should preserve both viewed-phase awareness and completed-phase states.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
 
-      mainContent.innerHTML = phases.map(phase => {
-        const phaseProgress = getPhaseCompletionPercent(phase.id);
-        const complete = isPhaseComplete(phase.id);
+    function renderSections() {
+      els.main.innerHTML = phases.map(phase => {
+        const completion = phaseCompletionPercent(phase.id);
+        const complete = phaseComplete(phase.id);
         return `
           <section class="section-shell ${complete ? 'phase-complete' : ''} reveal" id="${phase.id}">
             <div class="section-head reveal">
@@ -1752,133 +1149,140 @@ html = dedent(r'''<!DOCTYPE html>
                   <p class="eyebrow" style="letter-spacing:.2em">${phase.eyebrow}</p>
                   <div class="section-title-row">
                     <h2 class="section-title">${phase.title}</h2>
-                    ${appState.activePhase === phase.id ? pillHTML('Current focus', 'dark') : ''}
-                    ${complete ? pillHTML('Complete', 'success') : ''}
+                    ${complete ? '<span class="pill success">Complete</span>' : ''}
                   </div>
                   <p class="section-copy">${phase.blurb}</p>
-                  ${appState.phaseCompletionBanners[phase.id] ? '<div class="phase-complete-banner">✓ Phase complete — ready for next step</div>' : ''}
+                  ${state.phaseBanners[phase.id] ? '<div class="phase-complete-banner">✓ Phase complete — ready for next step</div>' : ''}
                 </div>
                 <div class="phase-progress-box ${complete ? 'complete' : ''} reveal">
-                  <div class="phase-progress-row"><span>Phase progress</span><span>${phaseProgress}%</span></div>
-                  <div class="progress-bar"><div class="progress-fill ${phaseProgress ? 'is-active' : ''} ${complete ? 'success' : ''}" style="width:${phaseProgress}%"></div></div>
-                  <button class="sync-link" type="button" data-phase="${phase.id}">Sync sidebar state to this phase</button>
-                  ${complete ? '<div class="phase-complete-chip">Ready for next step</div>' : ''}
+                  <div class="phase-progress-row"><span>Phase progress</span><span>${completion}%</span></div>
+                  <div class="progress-bar"><div class="progress-fill ${completion ? 'is-active' : ''} ${complete ? 'success' : ''}" style="width:${completion}%"></div></div>
+                  <button class="sync-link" type="button" data-phase="${phase.id}">Jump to this phase</button>
+                  ${complete ? '<div class="phase-chip" style="margin-top:12px;">Ready for next step</div>' : ''}
                 </div>
               </div>
             </div>
             <div class="section-body reveal">
               ${phase.video ? videoHTML(false) : ''}
               <div class="module-grid" style="margin-top:${phase.video ? 28 : 0}px;">
-                ${phase.modules.map((module, i) => moduleHTML(module, phase.id, i)).join('')}
+                ${phase.modules.map((module, index) => moduleHTML(module, phase.id, index)).join('')}
               </div>
               ${branchHTML(phase.branch, phase.id)}
             </div>
           </section>
         `;
-      }).join('') + `
-        ${finalJourneyHTML()}
-        <section class="addons-shell ${journeyComplete ? 'elevated' : ''} reveal" id="addons-section">
+      }).join('') + finalJourneyHTML() + `
+        <section class="addons-shell ${journeyComplete() ? 'elevated' : ''} reveal" id="addonsSection">
           <div class="addons-inner">
             <div class="addons-head">
               <div>
                 <p class="eyebrow" style="letter-spacing:.2em">Lower-page area</p>
                 <h2 class="addons-title">Available add-ons</h2>
-                <p class="results-copy">Placeholder presentation for add-on opportunities and sales/support conversation points, intentionally quieter than the primary onboarding flow${journeyComplete ? ', but now elevated as the next natural step.' : '.'}</p>
+                <p class="results-copy">Placeholder presentation for optional add-ons and extension services that should stay secondary to the primary onboarding flow${journeyComplete() ? ', but become slightly elevated once the full journey is complete.' : '.'}</p>
               </div>
               <div>${accentGroupHTML('default')}</div>
             </div>
             <div class="addons-grid">
-              ${Array.from({ length: 4 }).map(() => `
+              ${['Manager access', 'Additional coaching', 'Add countries (Global)', 'Additional benchmarks'].map(title => `
                 <article class="addon-card reveal">
-                  <div class="addon-title">Add-on concept</div>
-                  <div class="addon-copy">Placeholder detail for optional extensions that should not overpower the core onboarding phases.</div>
+                  <div class="addon-title">${title}</div>
+                  <div class="addon-copy">Placeholder detail for an optional extension that can be discussed after onboarding is complete.</div>
                   <button class="text-link js-tap-only" type="button" style="margin-top:16px;display:inline-flex;align-items:center;gap:4px;">Learn more <span aria-hidden="true">→</span></button>
                 </article>
               `).join('')}
             </div>
           </div>
         </section>
-      `;
+        ${reviewNotesHTML()}`;
+
+      els.pageRoot.classList.toggle('journey-complete', journeyComplete());
     }
 
-    function renderSidebar() {
-      sidebarNav.innerHTML = phases.map(phase => {
-        const active = appState.activePhase === phase.id;
-        const complete = isPhaseComplete(phase.id);
-        return `
-          <button class="phase-button ${active ? 'active' : ''} ${complete ? 'complete' : ''}" type="button" data-phase="${phase.id}">
-            <div class="phase-button-row">
-              <span class="phase-dot"></span>
-              <div>
-                <div class="phase-eyebrow">${phase.eyebrow}</div>
-                <div class="phase-button-title">${phase.title}</div>
-                <div class="phase-button-copy">${phase.blurb}</div>
-                ${complete ? '<div class="phase-complete-chip">Complete</div>' : ''}
-              </div>
-            </div>
-          </button>
-        `;
-      }).join('');
+    function renderRail() {
+      els.sidebarNav.innerHTML = phases.map(phaseButtonHTML).join('');
+      els.mobileTabs.innerHTML = phases.map(mobileTabHTML).join('');
+      const current = phases.find(p => p.id === state.viewedPhase) || phases[0];
+      els.currentPhaseLabel.textContent = current.title;
+      const progress = journeyProgress();
+      els.journeyLabel.textContent = `${progress}%`;
+      els.journeyFill.style.width = `${progress}%`;
+      els.journeyFill.classList.toggle('success', progress === 100);
+      pulse(els.journeyFill);
     }
 
-    function renderMobileTabs() {
-      mobileTabs.innerHTML = phases.map(phase => `
-        <button class="mobile-tab ${appState.activePhase === phase.id ? 'active' : ''}" type="button" data-phase="${phase.id}">${phase.eyebrow}</button>
-      `).join('');
-    }
-
-    function updateMeta() {
-      const phase = phases.find(p => p.id === appState.activePhase) || phases[0];
-      const journey = getJourneyProgress();
-      phaseLabel.textContent = phase.title;
-      journeyLabel.textContent = `${journey}%`;
-      journeyFill.style.width = `${journey}%`;
-      journeyFill.classList.toggle('success', journey === 100);
-      maybePulseFill(journeyFill);
+    function pulse(el) {
+      if (!el || state.reducedMotion) return;
+      el.classList.remove('is-active');
+      void el.offsetWidth;
+      el.classList.add('is-active');
     }
 
     function playTapFeedback(el) {
-      if (!el || appState.reducedMotion) return;
+      if (!el || state.reducedMotion) return;
       el.classList.remove('tap-bounce');
       void el.offsetWidth;
       el.classList.add('tap-bounce');
-      window.setTimeout(() => el.classList.remove('tap-bounce'), 210);
+      setTimeout(() => el.classList.remove('tap-bounce'), 220);
     }
 
-    function bindEvents() {
-      document.querySelectorAll('[data-phase]').forEach(btn => {
-        btn.addEventListener('click', () => setActivePhase(btn.dataset.phase, true));
+    function attachStaticEvents() {
+      els.sidebarNav.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-phase]');
+        if (!button) return;
+        setViewedPhase(button.dataset.phase, true);
       });
 
-      document.querySelectorAll('[data-module-toggle]').forEach(btn => {
-        btn.addEventListener('click', () => toggleModuleComplete(btn.dataset.moduleToggle));
+      els.mobileTabs.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-phase]');
+        if (!button) return;
+        setViewedPhase(button.dataset.phase, true);
       });
 
-      document.querySelectorAll('[data-branch-select]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const [phaseId, value] = btn.dataset.branchSelect.split(':');
-          setBranchSelection(phaseId, value);
-        });
-      });
+      els.main.addEventListener('click', (event) => {
+        const moduleToggle = event.target.closest('[data-module-toggle]');
+        if (moduleToggle) {
+          event.preventDefault();
+          toggleModule(moduleToggle.dataset.moduleToggle);
+          return;
+        }
 
-      document.querySelectorAll('.js-tap-only').forEach(btn => {
-        btn.addEventListener('click', () => playTapFeedback(btn));
-      });
+        const branchSelect = event.target.closest('[data-branch-select]');
+        if (branchSelect) {
+          event.preventDefault();
+          const [phaseId, value] = branchSelect.dataset.branchSelect.split(':');
+          state.branchSelections[phaseId] = value;
+          renderAll(false);
+          const detail = document.getElementById(phaseId)?.querySelector('.branch-details');
+          if (detail) playTapFeedback(detail);
+          return;
+        }
 
-      const finalBtn = document.getElementById('scroll-to-addons');
-      if (finalBtn) {
-        finalBtn.addEventListener('click', () => {
-          playTapFeedback(finalBtn);
-          const target = document.getElementById('addons-section');
-          if (target) target.scrollIntoView({ behavior: appState.reducedMotion ? 'auto' : 'smooth', block: 'start' });
-        });
-      }
+        const phaseJump = event.target.closest('[data-phase]');
+        if (phaseJump) {
+          event.preventDefault();
+          setViewedPhase(phaseJump.dataset.phase, true);
+          return;
+        }
+
+        const tapOnly = event.target.closest('.js-tap-only');
+        if (tapOnly) {
+          event.preventDefault();
+          playTapFeedback(tapOnly);
+          return;
+        }
+
+        const addonsCta = event.target.closest('#scrollToAddons');
+        if (addonsCta) {
+          event.preventDefault();
+          playTapFeedback(addonsCta);
+          document.getElementById('addonsSection')?.scrollIntoView({ behavior: state.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      });
     }
 
-    let revealObserver;
-    function initReveals() {
-      if (revealObserver) revealObserver.disconnect();
-      if (appState.reducedMotion) {
+    function initReveals(withReveal) {
+      revealObserver?.disconnect();
+      if (!withReveal || state.reducedMotion) {
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
         return;
       }
@@ -1898,118 +1302,87 @@ html = dedent(r'''<!DOCTYPE html>
       });
     }
 
-    function renderAll(withScrollReveal = true) {
-      renderSidebar();
-      renderMobileTabs();
-      renderMain();
-      updateMeta();
-      bindEvents();
-      if (withScrollReveal) {
-        initReveals();
-      } else {
-        document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
-      }
-      document.querySelectorAll('.just-completed').forEach(el => {
-        setTimeout(() => el.classList.remove('just-completed'), 1360);
-      });
-    }
+    function initPhaseTracking() {
+      phaseObserver?.disconnect();
+      const sections = Array.from(document.querySelectorAll('.section-shell[id]'));
+      if (!sections.length) return;
 
-    function toggleModuleComplete(key) {
-      const mod = appState.modules[key];
-      if (!mod) return;
-      const wasChecked = mod.checked;
-      mod.checked = !mod.checked;
-      mod.justCompleted = !wasChecked && mod.checked;
-      renderAll(false);
-      if (!wasChecked && mod.checked) checkPhaseCompletion(key.split('-')[0]);
-    }
-
-    function setBranchSelection(phaseId, value) {
-      appState.branchSelections[phaseId] = value;
-      renderAll(false);
-      const target = document.getElementById(phaseId);
-      if (target) {
-        const details = target.querySelector('.branch-details');
-        if (details) playTapFeedback(details);
-      }
-    }
-
-    function setActivePhase(phaseId, scrollToSection = false) {
-      appState.activePhase = phaseId;
-      renderAll(false);
-      if (scrollToSection) {
-        const target = document.getElementById(phaseId);
-        if (target) target.scrollIntoView({ behavior: appState.reducedMotion ? 'auto' : 'smooth', block: 'start' });
-      }
-    }
-
-    function triggerJourneyCompleteMoment() {
-      if (appState.allCompleteShown) return;
-      appState.allCompleteShown = true;
-      renderAll(false);
-
-      if (!appState.reducedMotion) {
-        const shell = document.getElementById('final-journey-shell');
-        if (shell) {
-          shell.classList.add('in-view');
-          setTimeout(() => {
-            shell.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 220);
+      phaseObserver = new IntersectionObserver((entries) => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (!visible.length) return;
+        const nextPhase = visible[0].target.id;
+        if (nextPhase && nextPhase !== state.viewedPhase) {
+          state.viewedPhase = nextPhase;
+          renderRail();
         }
+      }, {
+        threshold: [0.20, 0.35, 0.5, 0.7],
+        rootMargin: '-22% 0px -55% 0px'
+      });
+
+      sections.forEach(section => phaseObserver.observe(section));
+    }
+
+    function setViewedPhase(phaseId, scrollToSection = false) {
+      state.viewedPhase = phaseId;
+      renderRail();
+      if (scrollToSection) document.getElementById(phaseId)?.scrollIntoView({ behavior: state.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    function triggerJourneyComplete() {
+      if (state.allCompleteShown) return;
+      state.allCompleteShown = true;
+      renderAll(false);
+      if (!state.reducedMotion) {
+        const final = document.getElementById('finalJourney');
+        if (final) setTimeout(() => final.scrollIntoView({ behavior: 'smooth', block: 'center' }), 240);
       }
     }
 
     function checkPhaseCompletion(phaseId) {
-      const allComplete = getPhaseModuleKeys(phaseId).every(key => appState.modules[key]?.checked);
-      if (!allComplete) return;
-
-      appState.phaseCompletionBanners[phaseId] = true;
-      renderAll(false);
-
-      if (isJourneyComplete()) {
-        triggerJourneyCompleteMoment();
+      if (!phaseComplete(phaseId)) return;
+      state.phaseBanners[phaseId] = true;
+      if (journeyComplete()) {
+        triggerJourneyComplete();
         return;
       }
-
-      const nextPhase = phases[phases.findIndex(p => p.id === phaseId) + 1];
+      renderAll(false);
+      const next = phases[phases.findIndex(phase => phase.id === phaseId) + 1];
       const isMobile = window.innerWidth <= 1100;
-      if (nextPhase && !isMobile && !appState.reducedMotion) {
-        setTimeout(() => setActivePhase(nextPhase.id, true), 1680);
+      if (next && !isMobile && !state.reducedMotion) {
+        setTimeout(() => setViewedPhase(next.id, true), 1760);
       }
     }
 
-    function handleResize() {
+    function toggleModule(key) {
+      const module = state.modules[key];
+      if (!module) return;
+      const wasChecked = module.checked;
+      module.checked = !module.checked;
+      module.justCompleted = !wasChecked && module.checked;
       renderAll(false);
+      if (!wasChecked && module.checked) checkPhaseCompletion(key.split('-')[0]);
     }
 
-    function handleReducedMotionChange(e) {
-      appState.reducedMotion = e.matches;
-      renderAll(true);
+    function renderAll(withReveal = true) {
+      renderSections();
+      renderRail();
+      initReveals(withReveal);
+      initPhaseTracking();
+      document.querySelectorAll('.just-completed').forEach(el => setTimeout(() => el.classList.remove('just-completed'), 1860));
     }
 
     function init() {
+      attachStaticEvents();
       renderAll(true);
-      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (typeof mq.addEventListener === 'function') mq.addEventListener('change', handleReducedMotionChange);
-      else if (typeof mq.addListener === 'function') mq.addListener(handleReducedMotionChange);
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const onChange = (event) => { state.reducedMotion = event.matches; renderAll(true); };
+      if (typeof mediaQuery.addEventListener === 'function') mediaQuery.addEventListener('change', onChange);
+      else mediaQuery.addListener(onChange);
+      window.addEventListener('resize', () => renderAll(false));
     }
 
-    window.addEventListener('resize', handleResize);
     init();
   </script>
 </body>
 </html>
-''')
-
-out = Path('/mnt/data/accelerate_onboarding_premium_v5_full.html')
-out.write_text(html, encoding='utf-8')
-
-checks = {
-    'file_exists': out.exists(),
-    'has_final_inline_completion': 'final-journey-shell' in html,
-    'has_addons_scroll_cta': 'scroll-to-addons' in html,
-    'has_safe_rerender': "document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));" in html,
-    'has_popup_free_completion': 'Inline celebration' in html,
-    'has_slowed_motion': '--motion-celebrate: 1220ms;' in html,
-    'has_full_code': len(html),
-}
