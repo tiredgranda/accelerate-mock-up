@@ -1,7 +1,4 @@
-from textwrap import dedent
-from pathlib import Path
-
-html = dedent(r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1355,15 +1352,3 @@ html = dedent(r'''<!DOCTYPE html>
   </script>
 </body>
 </html>
-''')
-
-path = Path('/mnt/data/accelerate_onboarding_review_polished.html')
-path.write_text(html, encoding='utf-8')
-checks = {
-    'file_exists': path.exists(),
-    'global_deadlines_inline': 'Global Deadlines' in html,
-    'notes_updated': 'Pull inspiration from this mockup as much as possible' in html and 'alert Nate' in html,
-    'optional_moved': 'Add custom survey content' in html and 'Optional but recommended' in html and 'Culture and business insights' in html and 'If applicable' in html,
-    'length': len(html)
-}
-print({'path': str(path), 'checks': checks})
