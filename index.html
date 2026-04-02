@@ -1,7 +1,4 @@
-from textwrap import dedent
-from pathlib import Path
-
-html = dedent(r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1292,19 +1289,3 @@ html = dedent(r'''<!DOCTYPE html>
   </script>
 </body>
 </html>
-''')
-
-out = Path('/mnt/data/accelerate_onboarding_premium_v3.html')
-out.write_text(html, encoding='utf-8')
-
-checks = {
-    'file_exists': out.exists(),
-    'popup_reveal': 'scale(0.985)' in html,
-    'safe_rerender': "document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));" in html,
-    'tap_only_buttons': '.js-tap-only' in html and 'playTapFeedback(btn)' in html,
-    'checkbox_complete': 'data-module-toggle' in html,
-    'phase_nav': 'data-phase' in html,
-    'branch_select': 'data-branch-select' in html,
-    'size': out.stat().st_size if out.exists() else 0,
-}
-print({'path': str(out), 'checks': checks})
