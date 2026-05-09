@@ -4,18 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Accelerate Onboarding — Review Wireframe</title>
+  <!--
+    Brand font swap (v3.1, 2026-05-09):
+    Production GPTW.com uses Framehead Roman (display) + Gilroy (body), both paid licenses.
+    Closest free equivalents available on Google Fonts:
+      - Manrope (geometric sans, closest practical match to Gilroy — used for body + UI)
+      - Fraunces (variable serif, closest practical match to Framehead Roman's editorial weight — used for hero only)
+    Web team should swap these to the licensed Framehead + Gilroy in production.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- GPTW Brand Book 2.1: Gilroy is the primary typeface for ALL text (headlines AND body).
+       Manrope is the closest free Google Font analogue and is loaded here as a substitute.
+       Production: swap to licensed Gilroy. Century Gothic is the brand-specified email/doc fallback only. -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --red: #FF1628;
       --red-strong: #E10B1B;
       --black: #11131C;
       --white: #FFFFFF;
+      /* GPTW Brand Book 2.1 — Secondary palette (grayscale).
+         Cool greens in light shades, blue tints in darker shades. */
       --gray-1: #F5F8F6;
       --gray-2: #EDF1EF;
       --gray-3: #DEE5E4;
-      --gray-4: #C7D1CF;
-      --gray-5: #98A2B3;
-      --gray-6: #7F8A93;
+      --gray-4: #C4CCCC;
+      --gray-5: #A6AEB2;
+      --gray-6: #879298;
+      --gray-7: #69737A;
       --gray-8: #555E66;
       --success: #12B76A;
       --success-bg: #ECFDF3;
@@ -40,13 +57,16 @@
       --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      /* Typographic scale (GPTW-inspired) */
-      --tracking-tight: -0.022em;
-      --tracking-display: -0.03em;
-      --tracking-eyebrow: 0.16em;
-      --leading-tight: 1.05;
-      --leading-snug: 1.18;
-      --leading-body: 1.55;
+      /* GPTW Brand Book 2.1 — Typographic scale.
+         Brand spec: H1 tracking -25 / leading 100%, H2 tracking -25 / leading 120%,
+         H3 tracking -10, body tracking 0 / leading 140%.
+         -25 InDesign tracking units == -0.025em in CSS (1000-unit em). */
+      --tracking-display: -0.025em;  /* H1 / H2 — brand spec -25 */
+      --tracking-tight: -0.010em;    /* H3 — brand spec -10 */
+      --tracking-eyebrow: 0.16em;    /* uppercase eyebrow / labels */
+      --leading-tight: 1.00;         /* H1 — brand spec 100% */
+      --leading-snug: 1.20;          /* H2 — brand spec 120% */
+      --leading-body: 1.40;          /* body / caption — brand spec 140% */
       /* Component tokens */
       --rail-height: 88px;
       --rail-bg: #FFFFFF;
@@ -58,12 +78,28 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      /* GPTW Brand Book 2.1: Gilroy is the primary typeface for ALL text.
+         Manrope is the closest free Google Font substitute.
+         System fallbacks render before the webfont arrives. */
+      font-family: "Manrope", "Gilroy", "Century Gothic", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--gray-1);
       color: var(--black);
-      line-height: 1.5;
+      line-height: var(--leading-body);  /* 140% per brand spec */
+      letter-spacing: 0;                  /* body tracking 0 per brand spec */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: "liga" 0, "clig" 0;  /* brand spec: ligatures off */
     }
     h1,h2,h3,h4,p { margin: 0; }
+    /* GPTW Brand Book 2.1: All headlines are the same family as body (Gilroy/Manrope),
+       set in Semibold (600). Tracking and leading carry the brand-specified values. */
+    .hero-title, .section-title {
+      font-family: inherit;
+      font-weight: 600;
+      letter-spacing: var(--tracking-display);  /* -25 (-0.025em) per brand spec */
+      line-height: var(--leading-tight);        /* 100% on H1 per brand spec */
+    }
     button { font: inherit; cursor: pointer; }
     a { color: inherit; text-decoration: none; }
 
@@ -135,9 +171,9 @@
       margin-top: 14px;
       max-width: 820px;
       font-size: clamp(44px, 7.6vw, 84px);
-      line-height: 0.96;
-      letter-spacing: var(--tracking-display);
-      font-weight: 700;
+      line-height: 0.96;                       /* tighter than 100% for very large display sizes */
+      letter-spacing: var(--tracking-display); /* -25 per brand spec */
+      font-weight: 600;                         /* Semibold per brand spec */
       color: var(--black);
     }
     .hero-subtitle {
@@ -625,7 +661,7 @@
       justify-content: space-between;
     }
     .section-title-row { display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
-    .section-title { font-size: clamp(32px, 4.2vw, 44px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #101828; }
+    .section-title { font-size: clamp(32px, 4.2vw, 44px); line-height: var(--leading-tight); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--black); }
     .section-copy { margin-top: 16px; max-width: 760px; font-size: 16px; }
     .phase-progress-box {
       min-width: 280px;
@@ -797,7 +833,7 @@
     .branch-inner { padding: 24px 28px 28px; }
     .branch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
     .branch-chip { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); padding: 6px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #cbd5e1; }
-    .branch-title { margin-top: 12px; font-size: 28px; line-height: 1.08; font-weight: 700; }
+    .branch-title { margin-top: 12px; font-size: 28px; line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); font-weight: 600; }
     .branch-copy { margin-top: 12px; max-width: 760px; font-size: 14px; color: #cbd5e1; }
     .branch-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); padding: 16px; backdrop-filter: blur(4px); text-align: left; width: 100%; }
     .branch-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
@@ -839,7 +875,7 @@
     .final-journey-shell { border-color: rgba(17,19,28,0.06); box-shadow: 0 22px 56px rgba(17,19,28,0.08); }
     .final-inner { position: relative; z-index: 2; padding: 28px 36px 34px; background: radial-gradient(circle at top right, rgba(255,255,255,0.92), rgba(18,183,106,0.04) 24%, transparent 42%), linear-gradient(180deg, #ffffff 0%, #fbfdfc 100%); }
     .final-head { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; }
-    .final-title { margin-top: 12px; font-size: clamp(30px, 4vw, 42px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #101828; }
+    .final-title { margin-top: 12px; font-size: clamp(30px, 4vw, 42px); line-height: var(--leading-tight); letter-spacing: var(--tracking-display); font-weight: 600; color: var(--black); }
     .final-copy { margin-top: 14px; max-width: 760px; font-size: 16px; }
     .final-card-title { font-size: 16px; font-weight: 700; color: #101828; }
     .final-check-cluster { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
@@ -849,7 +885,7 @@
     .addons-shell.elevated { border-color: rgba(17,19,28,0.06); box-shadow: 0 22px 56px rgba(17,19,28,0.08); }
     .addons-inner { position: relative; z-index: 2; padding: 28px 36px 36px; }
     .addons-head { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-    .addons-title { margin-top: 12px; font-size: 36px; line-height: 1.08; font-weight: 700; color: #101828; }
+    .addons-title { margin-top: 12px; font-size: 36px; line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); font-weight: 600; color: var(--black); }
     .addon-card { background: #f8faf9; }
     .addon-card:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(17,19,28,0.06); }
     .addon-title { font-size: 14px; font-weight: 700; color: #101828; }
@@ -862,13 +898,16 @@
     .review-note-title { font-size: 14px; font-weight: 700; color: #101828; }
     .review-note-copy { margin-top: 8px; font-size: 13px; }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 360ms var(--ease-out), transform 360ms var(--ease-out-expo);
-      will-change: opacity, transform;
-    }
-    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    /* v3.1 (2026-05-09): scroll-in fade animation neutralized.
+       Sections appear immediately as the user scrolls — no entrance choreography.
+       The IntersectionObserver in JS still runs (cheap, harmless) but has no visual effect.
+       If we ever want to re-enable, restore the original opacity:0 / transform values here. */
+    .reveal { opacity: 1; transform: none; transition: none; will-change: auto; }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    /* v3.1: pause sticky behavior of the progress rail while the tutorial overlay is active,
+       so the rail stops chasing the viewport and stops covering spotlights below the fold. */
+    body.tutorial-active .journey-rail { position: relative; box-shadow: none; }
 
     @media (max-width: 1279px) {
       .content-grid { grid-template-columns: 1fr; }
@@ -957,9 +996,12 @@
     .journey-rail-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
     .journey-rail-eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
     .journey-rail-title { margin: 8px 0 0; font-size: clamp(24px, 3vw, 30px); font-weight: 700; letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); color: var(--black); }
-    .journey-rail-summary { text-align: right; }
+    .journey-rail-summary { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
     .journey-rail-percent { font-size: 36px; font-weight: 700; line-height: 1; color: var(--black); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
-    .journey-rail-percent-label { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .journey-rail-percent-label { margin-top: 2px; font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    /* v3.1: SaaS-style autosave reassurance pill */
+    .journey-rail-autosave { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border-radius: 999px; background: var(--success-bg); border: 1px solid var(--success-border); color: #067647; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+    .journey-rail-autosave-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--success); box-shadow: 0 0 0 3px rgba(18,183,106,0.18); }
     .journey-rail-bar {
       position: relative;
       height: 8px;
@@ -1017,12 +1059,23 @@
     .rail-segment.is-active .rail-seg-percent { color: var(--red); }
     .rail-segment.is-active.is-complete .rail-seg-percent { color: #067647; }
 
+    /* Tablet — between phone breakpoint and the desktop 1100 breakpoint.
+       Addons grid was already collapsed to 1fr at 1100px, but a 2-col on tablet
+       reads better and uses the available width. */
+    @media (min-width: 740px) and (max-width: 1099px) {
+      .addons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .review-notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
     @media (max-width: 768px) {
       .journey-rail { margin: 0 12px 20px; border-radius: var(--radius-md); }
       .journey-rail-inner { padding: 16px 16px 18px; }
       .journey-rail-header { gap: 12px; margin-bottom: 10px; }
       .journey-rail-title { font-size: 16px; }
       .journey-rail-percent { font-size: 22px; }
+      /* Compact autosave pill on mobile so it doesn't crowd the rail header */
+      .journey-rail-autosave { font-size: 10px; padding: 3px 8px; }
       .journey-rail-segments { grid-template-columns: 1fr; gap: 8px; }
       .rail-segment { padding: 12px 14px; }
       .rail-segment:not(.is-active) { display: none; }
@@ -1499,6 +1552,12 @@
           <div class="journey-rail-summary">
             <div class="journey-rail-percent" id="journeyProgressLabel">0%</div>
             <div class="journey-rail-percent-label">Complete</div>
+            <!-- v3.1: SaaS best-practice — explicit reassurance that progress is saved.
+                 Reduces drop-off anxiety for users who need to leave and come back. -->
+            <div class="journey-rail-autosave" aria-live="polite">
+              <span class="journey-rail-autosave-dot" aria-hidden="true"></span>
+              <span>Progress auto-saved</span>
+            </div>
           </div>
         </div>
         <div class="journey-rail-bar"><div class="journey-rail-fill" id="journeyProgressFill" style="width:0%"></div></div>
@@ -1546,6 +1605,107 @@
           Maintained by Nathanael Conway. Last updated: May 9, 2026.
         </p>
 
+        <!-- v3.2 — BRAND BOOK 2.1 ALIGNMENT -->
+        <div style="margin-top:28px; padding:20px; border-radius:20px; border:1px solid var(--success-border); background:linear-gradient(180deg,#fff,#f8fdfb);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; background:var(--success); color:white; font-size:12px; font-weight:800;">&#10003;</span>
+            <span style="font-size:16px; font-weight:700; color:#05603A;">v3.2 &mdash; Brand Book 2.1 Alignment (May 9, 2026)</span>
+          </div>
+          <div style="display:grid; gap:14px;">
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Typography &mdash; Single typeface across the page</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Brand Book 2.1 specifies <strong>Gilroy</strong> as the primary typeface for both headlines and body. The prior live-site audit had inferred Framehead Roman as a separate display face, which was substituted with Fraunces. Fraunces is now removed; Manrope (the closest free Gilroy substitute) carries every text level. Headings switched to Semibold (600) per spec; previously Bold (700). Production should swap Manrope for licensed Gilroy.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Source:</strong> GPTW Brand Book 2.1, pages 70-75. <strong>Built by:</strong> Nathanael Conway.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Typography &mdash; Tracking and leading aligned to brand spec</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Brand book specifies tracking -25 (-0.025em) on H1/H2, tracking -10 (-0.010em) on H3, and 0 on body. Leading is 100% on H1, 120% on H2, 140% on body. Tokens updated and applied across .hero-title, .section-title, .final-title, .branch-title, .addons-title. Ligatures explicitly disabled at the body level (brand requirement). Body line-height tightened from 1.55 to 1.40.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Source:</strong> GPTW Brand Book 2.1, page 72. <strong>Built by:</strong> Nathanael Conway.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Color &mdash; Brand Black and Gray ramp corrected</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">The prior live-site audit captured Brand Black as <code>#111C1C</code> and Gray 4 as <code>#C4CBCC</code> &mdash; both single-digit transpositions of the actual brand-book values. Corrected to <code>#11131C</code> (Brand Black) and <code>#C4CCCC</code> (Gray 4). Gray 5 corrected from <code>#98A2B3</code> to <code>#A6AEB2</code>. Gray 6 corrected from <code>#7F8A93</code> to <code>#879298</code>. Gray 7 added at <code>#69737A</code> (was missing). Brand Red <code>#FF1628</code> was already correct.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Source:</strong> GPTW Brand Book 2.1, pages 77-78. <strong>Built by:</strong> Nathanael Conway.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Reference doc rewritten as merged source-of-truth</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">02_Reference/GPTW_Design_System.md is now keyed off the brand book with the live-site audit kept as a delta annotation per section. Where they disagree, brand book wins. Includes a CSS variable scaffold, a five-attribute voice matrix, and the foundational terminology rules (Great / Place / Work / For All / "Become Great." tagline).</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Built by:</strong> Nathanael Conway.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Brand verbal identity scan &mdash; passed</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">All references to "Great Place To Work" use capital T in "To" per brand spec. "For All" treatments are correct (For All Summit, For All model). No gendered pronouns found in copy. Tagline "Become Great." is not currently in the page &mdash; flagged for content layer if added later it must use exact spec.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Source:</strong> GPTW Brand Book 2.1, pages 144-150. <strong>Built by:</strong> Nathanael Conway.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #fde68a; background:#fffbeb;">
+              <div style="font-size:12px; font-weight:700; color:#92400E; letter-spacing:0.1em; text-transform:uppercase;">Flagged for v3.3 &mdash; Token-replace inline functional grays</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">95 inline references to Tailwind-default neutral grays (<code>#667085</code>, <code>#475467</code>, <code>#344054</code>, <code>#98A2B3</code>) remain in component-level styles. They're visually close to the brand gray ramp but not identical. Acceptable for an internal wireframe; a future v3.3 pass should swap these to the brand tokens or document the deviation. Mass replacement skipped here to avoid regression risk.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Owner:</strong> Nathanael Conway.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- v3.1 — POLISH PASS, BUG FIXES, BRAND FONT, SaaS BEST PRACTICES -->
+        <div style="margin-top:28px; padding:20px; border-radius:20px; border:1px solid var(--success-border); background:linear-gradient(180deg,#fff,#f8fdfb);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; background:var(--success); color:white; font-size:12px; font-weight:800;">&#10003;</span>
+            <span style="font-size:16px; font-weight:700; color:#05603A;">v3.1 &mdash; Polish Pass &amp; Bug Fixes (May 9, 2026)</span>
+          </div>
+          <div style="display:grid; gap:14px;">
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Bug fix — Phase rail tracking (the Phase 3 blink-back bug)</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">The active-phase highlight on the top sticky rail wasn't reaching Phase 3 on scroll, wasn't tracking back to Phase 1 on scroll-up, and snapped back to Phase 2 when Phase 3 was clicked. Fixed by rewriting the IntersectionObserver to read the rail's actual rendered height for the top inset (so the observation zone starts below the sticky rail and ends at viewport mid), and by adding a 700ms click-pin guard so user clicks on phase pills aren't overridden by the smooth-scroll firing the observer.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Built by:</strong> Nathanael Conway</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Bug fix — Sticky rail no longer covers tutorial spotlights</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">When the tutorial scrolled to anchors below the fold, the sticky rail followed the viewport and sat on top of the spotlight on tutorial steps 3 and beyond. Fix: a `tutorial-active` class is added to the body when the tutorial opens; CSS pauses the rail's sticky behavior while it's set. Removed on tutorial end.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Polish — Section fade-ins removed</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">The scroll-triggered fade-up entrance animation on every section is gone. Sections render immediately as the user scrolls. Animation observer code is left in place (cheap, harmless) but the CSS is a no-op — clean revert path if we want it back.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Brand — Typography updated to match GPTW.com</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Loaded Manrope (closest free analogue to GPTW's licensed Gilroy) for body and UI, and Fraunces (closest free analogue to Framehead Roman) for hero and section titles. Web team should swap these to the licensed Framehead + Gilroy in production. Body line-height bumped from 1.5 to 1.55 and font-smoothing enabled for better legibility.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Reference:</strong> greatplacetowork.com About / Our Mission and CEO pages</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">SaaS best practice — Auto-saved progress reassurance pill</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Added a small green "Progress auto-saved" pill in the rail header. Reduces drop-off anxiety for users who need to leave and return — they can see at a glance that nothing will be lost. Compact on mobile so it doesn't crowd the rail.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Tablet/mobile — Two-column grids on tablet, addons grid responsive</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Added a 740–1099px tablet breakpoint that gives addons, modules, and review-notes a 2-column grid (instead of the wasteful 1-col fallback that kicked in at 1100px). Page now uses tablet width effectively.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Footer — Jump-to-changelog link added</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Reviewers and testers can now jump straight to the change log from the footer without scrolling. Sits next to the existing "Restart tutorial" link.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Promoted from Backlog — Top-of-page progress indicator (single canonical record)</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Removed the duplicate "progress bar at top of page" entry from the Backlog section. The shipped sticky three-phase rail is the resolution — that single record now lives in v3 (Promoted from Backlog) below.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Originally raised by:</strong> Claire Murphy (April 12), Melissa Young (April 7) · <strong>Cleanup:</strong> Audit consolidation</p>
+            </div>
+
+          </div>
+        </div>
+
         <!-- v3 — INTERACTIVE PROTOTYPE BUILD -->
         <div style="margin-top:28px; padding:20px; border-radius:20px; border:1px solid var(--success-border); background:linear-gradient(180deg,#fff,#f8fdfb);">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
@@ -1574,6 +1734,12 @@
               <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Promoted from Backlog — Persistent user progress (prototype scope)</div>
               <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Shipped browser-localStorage progress saving for the prototype. Closes the previously-backlogged "autosave" ask within prototype scope. Production cross-device sync still requires login infrastructure and is unchanged.</p>
               <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Originally raised by:</strong> Melissa Young (April 7) · <strong>Resolved:</strong> Prototype scope shipped; production scope unchanged</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Promoted from Backlog — Top-of-page progress indicator</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Shipped the top-of-page progress indicator originally requested by Claire and Melissa. Implementation is the sticky three-phase rail described in the "Navigation &amp; structure" entry above — it tracks overall progress, highlights the current phase, picks up a soft shadow on scroll, and collapses cleanly on mobile. Earlier concern about add-ons making the indicator "messy" was resolved by separating phase progress (rail) from add-ons (their own grid below Phase 3). Single shipped record — see Navigation &amp; structure entry above for the technical detail.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Originally raised by:</strong> Claire Murphy (April 12), Melissa Young (April 7) · <strong>Resolved:</strong> Shipped as sticky three-phase rail in v3</p>
             </div>
 
           </div>
@@ -1638,12 +1804,6 @@
             </div>
 
             <div style="padding:14px 16px; border-radius:14px; border:1px solid #E6EAE8; background:white;">
-              <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase;">Progress bar at top of page</div>
-              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Claire and Melissa suggested top progress indicator. Nathanael noted it would get messy with add-ons included. Deferred to v2+.</p>
-              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Raised by:</strong> Claire Murphy (April 12), Melissa Young (April 7)</p>
-            </div>
-
-            <div style="padding:14px 16px; border-radius:14px; border:1px solid #E6EAE8; background:white;">
               <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase;">Lifecycle resource destination</div>
               <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Gail's idea (via Natalie): evolve into a resource customers return to throughout their journey. Nathanael leans toward AI tools long-term.</p>
               <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Raised by:</strong> Gail via Natalie Lyda (April 16) · <strong>Decision:</strong> Future consideration</p>
@@ -1691,10 +1851,31 @@
           </div>
         </div>
 
+        <!-- AUDIT CADENCE -->
+        <div style="margin-top:24px; padding:20px; border-radius:20px; border:1px solid #dde5e4; background:white;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; background:#5B6FD6; color:white; font-size:12px; font-weight:800;">↻</span>
+            <span style="font-size:16px; font-weight:700; color:#101828;">Audit cadence</span>
+          </div>
+          <p style="font-size:13px; color:#475467; line-height:1.7;">
+            Feedback comes in via the <strong>Accelerate Wireframe 🧑‍💻</strong> Teams chat, .docx comments, and review meetings. New items get logged into this changelog as <strong>Shipped</strong>, <strong>Backlogged</strong>, or <strong>Declined</strong> with originator and date. A regular audit pass (run with each version bump) checks for duplicates between sections, items that have moved status without being moved here, and any orphaned ideas. Each version bump records a one-line entry in Version History below.
+          </p>
+        </div>
+
         <!-- VERSION HISTORY -->
         <div style="margin-top:24px; padding:20px; border-radius:20px; border:1px solid #dde5e4; background:#f8faf9;">
           <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px;">Version history</div>
           <div style="display:grid; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:baseline; font-size:13px; line-height:1.6;">
+              <span style="flex-shrink:0; font-weight:700; color:#101828; min-width:44px;">v3.2</span>
+              <span style="flex-shrink:0; color:#667085; min-width:100px;">May 9, 2026</span>
+              <span style="color:#475467;">Brand Book 2.1 alignment: Fraunces removed (brand book uses one typeface, Gilroy, for headlines and body), heading weight switched 700&rarr;600 (Semibold per spec), tracking/leading tokens aligned to brand spec (-25/-10, 100%/120%/140%), Brand Black corrected to #11131C, gray ramp corrected (Gray 4 #C4CCCC, Gray 5 #A6AEB2, Gray 6 #879298, Gray 7 #69737A added), ligatures disabled per spec, design system reference doc rewritten as merged source-of-truth.</span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:baseline; font-size:13px; line-height:1.6;">
+              <span style="flex-shrink:0; font-weight:700; color:#101828; min-width:44px;">v3.1</span>
+              <span style="flex-shrink:0; color:#667085; min-width:100px;">May 9, 2026</span>
+              <span style="color:#475467;">Polish pass: Phase rail tracking bug fixed, sticky rail paused during tutorial, section fade-ins removed, Manrope + Fraunces brand fonts loaded, auto-saved reassurance pill added to rail, tablet 2-col grids, jump-to-changelog footer link, progress-bar item moved Backlog &rarr; Shipped (deduped).</span>
+            </div>
             <div style="display:flex; gap:12px; align-items:baseline; font-size:13px; line-height:1.6;">
               <span style="flex-shrink:0; font-weight:700; color:#101828; min-width:44px;">v3.0</span>
               <span style="flex-shrink:0; color:#667085; min-width:100px;">May 9, 2026</span>
@@ -1727,6 +1908,7 @@
         <p class="page-footer-body">Reach out to your Customer Success Manager or browse the Knowledge Base anytime.</p>
       </div>
       <div class="page-footer-aside">
+        <a href="#changeLog" class="page-footer-link" style="margin-right:18px;">View change log</a>
         <a href="#" id="restartTutorialLink" class="page-footer-link">↻ Restart tutorial</a>
       </div>
     </div>
@@ -1841,8 +2023,15 @@
       branchExpansions: { before: {}, live: {}, after: {} },
       phaseBanners: {},
       allCompleteShown: false,
-      modules: {}
+      modules: {},
+      // Click-pin guard: when a user clicks a rail segment, we set this to Date.now().
+      // The phase IntersectionObserver checks this and skips updates within
+      // PHASE_CLICK_PIN_MS so the smooth-scroll fired by setViewedPhase doesn't
+      // get overridden by intermediate observer hits (which used to make Phase 3
+      // blink-and-snap-back on click).
+      recentClickAt: 0
     };
+    const PHASE_CLICK_PIN_MS = 700;
 
     phases.forEach(phase => phase.modules.forEach((_, i) => {
       state.modules[`${phase.id}-${i}`] = { checked: false, justCompleted: false };
@@ -2332,7 +2521,17 @@
       phaseObserver?.disconnect();
       const sections = Array.from(document.querySelectorAll('.section-shell[id]'));
       if (!sections.length) return;
+      // Read the *rendered* sticky-rail height so the observer's top inset adapts
+      // to mobile collapse and any future rail height changes. The bottom inset
+      // is fixed at 50% so the active phase is whichever section's top is
+      // currently in the upper half of the viewport (below the rail).
+      const rail = document.getElementById('journeyRail');
+      const railHeight = rail ? rail.offsetHeight : 88;
       phaseObserver = new IntersectionObserver((entries) => {
+        // Click-pin guard: ignore observer hits for ~700ms after a user clicks
+        // a rail segment, so the smooth-scroll doesn't trigger intermediate
+        // updates that snap the highlight back to Phase 2.
+        if (Date.now() - state.recentClickAt < PHASE_CLICK_PIN_MS) return;
         const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (!visible.length) return;
         const nextPhase = visible[0].target.id;
@@ -2341,14 +2540,19 @@
           renderRail();
         }
       }, {
-        threshold: [0.20, 0.35, 0.5, 0.7],
-        rootMargin: '-22% 0px -55% 0px'
+        // Top inset = rail height (so observation starts BELOW the sticky rail).
+        // Bottom inset = -50% (so active phase tracks roughly the upper half).
+        // This is the canonical fix for IntersectionObserver-with-sticky-element.
+        threshold: [0, 0.15, 0.35, 0.6],
+        rootMargin: `-${railHeight}px 0px -50% 0px`
       });
       sections.forEach(section => phaseObserver.observe(section));
     }
 
     function setViewedPhase(phaseId, scrollToSection = false) {
       state.viewedPhase = phaseId;
+      // Set click-pin so the observer doesn't fight us during the smooth-scroll.
+      if (scrollToSection) state.recentClickAt = Date.now();
       renderRail();
       if (scrollToSection) document.getElementById(phaseId)?.scrollIntoView({ behavior: state.reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
@@ -2840,12 +3044,16 @@
         currentStep = 0;
         tutorialEls.tooltip.classList.remove('is-positioned', 'is-fading');
         tutorialEls.overlay.classList.add('is-active');
+        // Pause the sticky rail so it stops chasing the viewport between
+        // tutorial anchors and stops covering spotlights below the fold.
+        document.body.classList.add('tutorial-active');
         document.body.style.overflow = 'hidden';
         renderTutorialStep();
       }
 
       function endTutorial(triggerCelebration) {
         tutorialEls.overlay.classList.remove('is-active');
+        document.body.classList.remove('tutorial-active');
         document.body.style.overflow = '';
         // Persist seen flag so the tutorial doesn't auto-launch on subsequent loads.
         // Users can re-open it via the "Replay tutorial" button or footer link.
