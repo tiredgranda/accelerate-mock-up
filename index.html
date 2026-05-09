@@ -255,40 +255,96 @@
     .video::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,22,40,0.03), rgba(17,19,28,0.02)); }
     .video::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: rgba(255,22,40,0.45); }
 
-    /* Photo-backed video card — dark gradient overlay, white text */
+    /* Photo-backed video card — two zones: photo (16:9) + content band */
     .video.has-photo {
-      border-color: rgba(17,19,28,0.16);
+      display: block;
+      padding: 0;
+      border: 1px solid var(--rail-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #fff;
+      cursor: pointer;
     }
-    .video.has-photo::before {
-      background: linear-gradient(180deg, rgba(17,19,28,0.10) 0%, rgba(17,19,28,0.18) 45%, rgba(17,19,28,0.55) 75%, rgba(17,19,28,0.82) 100%);
+    .video.has-photo::before, .video.has-photo::after { display: none; }
+    .video.has-photo .video-photo {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: var(--gray-2);
     }
-    .video.has-photo .video-label {
-      background: rgba(255,255,255,0.16);
-      border-color: rgba(255,255,255,0.30);
+    .video.has-photo.compact { display: flex; flex-direction: row; align-items: stretch; }
+    .video.has-photo.compact .video-photo { aspect-ratio: 16 / 10; flex: 0 0 52%; min-height: 100%; }
+    .video.has-photo.compact .video-content { flex: 1; align-items: center; border-top: 0; border-left: 1px solid var(--rail-border); flex-direction: column; align-items: flex-start; justify-content: center; }
+    @media (max-width: 768px) {
+      .video.has-photo.compact { flex-direction: column; }
+      .video.has-photo.compact .video-photo { flex: 1 0 auto; aspect-ratio: 16 / 9; }
+      .video.has-photo.compact .video-content { border-left: 0; border-top: 1px solid var(--rail-border); }
+    }
+    .video.has-photo .video-photo-eyebrow {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(17, 19, 28, 0.78);
       color: #ffffff;
-      backdrop-filter: blur(6px);
-    }
-    .video.has-photo .video-center {
-      justify-content: flex-end;
-      align-items: flex-start;
-      text-align: left;
-      padding: 24px 28px 28px;
-      gap: 18px;
-    }
-    .video.has-photo .play-shell {
-      align-self: flex-start;
-      margin-bottom: 4px;
-    }
-    .video.has-photo .video-title {
-      color: #ffffff;
-      font-size: 22px;
-      line-height: 1.25;
-      letter-spacing: var(--tracking-tight);
+      font-size: 11px;
       font-weight: 700;
-      max-width: 640px;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
     }
-    .video.compact.has-photo .video-title { font-size: 17px; max-width: 420px; }
-    .video.has-photo .video-copy { color: rgba(255,255,255,0.75); }
+    .video.has-photo .video-photo-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video.has-photo .video-photo-play .play-shell {
+      width: 76px;
+      height: 76px;
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 8px 28px rgba(17,19,28,0.25);
+      transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+    }
+    .video.compact.has-photo .video-photo-play .play-shell { width: 60px; height: 60px; }
+    .video.has-photo:hover .video-photo-play .play-shell { transform: scale(1.06); box-shadow: 0 12px 36px rgba(17,19,28,0.30); }
+    .video.has-photo .video-content {
+      padding: 22px 28px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      border-top: 1px solid var(--rail-border);
+      background: #fff;
+    }
+    .video.has-photo .video-content-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+      line-height: var(--leading-snug);
+      color: var(--black);
+      max-width: 720px;
+    }
+    .video.compact.has-photo .video-content { padding: 16px 20px 18px; }
+    .video.compact.has-photo .video-content-title { font-size: 17px; }
+    .video.has-photo .video-content-cta {
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: -0.005em;
+      align-self: center;
+      white-space: nowrap;
+    }
+    .video.has-photo:hover { transform: translateY(var(--hover-lift)); box-shadow: var(--shadow-lg); }
+    @media (max-width: 768px) {
+      .video.has-photo .video-content { flex-direction: column; gap: 8px; padding: 18px 18px 18px; }
+      .video.has-photo .video-content-title { font-size: 17px; }
+      .video.has-photo .video-photo-play .play-shell { width: 56px; height: 56px; }
+    }
 
     .video-label {
       position: absolute;
@@ -602,6 +658,7 @@
       transform-origin: center;
     }
     .module-card.featured { box-shadow: 0 22px 50px rgba(17,19,28,0.08); }
+    .module-card.has-video { grid-column: 1 / -1; }
     .module-card.standard { background: #fbfcfc; box-shadow: 0 10px 24px rgba(17,19,28,0.04); }
     .module-card:hover { transform: translateY(-2px); }
     .module-card.is-complete { border-color: var(--success-border); background: linear-gradient(180deg, #ffffff 0%, #f8fffb 100%); box-shadow: 0 18px 36px rgba(18,183,106,0.06); }
@@ -1048,6 +1105,90 @@
       .tutorial-overlay, .tutorial-spotlight, .tutorial-tooltip { transition: none !important; }
     }
 
+    /* Branch routes — collapsible accordion (Choose your route) */
+    .branch-routes { display: grid; gap: 12px; margin-top: 22px; }
+    .branch-route {
+      background: var(--white);
+      border: 1px solid var(--rail-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+    }
+    .branch-route.is-open { border-color: var(--gray-4); box-shadow: var(--shadow-sm); }
+    .branch-route-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      transition: background var(--motion-fast) var(--ease-out);
+    }
+    .branch-route-header:hover { background: var(--gray-1); }
+    .branch-route-header-text { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+    .branch-route-pill {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--gray-1);
+      border: 1px solid var(--gray-3);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--gray-8);
+    }
+    .branch-route.is-open .branch-route-pill { background: #fff8f8; border-color: var(--red); color: var(--red); }
+    .branch-route-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: -0.005em;
+      line-height: 1.3;
+    }
+    .branch-route-toggle {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid var(--gray-3);
+      background: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-8);
+      transition: background var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+    }
+    .branch-route.is-open .branch-route-toggle { background: var(--red); color: #fff; border-color: var(--red); }
+    .branch-route-body {
+      padding: 4px 22px 22px;
+      animation: routeBodyIn var(--motion-base) var(--ease-out-expo);
+    }
+    @keyframes routeBodyIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .branch-route-copy { margin: 8px 0 14px; font-size: 14px; line-height: var(--leading-body); color: var(--gray-8); }
+    .branch-route-resources { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .branch-route .branch-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .branch-route-body { animation: none; }
+    }
+
+    /* Phase 1 — Before you launch — should always be visible (no fade) so tutorial highlight works */
+    #before.reveal,
+    #before .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1408,7 +1549,7 @@
     <div class="tutorial-spotlight" id="tutorialSpotlight" aria-hidden="true"></div>
     <div class="tutorial-tooltip" id="tutorialTooltip" data-placement="bottom">
       <div class="tutorial-tooltip-header">
-        <div class="tutorial-step-counter" id="tutorialStepCounter">Step 1 of 5</div>
+        <div class="tutorial-step-counter" id="tutorialStepCounter">Step 1 of 6</div>
         <button class="tutorial-skip-btn" type="button" id="tutorialSkipBtn">Skip tour</button>
       </div>
       <h3 class="tutorial-tooltip-title" id="tutorialTitle">Title</h3>
@@ -1505,6 +1646,7 @@
       viewedPhase: 'before',
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
       branchSelections: { before: 'global', live: 'global', after: 'global' },
+      branchExpansions: { before: {}, live: {}, after: {} },
       phaseBanners: {},
       allCompleteShown: false,
       modules: {}
@@ -1544,15 +1686,31 @@
       const hasThumb = config && config.src;
       const title = (config && config.title) || 'Video placement';
       const eyebrow = (config && config.eyebrow) || 'Video placeholder';
-      const thumbStyle = hasThumb ? `background-image: url('data:image/jpeg;base64,${config.src}'); background-size: cover; background-position: 50% 25%;` : '';
+      if (hasThumb) {
+        // Two-zone treatment: photo at top (16:9), content band below
+        return `
+          <button class="video ${compact ? 'compact' : 'full'} has-photo js-tap-only" type="button" style="width:100%;text-align:left;">
+            <div class="video-photo" style="background-image: url('data:image/jpeg;base64,${config.src}'); background-size: cover; background-position: 50% 22%;">
+              <div class="video-photo-eyebrow">${eyebrow}</div>
+              <div class="video-photo-play">
+                <div class="play-shell"><div class="play-triangle"></div></div>
+              </div>
+            </div>
+            <div class="video-content">
+              <h3 class="video-content-title">${title}</h3>
+              <span class="video-content-cta">Watch video <span aria-hidden="true">→</span></span>
+            </div>
+          </button>
+        `;
+      }
       return `
-        <button class="video ${compact ? 'compact' : 'full'} ${hasThumb ? 'has-photo' : ''} js-tap-only" type="button" style="width:100%;text-align:left;border-width:1px;${thumbStyle}">
+        <button class="video ${compact ? 'compact' : 'full'} js-tap-only" type="button" style="width:100%;text-align:left;border-width:1px;">
           <div class="video-label">${eyebrow}</div>
           <div class="video-center">
             <div class="play-shell"><div class="play-triangle"></div></div>
             <div>
               <div class="video-title">${title}</div>
-              ${!hasThumb ? '<div class="video-copy">Placeholder area for filmed onboarding content. Final media can replace this later without changing layout.</div>' : ''}
+              <div class="video-copy">Placeholder area for filmed onboarding content. Final media can replace this later without changing layout.</div>
             </div>
           </div>
         </button>
@@ -1603,7 +1761,7 @@
       const key = `${phaseId}-${index}`;
       const checked = state.modules[key].checked;
       return `
-        <article class="module-card ${module.featured ? 'featured' : 'standard'} ${checked ? 'is-complete' : ''} ${state.modules[key].justCompleted ? 'just-completed' : ''} reveal">
+        <article class="module-card ${module.featured ? 'featured' : 'standard'} ${module.video ? 'has-video' : ''} ${checked ? 'is-complete' : ''} ${state.modules[key].justCompleted ? 'just-completed' : ''} reveal">
           <div class="module-top">
             <span class="pill ${checked ? 'success' : ''}">${checked ? 'Module complete' : 'Module'}</span>
             ${accentGroupHTML('subtle')}
@@ -1640,42 +1798,41 @@
     }
 
     function branchHTML(branch, phaseId) {
-      const selected = state.branchSelections[phaseId] || branch.options[0].id;
-      const selectedOption = branch.options.find(option => option.id === selected) || branch.options[0];
+      // Collapsed by default — no preselection. Each route opens independently.
+      const expansions = state.branchExpansions[phaseId] || {};
       return `
-        <div class="branch-shell reveal">
+        <div class="branch-shell reveal" id="branch-${phaseId}">
           <div class="branch-inner">
             <div class="branch-head">
               <div>
-                <div class="branch-chip">Inline branch moment</div>
+                <div class="branch-chip">Choose your route</div>
                 <h4 class="branch-title">${branch.title}</h4>
-                <p class="branch-copy">${branch.body}</p>
+                <p class="branch-copy">${branch.body} Tap a route to see the steps tailored to your team.</p>
               </div>
               <div>${accentGroupHTML('branch')}</div>
             </div>
-            <div class="branch-grid">
-              ${branch.options.map(option => `
-                <button class="branch-card ${selected === option.id ? 'selected' : 'dimmed'}" type="button" data-branch-select="${phaseId}:${option.id}">
-                  <div class="branch-card-pill">${option.label}</div>
-                  <div class="branch-card-title">${option.title}</div>
-                  <div class="branch-card-copy">${option.copy}</div>
-                  <div class="branch-card-resources">
-                    ${option.resources.map(resource => `<span class="branch-resource-pill">${resource}</span>`).join('')}
+            <div class="branch-routes">
+              ${branch.options.map(option => {
+                const expanded = !!expansions[option.id];
+                return `
+                  <div class="branch-route ${expanded ? 'is-open' : ''}">
+                    <button class="branch-route-header" type="button" data-branch-toggle="${phaseId}:${option.id}" aria-expanded="${expanded ? 'true' : 'false'}">
+                      <div class="branch-route-header-text">
+                        <span class="branch-route-pill">${option.label}</span>
+                        <span class="branch-route-title">${option.title}</span>
+                      </div>
+                      <span class="branch-route-toggle" aria-hidden="true">${expanded ? '−' : '+'}</span>
+                    </button>
+                    <div class="branch-route-body" ${expanded ? '' : 'hidden'}>
+                      <p class="branch-route-copy">${option.copy}</p>
+                      <div class="branch-route-resources">
+                        ${option.resources.map(resource => `<span class="branch-resource-pill">${resource}</span>`).join('')}
+                      </div>
+                      <a class="branch-link" href="#">View full path <span aria-hidden="true">→</span></a>
+                    </div>
                   </div>
-                  <div class="branch-link">View path <span aria-hidden="true">→</span></div>
-                </button>
-              `).join('')}
-            </div>
-            <div class="branch-segment-wrap">
-              ${branch.options.map(option => `<button class="branch-segment ${selected === option.id ? 'active' : ''}" type="button" data-branch-select="${phaseId}:${option.id}">${option.label}</button>`).join('')}
-            </div>
-            <div class="branch-details reveal">
-              <div class="branch-details-label">Selected audience path</div>
-              <div class="branch-details-title">${selectedOption.title}</div>
-              <div class="branch-copy" style="margin-top:8px; color:#d7dee8;">${selectedOption.copy}</div>
-              <div class="branch-details-resources">
-                ${selectedOption.resources.map(resource => `<span class="branch-resource-pill">${resource}</span>`).join('')}
-              </div>
+                `;
+              }).join('')}
             </div>
           </div>
         </div>
@@ -1878,14 +2035,13 @@
           return;
         }
 
-        const branchSelect = event.target.closest('[data-branch-select]');
-        if (branchSelect) {
+        const branchToggle = event.target.closest('[data-branch-toggle]');
+        if (branchToggle) {
           event.preventDefault();
-          const [phaseId, value] = branchSelect.dataset.branchSelect.split(':');
-          state.branchSelections[phaseId] = value;
+          const [phaseId, optionId] = branchToggle.dataset.branchToggle.split(':');
+          if (!state.branchExpansions[phaseId]) state.branchExpansions[phaseId] = {};
+          state.branchExpansions[phaseId][optionId] = !state.branchExpansions[phaseId][optionId];
           renderAll(false);
-          const detail = document.getElementById(phaseId)?.querySelector('.branch-details');
-          if (detail) playTapFeedback(detail);
           return;
         }
 
@@ -2300,10 +2456,16 @@
           placement: 'bottom'
         },
         {
-          anchor: null, // centered, no anchor
-          title: "You're ready to begin",
-          body: "Complete all 16 modules across the three phases and you'll see a special celebration. Ready to get started?",
-          placement: 'center',
+          anchor: '#branch-before',
+          title: 'Choose your route',
+          body: "Some steps differ depending on whether you're a Global or UKG customer. Tap a route to expand the steps tailored to your team.",
+          placement: 'top'
+        },
+        {
+          anchor: '.hero-media',
+          title: "Now — start with the overview video",
+          body: "You're all set. Hit play on the welcome video to begin, then work your way through Phase 1 at your own pace.",
+          placement: 'bottom',
           finalAction: 'finish'
         }
       ];
@@ -2336,6 +2498,16 @@
         }
 
         var rect = anchor.getBoundingClientRect();
+        // Force-reveal all ancestor .reveal elements so the highlight has visible content
+        var node = anchor;
+        while (node && node !== document.body) {
+          if (node.classList && node.classList.contains('reveal')) node.classList.add('is-visible');
+          node = node.parentElement;
+        }
+        // Also reveal direct .reveal children inside the anchor
+        if (anchor.querySelectorAll) {
+          anchor.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
+        }
         // Mid-visible test: any meaningful portion of anchor in viewport (cap recursion at 1)
         var midVisible = rect.bottom > 100 && rect.top < window.innerHeight - 100;
         if (!midVisible && scrollAttempt < 1) {
@@ -2366,6 +2538,9 @@
         if (spaceBelow > tooltipH + 24) { placement = 'bottom'; top = clipBottom + 14; }
         else if (spaceAbove > tooltipH + 24) { placement = 'top'; top = clipTop - tooltipH - 14; }
         else { placement = 'center'; top = (window.innerHeight - tooltipH) / 2; }
+        // Hard clamp to viewport — guarantees tooltip is always visible even if smooth scroll
+        // hasn't finished by the time positionTutorial runs.
+        top = Math.max(12, Math.min(top, window.innerHeight - tooltipH - 12));
         tutorialEls.tooltip.setAttribute('data-placement', placement);
 
         var leftRaw = (placement === 'center') ? (window.innerWidth - tooltipW) / 2 : clipLeft;
@@ -2404,20 +2579,16 @@
       function endTutorial(triggerCelebration) {
         tutorialEls.overlay.classList.remove('is-active');
         document.body.style.overflow = '';
-        try { localStorage.setItem(TUTORIAL_FLAG, '1'); } catch (e) {}
+        // No localStorage flag — tutorial reloads on each page load (internal mockup mode)
         if (triggerCelebration) {
-          // Fire celebration as the natural conclusion
-          setTimeout(function() {
-            window.dispatchEvent(new CustomEvent('gpc:journey-complete'));
-          }, 240);
+          // Final step: scroll back to top to encourage starting with the overview video
+          window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         }
       }
 
       function nextStep() {
         if (currentStep === tourSteps.length - 1) {
-          // Final step — finish + trigger celebration
-          // Reset alreadyFired so the celebration definitely shows even if user briefly toggled before
-          alreadyFired = false;
+          // Final step — finish + scroll back to top
           endTutorial(true);
         } else {
           currentStep++;
@@ -2453,14 +2624,10 @@
         startTutorial();
       });
 
-      // Auto-start on first load
+      // Auto-start on first load (always shows on each load — internal mockup mode)
       function maybeStartTutorial() {
-        var seen = false;
-        try { seen = localStorage.getItem(TUTORIAL_FLAG) === '1'; } catch (e) {}
-        if (!seen) {
-          // Brief delay so reveal animations get going first, then tutorial appears
-          setTimeout(startTutorial, prefersReducedMotion ? 0 : 350);
-        }
+        // Brief delay so reveal animations get going first, then tutorial appears
+        setTimeout(startTutorial, prefersReducedMotion ? 0 : 350);
       }
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', maybeStartTutorial);
