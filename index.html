@@ -3297,7 +3297,7 @@
         modules: [
           { title: 'Monitor and drive participation', time: 'Quick daily check-in', body: 'Participation is the single biggest driver of a strong survey. Track progress daily, spot issues early, and send consistent reminders.', primary: 'Participation guidance', featured: true, secondary: ['Participation thresholds', 'Monitoring guidance', 'Invitation troubleshooting'] },
           { title: 'Complete the Culture Brief', time: '~15–20 min', body: 'The Culture Brief is part of your Certification application. Completing it while the survey is open keeps your closeout smooth and helps you stay on schedule.', primary: 'Culture Brief overview', secondary: ['Culture Brief articles'] },
-          { title: 'Culture Audit', time: 'Optional, when ready', note: 'Optional — for list consideration', body: 'The Culture Audit is optional. Complete it if your company wants to be considered for Best Workplaces national lists. It allows Great Place To Work to evaluate your people practices against the For All model.', primary: 'Culture Audit overview', secondary: ['Lists overview', 'Best Workplaces guidance'] }
+          { title: 'Culture Audit', time: 'For List consideration.', body: 'The Culture Audit is optional. Complete it if your company wants to be considered for Best Workplaces national lists. It allows Great Place To Work to evaluate your people practices against the For All model.', primary: 'Culture Audit overview', secondary: ['Lists overview', 'Best Workplaces guidance'] }
         ]
         // v3.8 (2026-05-09): branch removed — single master picker now lives in Phase 1.
       },
@@ -3629,9 +3629,11 @@
             ${module.note ? `<div class="module-note"><span class="inline-note-chip">${module.note}</span></div>` : ''}
             ${module.time ? (function () {
               // v3.9 patch 2: chip hosts time OR effort label; aria adapts.
+              // v3.9 patch 3: chip can also host a short note (e.g. "For List consideration.").
               const t = module.time;
               const isTime = /^~|min|hr|hour|day/i.test(t);
-              const aria = isTime ? `Estimated time ${t}` : `Effort: ${t}`;
+              const isEffort = /^(quick read|reference|optional|placeholder)/i.test(t);
+              const aria = isTime ? `Estimated time ${t}` : (isEffort ? `Effort: ${t}` : `Note: ${t}`);
               return `<div style="margin:6px 0 12px;"><span class="bx-time-estimate" aria-label="${aria}">${t}</span></div>`;
             })() : ''}
             <p class="module-copy">${module.body}</p>
