@@ -76,9 +76,6 @@
     .hero-shell,
     .section-shell,
     .addons-shell,
-    .mobile-tabs { display: none !important; }
-    #changeLog,
-    #reviewNotes { display: none !important; }
     .mobile-tabs,
     .final-journey-shell,
     .review-notes-shell {
@@ -88,6 +85,10 @@
       border: 1px solid rgba(17, 19, 28, 0.06);
       overflow: hidden;
     }
+    /* Hide review-mode and redundant tabs on the live mockup */
+    .mobile-tabs,
+    #changeLog,
+    #reviewNotes { display: none !important; }
 
     .hero-shell { margin-bottom: 24px; }
     .hero-grid { display: grid; grid-template-columns: 1.18fr 0.92fr; }
