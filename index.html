@@ -87,7 +87,6 @@
     }
     /* Hide review-mode and redundant tabs on the live mockup */
     .mobile-tabs,
-    #changeLog,
     #reviewNotes { display: none !important; }
 
     .hero-shell { margin-bottom: 24px; }
@@ -927,6 +926,18 @@
     @media (prefers-reduced-motion: reduce) {
       .gpc-overlay, .gpc-overlay-inner { transition: opacity 200ms linear; transform: none !important; }
       .gpc-overlay-inner svg * { animation: none !important; }
+      /* Force final-state visibility for elements that animate in from opacity:0 / transform.
+         Without this, they stay frozen invisible because their base state was the start frame. */
+      .gpc-overlay-inner svg .gpc-title,
+      .gpc-overlay-inner svg .gpc-subtitle,
+      .gpc-overlay-inner svg .gpc-progress-track,
+      .gpc-overlay-inner svg .gpc-progress-label,
+      .gpc-overlay-inner svg .gpc-phase-line,
+      .gpc-overlay-inner svg .gpc-completion-pill { opacity: 1 !important; transform: none !important; }
+      .gpc-overlay-inner svg .gpc-progress-bar { transform: scaleX(1) !important; }
+      .gpc-overlay-inner svg .gpc-check-mark { stroke-dashoffset: 0 !important; }
+      /* Confetti is purely decorative motion — hide entirely in reduced-motion mode */
+      .gpc-overlay-inner svg .gpc-confetti, .gpc-overlay-inner svg .gpc-sweep { display: none; }
     }
     /* === TOP PROGRESS RAIL (replaces left sidebar) === */
     .journey-rail {
@@ -1498,10 +1509,13 @@
     <div class="preview-bar" role="region" aria-label="Internal preview">
       <div class="preview-bar-inner">
         <span class="preview-bar-pill">For preview</span>
-        <span class="preview-bar-text">Test the celebration animation, or reset everything to start onboarding from scratch.</span>
+        <span class="preview-bar-text">Test the celebration animation, replay the tutorial, or reset everything to start onboarding from scratch.</span>
         <div class="preview-bar-actions">
           <button class="preview-bar-cta" type="button" id="previewCelebrationBtn">
             <span aria-hidden="true">▶</span> Play celebration
+          </button>
+          <button class="preview-bar-cta preview-bar-cta--secondary" type="button" id="replayTutorialBtn">
+            <span aria-hidden="true">↗</span> Replay tutorial
           </button>
           <button class="preview-bar-cta preview-bar-cta--secondary" type="button" id="resetProgressBtn">
             <span aria-hidden="true">↻</span> Reset progress
@@ -1524,11 +1538,44 @@
           <strong>Accelerate Wireframe 🧑‍💻</strong> Teams chat, comments in the
           <strong>Accelerate Landing Page .docx</strong>, and the
           <strong>Accelerate_Landing_Page_Web_Dev_Handoff.docx</strong> handoff file.
-          Maintained by Nathanael Conway. Last updated: May 8, 2026.
+          Maintained by Nathanael Conway. Last updated: May 9, 2026.
         </p>
 
-        <!-- APPROVED -->
+        <!-- v3 — INTERACTIVE PROTOTYPE BUILD -->
         <div style="margin-top:28px; padding:20px; border-radius:20px; border:1px solid var(--success-border); background:linear-gradient(180deg,#fff,#f8fdfb);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; background:var(--success); color:white; font-size:12px; font-weight:800;">✓</span>
+            <span style="font-size:16px; font-weight:700; color:#05603A;">v3 — Interactive Prototype Build (May 9, 2026)</span>
+          </div>
+          <div style="display:grid; gap:14px;">
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Interactive prototype layer — Tutorial, celebration, persistence, preview tools</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Added a guided 6-step SaaS-style tutorial with spotlight + tooltip, a full-screen journey-complete celebration animation (confetti, checkmark, progress bar), and browser-storage progress saving so users can bookmark, leave, and pick up where they left off. The tutorial auto-launches once per browser; from then on it stays out of the way and users can re-open it from the footer link or the in-page preview bar. Added an amber "For Preview" bar with three internal-tester buttons: Play celebration, Replay tutorial, and Reset progress.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Built by:</strong> Nathanael Conway</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Visual upgrade — Hero, photo-led videos, wider page, checkbox affordance</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Refreshed the hero with a single welcome pill, larger title, and the Janan still embedded in the video preview. Added three photo-led video treatments — Janan in Phase 1 (intro) and the Build-your-EDF module, Victoria in Phase 3 — using a two-zone layout: 16:9 photo on top, content band below with title, subtitle, and "Watch video" CTA. Expanded the page from 1400 → 1600px max-width for desktop breathing room. Redesigned module checkboxes for clearer affordance: bigger 32px dashed circles with a light tinted background, a "Mark complete" floating hint that appears on hover, and a faint preview checkmark inside.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Navigation &amp; structure — Sticky top rail, Global / UKG branch routes</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Replaced the side navigation with a top sticky progress rail that tracks all three phases, picks up a soft shadow as you scroll, and collapses cleanly on mobile. Added a Global / UKG branch routes accordion in Phase 1 demonstrating how customer-segment-specific steps can surface inline rather than as a separate doc. Routes start collapsed; tap to expand.</p>
+            </div>
+
+            <div style="padding:14px 16px; border-radius:14px; border:1px solid #dde5e4; background:white;">
+              <div style="font-size:12px; font-weight:700; color:#05603A; letter-spacing:0.1em; text-transform:uppercase;">Promoted from Backlog — Persistent user progress (prototype scope)</div>
+              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Shipped browser-localStorage progress saving for the prototype. Closes the previously-backlogged "autosave" ask within prototype scope. Production cross-device sync still requires login infrastructure and is unchanged.</p>
+              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Originally raised by:</strong> Melissa Young (April 7) · <strong>Resolved:</strong> Prototype scope shipped; production scope unchanged</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- APPROVED -->
+        <div style="margin-top:24px; padding:20px; border-radius:20px; border:1px solid var(--success-border); background:linear-gradient(180deg,#fff,#f8fdfb);">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
             <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:999px; background:var(--success); color:white; font-size:12px; font-weight:800;">✓</span>
             <span style="font-size:16px; font-weight:700; color:#05603A;">v2 — Approved Changes Applied (May 8, 2026)</span>
@@ -1592,12 +1639,6 @@
             </div>
 
             <div style="padding:14px 16px; border-radius:14px; border:1px solid #E6EAE8; background:white;">
-              <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase;">Persistent user progress / autosave</div>
-              <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Saving user state on a public website without auth is not feasible for MVP. Requires login infrastructure.</p>
-              <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Raised by:</strong> Melissa Young (April 7) · <strong>Decision:</strong> Not feasible for MVP</p>
-            </div>
-
-            <div style="padding:14px 16px; border-radius:14px; border:1px solid #E6EAE8; background:white;">
               <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase;">Lifecycle resource destination</div>
               <p style="margin-top:6px; font-size:13px; color:#475467; line-height:1.6;">Gail's idea (via Natalie): evolve into a resource customers return to throughout their journey. Nathanael leans toward AI tools long-term.</p>
               <p style="margin-top:6px; font-size:11px; color:#667085;"><strong>Raised by:</strong> Gail via Natalie Lyda (April 16) · <strong>Decision:</strong> Future consideration</p>
@@ -1649,6 +1690,11 @@
         <div style="margin-top:24px; padding:20px; border-radius:20px; border:1px solid #dde5e4; background:#f8faf9;">
           <div style="font-size:12px; font-weight:700; color:#344054; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px;">Version history</div>
           <div style="display:grid; gap:8px;">
+            <div style="display:flex; gap:12px; align-items:baseline; font-size:13px; line-height:1.6;">
+              <span style="flex-shrink:0; font-weight:700; color:#101828; min-width:44px;">v3.0</span>
+              <span style="flex-shrink:0; color:#667085; min-width:100px;">May 9, 2026</span>
+              <span style="color:#475467;">Interactive prototype build: guided tutorial, completion celebration, localStorage persistence, photo-led videos, top sticky rail (replaces sidebar), Global/UKG branch routes, redesigned checkboxes, internal preview tools.</span>
+            </div>
             <div style="display:flex; gap:12px; align-items:baseline; font-size:13px; line-height:1.6;">
               <span style="flex-shrink:0; font-weight:700; color:#101828; min-width:44px;">v2.0</span>
               <span style="flex-shrink:0; color:#667085; min-width:100px;">May 8, 2026</span>
@@ -2546,9 +2592,8 @@
   <script>
     // Celebration overlay timing
     (function() {
-      var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReduced) return; // respect reduced-motion preference
-
+      // Reduced-motion is handled by CSS (animations off, just opacity fade) — the celebration
+      // still shows so users get the achievement feedback, just without the kinetic effects.
       var overlay = document.getElementById('celebrationOverlay');
       var dismiss = document.getElementById('celebrationDismiss');
       if (!overlay) return;
@@ -2816,7 +2861,9 @@
       function endTutorial(triggerCelebration) {
         tutorialEls.overlay.classList.remove('is-active');
         document.body.style.overflow = '';
-        // No localStorage flag — tutorial reloads on each page load (internal mockup mode)
+        // Persist seen flag so the tutorial doesn't auto-launch on subsequent loads.
+        // Users can re-open it via the "Replay tutorial" button or footer link.
+        try { localStorage.setItem(TUTORIAL_FLAG, '1'); } catch(_) {}
         if (triggerCelebration) {
           // Final step: scroll back to top to encourage starting with the overview video
           window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
@@ -2860,9 +2907,22 @@
         try { localStorage.removeItem(TUTORIAL_FLAG); } catch(_) {}
         startTutorial();
       });
+      // Replay tutorial button in the preview bar — same behavior
+      var replayBtn = document.getElementById('replayTutorialBtn');
+      if (replayBtn) {
+        replayBtn.addEventListener('click', function() {
+          try { localStorage.removeItem(TUTORIAL_FLAG); } catch(_) {}
+          startTutorial();
+        });
+      }
 
-      // Auto-start on first load (always shows on each load — internal mockup mode)
+      // Auto-start on first load only — once the user has finished or skipped, the flag is set
+      // and the tutorial stays out of their way. They can re-open it via the preview bar
+      // "Replay tutorial" button or the footer link.
       function maybeStartTutorial() {
+        try {
+          if (localStorage.getItem(TUTORIAL_FLAG)) return;
+        } catch(_) {}
         // Brief delay so reveal animations get going first, then tutorial appears
         setTimeout(startTutorial, prefersReducedMotion ? 0 : 350);
       }
