@@ -426,7 +426,16 @@
     @media (max-width: 768px) {
       .video.has-photo .video-content { flex-direction: column; gap: 8px; padding: 18px 18px 18px; }
       .video.has-photo .video-content-title { font-size: 17px; }
-      .video.has-photo .video-photo-play .play-shell { width: 56px; height: 56px; }
+      /* v3.10 (2026-05-09): mobile play button shrunk from 56→48 (a measured
+         14% reduction). On phone widths the 56px shell felt heavy on top of the
+         photo; 48px reads as a clear "tap to play" affordance without dominating
+         the thumbnail. Desktop (76) and compact-desktop (60) variants unchanged.
+         The compact override below is required because `.video.compact.has-photo`
+         has higher specificity than `.video.has-photo` and would otherwise keep
+         the inline walkthrough thumbnail at 60px while the full-bleed thumbnails
+         shrunk to 48px — visibly inconsistent. Locking all three to 48px here. */
+      .video.has-photo .video-photo-play .play-shell,
+      .video.compact.has-photo .video-photo-play .play-shell { width: 48px; height: 48px; }
     }
 
     /* v3.7: Victoria's Phase 3 video card now matches Janan's Phase 1 — full-bleed
@@ -2638,6 +2647,11 @@
             <div class="cl-card">
               <div class="cl-eb-g">The shared link preview image is provably a hard rectangle</div>
               <p class="cl-body">The image that appears when this page is shared in Teams / iMessage / Slack / LinkedIn was re-rendered with explicit hard-square corner enforcement so the file itself is unambiguously a 1200&times;630 rectangle &mdash; no soft edges, no rounding artifacts. Most chat surfaces still wrap link-preview cards in their own rounded chrome (that's their UI, not our file), but the image we hand them is now provably square.</p>
+            </div>
+
+            <div class="cl-card">
+              <div class="cl-eb-g">Mobile play buttons on the video thumbnails feel lighter</div>
+              <p class="cl-body">The circular play button that sits on top of each video photo is now slightly smaller on phones &mdash; a measured trim, not an aggressive one. The desktop and compact sizes are unchanged; this only affects the phone breakpoint, where the previous size felt heavier than it needed to be on top of the presenter's photo. The button still reads as a clear "tap to play" affordance.</p>
             </div>
 
           </div>
