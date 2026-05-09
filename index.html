@@ -348,8 +348,11 @@
       .video.has-photo.compact .video-content { border-right: 0; border-top: 1px solid var(--rail-border); padding: 18px 22px; }
     }
     .video.has-photo .video-photo-eyebrow {
+      /* v3.10 (2026-05-09): moved from top-left to bottom-left so the eyebrow
+         pill no longer overlaps the presenter's face in the photo. The lower
+         portion of the photo is shoulder/torso, which is safe to obscure. */
       position: absolute;
-      top: 16px;
+      bottom: 16px;
       left: 16px;
       padding: 6px 12px;
       border-radius: 0;
@@ -2130,6 +2133,13 @@
       font-weight: 600;
       color: var(--black);
       letter-spacing: 0.01em;
+      /* v3.10 (2026-05-09): keep "Watching counts as done — or check it off →"
+         on one line. At tablet widths the label was getting allocated ~243px
+         but needs ~290px to render single-line; nowrap forces it to take its
+         content width and the progress track yields space (track has its own
+         min-width: 160px so it stays usable). At narrow widths flex-wrap on
+         the parent strip drops the label to its own full-width row. */
+      white-space: nowrap;
     }
     .bx-video-watch-toggle {
       display: inline-flex;
@@ -2613,6 +2623,21 @@
             <div class="cl-card">
               <div class="cl-eb-g">A 13-second demo video for Claire to share at Launch Pad</div>
               <p class="cl-body">There's now a short demo video that walks through the page in 13 seconds &mdash; the hero panel, a sample module checking off in green, and the full "100% complete &middot; Great Starts Here" celebration with the GPTW box logo. Claire Murphy will share it at Launch Pad as a quick preview of what new customers see. The video is built from the actual artwork on this page (real hero, real module checkbox, real celebration animation) so what people see in the clip matches what they'll see when they land on the page. Five full loops are baked into the file so it auto-replays on its own across email, Teams, iMessage, and Slack &mdash; recipients don't need to tap play again.</p>
+            </div>
+
+            <div class="cl-card">
+              <div class="cl-eb-g">The video eyebrow no longer covers Janan's or Victoria's face</div>
+              <p class="cl-body">The small label that sits on top of each video thumbnail (the "A note from your team" pill on Janan's and Victoria's video cards, and "Walkthrough" on the Phase 1 video) used to sit in the top-left corner of the photo &mdash; right where the presenter's face is. It's now anchored to the bottom-left of the photo so the face is visible and the pill rests over the shoulder/torso area instead.</p>
+            </div>
+
+            <div class="cl-card">
+              <div class="cl-eb-g">"Watching counts as done &mdash; or check it off &rarr;" stays on one line on tablets</div>
+              <p class="cl-body">On tablet-sized screens the label inside the video completion strip was wrapping onto two lines because the progress bar next to it was claiming too much room. The label now refuses to break mid-sentence; the progress bar yields the space it needs and the whole strip reads as a single line again. On phones, the label still drops to its own row so nothing gets squished.</p>
+            </div>
+
+            <div class="cl-card">
+              <div class="cl-eb-g">The shared link preview image is provably a hard rectangle</div>
+              <p class="cl-body">The image that appears when this page is shared in Teams / iMessage / Slack / LinkedIn was re-rendered with explicit hard-square corner enforcement so the file itself is unambiguously a 1200&times;630 rectangle &mdash; no soft edges, no rounding artifacts. Most chat surfaces still wrap link-preview cards in their own rounded chrome (that's their UI, not our file), but the image we hand them is now provably square.</p>
             </div>
 
           </div>
