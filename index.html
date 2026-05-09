@@ -1278,6 +1278,7 @@
       text-transform: uppercase;
     }
     .preview-bar-text { flex: 1; min-width: 220px; line-height: 1.45; }
+    .preview-bar-actions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
     .preview-bar-cta {
       display: inline-flex;
       align-items: center;
@@ -1293,9 +1294,12 @@
       transition: background var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
     }
     .preview-bar-cta:hover { background: #fff7e8; border-color: #d99a2a; transform: translateY(-1px); }
+    .preview-bar-cta--secondary { background: transparent; border-color: rgba(122,93,31,0.25); color: #7a5d1f; }
+    .preview-bar-cta--secondary:hover { background: rgba(255,255,255,0.6); border-color: rgba(122,93,31,0.45); }
     @media (max-width: 768px) {
       .preview-bar { margin: -8px 12px 20px; }
       .preview-bar-inner { flex-direction: column; align-items: stretch; }
+      .preview-bar-actions { flex-direction: column; }
       .preview-bar-cta { justify-content: center; }
     }
 
@@ -1494,10 +1498,15 @@
     <div class="preview-bar" role="region" aria-label="Internal preview">
       <div class="preview-bar-inner">
         <span class="preview-bar-pill">For preview</span>
-        <span class="preview-bar-text">Want to see the celebration animation that fires when onboarding is complete?</span>
-        <button class="preview-bar-cta" type="button" id="previewCelebrationBtn">
-          <span aria-hidden="true">▶</span> Play it now
-        </button>
+        <span class="preview-bar-text">Test the celebration animation, or reset everything to start onboarding from scratch.</span>
+        <div class="preview-bar-actions">
+          <button class="preview-bar-cta" type="button" id="previewCelebrationBtn">
+            <span aria-hidden="true">▶</span> Play celebration
+          </button>
+          <button class="preview-bar-cta preview-bar-cta--secondary" type="button" id="resetProgressBtn">
+            <span aria-hidden="true">↻</span> Reset progress
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1772,6 +1781,8 @@
       }
     ];
 
+    const PROGRESS_KEY = 'gpc.moduleProgress.v1';
+
     const state = {
       viewedPhase: 'before',
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -1785,6 +1796,29 @@
     phases.forEach(phase => phase.modules.forEach((_, i) => {
       state.modules[`${phase.id}-${i}`] = { checked: false, justCompleted: false };
     }));
+
+    // Restore saved progress from localStorage so users can come back and pick up where they left off.
+    // Only restore the `checked` flag; transient state like justCompleted starts fresh.
+    (function restoreProgress() {
+      try {
+        const raw = localStorage.getItem(PROGRESS_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        Object.keys(saved).forEach(key => {
+          if (state.modules[key] && typeof saved[key] === 'boolean') {
+            state.modules[key].checked = saved[key];
+          }
+        });
+      } catch (e) { /* corrupted storage — ignore and start fresh */ }
+    })();
+
+    function saveProgress() {
+      try {
+        const obj = {};
+        Object.keys(state.modules).forEach(k => { obj[k] = state.modules[k].checked; });
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(obj));
+      } catch (e) { /* storage full / disabled — fail silently */ }
+    }
 
     const els = {
       pageRoot: document.getElementById('pageRoot'),
@@ -2170,6 +2204,17 @@
         });
       }
 
+      // Wire up "Reset progress" — clears localStorage + reloads so testers can start fresh
+      const resetBtn = document.getElementById('resetProgressBtn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (window.confirm('Reset all module progress and reload the page?')) {
+            try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+            window.location.reload();
+          }
+        });
+      }
+
       els.main.addEventListener('click', (event) => {
         const moduleToggle = event.target.closest('[data-module-toggle]');
         if (moduleToggle) {
@@ -2289,6 +2334,7 @@
       const wasChecked = module.checked;
       module.checked = !module.checked;
       module.justCompleted = !wasChecked && module.checked;
+      saveProgress();
       renderAll(false);
       if (!wasChecked && module.checked) checkPhaseCompletion(key.split('-')[0]);
       // Fire celebration only on the transition incomplete → complete
@@ -2508,22 +2554,23 @@
       if (!overlay) return;
 
       var hideTimer = null;
-      var removeTimer = null;
+      // Save the pristine SVG markup so we can replay animations cleanly each time
+      var inner = overlay.querySelector('.gpc-overlay-inner');
+      var pristineSvg = inner ? inner.innerHTML : '';
 
       function showCelebration() {
+        if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+        // Replace SVG with a fresh copy — guarantees all CSS animations restart from frame 0
+        if (inner && pristineSvg) inner.innerHTML = pristineSvg;
         overlay.classList.add('is-visible');
         overlay.setAttribute('aria-hidden', 'false');
-        // Auto-dismiss after celebration animation has played (~5s of visible animation + buffer)
         hideTimer = setTimeout(hideCelebration, 5500);
       }
 
       function hideCelebration() {
         overlay.classList.remove('is-visible');
         overlay.setAttribute('aria-hidden', 'true');
-        // Remove from DOM after fade-out completes
-        removeTimer = setTimeout(function() {
-          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 700);
+        // Don't remove from DOM — keep it around so it can re-fire as many times as needed
       }
 
       // Click backdrop or × to dismiss early
@@ -2539,6 +2586,15 @@
           hideCelebration();
         });
       }
+      // Re-attach dismiss handler since innerHTML replacement may have re-created the button.
+      // Use event delegation on the overlay instead.
+      overlay.addEventListener('click', function(e) {
+        var t = e.target;
+        if (t && (t.id === 'celebrationDismiss' || (t.closest && t.closest('#celebrationDismiss')))) {
+          if (hideTimer) clearTimeout(hideTimer);
+          hideCelebration();
+        }
+      });
       // Esc dismisses
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && overlay.classList.contains('is-visible')) {
@@ -2547,13 +2603,11 @@
         }
       });
 
-      // Trigger when journey transitions from incomplete → complete (fires once per session)
-      var alreadyFired = false;
+      // Trigger whenever a journey-complete event is dispatched.
+      // Natural completion only fires once per page lifecycle (the actual transition),
+      // and the preview button can fire it any number of times.
       window.addEventListener('gpc:journey-complete', function() {
-        if (alreadyFired) return;
-        alreadyFired = true;
-        // Small delay so the user feels the satisfying click → then the celebration
-        setTimeout(showCelebration, 350);
+        setTimeout(showCelebration, 250);
       });
 
       // ===== SAAS TUTORIAL OVERLAY =====
@@ -2595,7 +2649,7 @@
         {
           anchor: '.module-card',
           title: 'Check things off as you go',
-          body: 'Tap the checkbox on any module when you complete it. Your progress is saved as you go.',
+          body: 'Tap the checkbox on any module when you complete it. Your progress saves automatically — bookmark this page so you can come back anytime and pick up where you left off.',
           placement: 'bottom'
         },
         {
