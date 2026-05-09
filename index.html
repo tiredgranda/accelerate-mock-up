@@ -2210,6 +2210,84 @@
       .bx-video-shell.just-completed { animation: none; }
       .bx-video-watch-fill { transition: none; }
     }
+    /* v3.10 (2026-05-09): force the watch strip to stay one line at tablet
+       and phone widths.
+
+       Background: at ~641–1024px the long label ("Watching counts as done —
+       or check it off →") plus the progress track plus the "I've watched it"
+       toggle could not coexist on one row inside the available container
+       width, so the toggle was wrapping to a second row. White-space: nowrap
+       on the label alone wasn't enough; the track was claiming too much space.
+
+       Fix:
+         - At ≤1024px the progress track is removed (display: none). The
+           track is decorative — the green is-complete border and the toggle
+           state already communicate progress — so removing it on smaller
+           viewports does not lose information, and frees enough width for
+           label + toggle to share one row.
+         - At ≤640px the label text is also visually swapped to a tighter
+           version ("Watching counts as done →") via a CSS content trick so
+           label + toggle still share one row at 375px. The original full
+           label remains in the DOM for screen readers; only the visual is
+           swapped, so semantics and the "complete" announcement are intact.
+
+       Desktop (>1024px) is unchanged: full label, progress track, full
+       toggle, all on one row. */
+    @media (max-width: 1024px) {
+      .bx-video-watch-strip {
+        flex-wrap: nowrap;
+      }
+      .bx-video-watch-track {
+        display: none;
+      }
+    }
+    @media (max-width: 640px) {
+      /* Strip has tighter horizontal padding on phones so label + toggle
+         have more room to live on one row. */
+      .bx-video-watch-strip {
+        padding: 14px 12px;
+        gap: 12px;
+      }
+      .bx-video-watch-label {
+        font-size: 0;
+        line-height: 0;
+        flex: 0 1 auto;
+        min-width: 0;
+      }
+      .bx-video-watch-label::before {
+        content: 'Watching counts \2192';
+        font-size: 13px;
+        line-height: 1.3;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        color: var(--black);
+        white-space: nowrap;
+      }
+      .bx-video-shell.is-complete .bx-video-watch-label::before {
+        content: 'Watched \2713';
+      }
+      /* Lock the toggle to its natural width so its internal label
+         ("I've watched it") cannot wrap onto two lines and inflate the
+         strip height. flex-shrink: 0 + white-space: nowrap on the button
+         text together guarantee a single-line button on phones. */
+      .bx-video-watch-toggle {
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+    }
+    /* Smallest realistic mobile (e.g., iPhone SE at 320px). At this width the
+       label "Watching counts →" still overflows the available slot next to the
+       full-width toggle, so the visual swaps to a shorter "Watching →" form
+       and the strip tightens further. */
+    @media (max-width: 360px) {
+      .bx-video-watch-strip {
+        padding: 12px 10px;
+        gap: 10px;
+      }
+      .bx-video-watch-label::before {
+        content: 'Watching \2192';
+      }
+    }
 
     /* ============================================================== */
     /* v3.4 (2026-05-09): journey-100 handoff + resource grid           */
@@ -2647,8 +2725,8 @@
             </div>
 
             <div class="cl-card">
-              <div class="cl-eb-g">"Watching counts as done &mdash; or check it off &rarr;" stays on one line on tablets</div>
-              <p class="cl-body">On tablet-sized screens the label inside the video completion strip was wrapping onto two lines because the progress bar next to it was claiming too much room. The label now refuses to break mid-sentence; the progress bar yields the space it needs and the whole strip reads as a single line again. On phones, the label still drops to its own row so nothing gets squished.</p>
+              <div class="cl-eb-g">The video completion strip stays on a single line on every screen size</div>
+              <p class="cl-body">On tablets and phones the strip under each video used to wrap to two rows &mdash; the "I've watched it" button was getting pushed below the label. Now it always reads as one line. On tablet, the thin progress bar (decorative; the checkbox and green border already convey progress) is hidden so the label and button can share the row. On phones, the label also tightens to a shorter version ("Watching counts as done &rarr;") so the full button still fits next to it. Desktop is unchanged &mdash; full label, progress bar, and button on one row.</p>
             </div>
 
             <div class="cl-card">
