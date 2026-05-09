@@ -31,14 +31,27 @@
       --radius-lg: 28px;
       --radius-md: 24px;
       --radius-sm: 22px;
-      --motion-fast: 240ms;
+      --motion-fast: 200ms;
       --motion-checkbox: 580ms;
-      --motion-base: 560ms;
-      --motion-slow: 860ms;
+      --motion-base: 480ms;
+      --motion-slow: 720ms;
       --motion-celebrate: 1320ms;
       --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
       --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      /* Typographic scale (GPTW-inspired) */
+      --tracking-tight: -0.022em;
+      --tracking-display: -0.03em;
+      --tracking-eyebrow: 0.16em;
+      --leading-tight: 1.05;
+      --leading-snug: 1.18;
+      --leading-body: 1.55;
+      /* Component tokens */
+      --rail-height: 88px;
+      --rail-bg: #FFFFFF;
+      --rail-border: #EDF1EF;
+      --hover-lift: -2px;
     }
 
     * { box-sizing: border-box; }
@@ -63,6 +76,9 @@
     .hero-shell,
     .section-shell,
     .addons-shell,
+    .mobile-tabs { display: none !important; }
+    #changeLog,
+    #reviewNotes { display: none !important; }
     .mobile-tabs,
     .final-journey-shell,
     .review-notes-shell {
@@ -116,20 +132,20 @@
     }
 
     .hero-title {
-      margin-top: 12px;
-      max-width: 760px;
-      font-size: clamp(42px, 7vw, 72px);
-      line-height: 0.98;
-      letter-spacing: -0.04em;
+      margin-top: 14px;
+      max-width: 820px;
+      font-size: clamp(44px, 7.6vw, 84px);
+      line-height: 0.96;
+      letter-spacing: var(--tracking-display);
       font-weight: 700;
-      color: #101828;
+      color: var(--black);
     }
     .hero-subtitle {
-      margin-top: 20px;
-      max-width: 700px;
+      margin-top: 22px;
+      max-width: 640px;
       font-size: 19px;
-      line-height: 1.7;
-      color: #667085;
+      line-height: var(--leading-body);
+      color: #475467;
     }
     .button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 
@@ -299,7 +315,7 @@
     .mobile-tab { border: 0; border-radius: 16px; background: transparent; color: #667085; padding: 10px 12px; font-size: 12px; font-weight: 700; }
     .mobile-tab.active { background: white; color: #101828; box-shadow: 0 2px 8px rgba(17,19,28,0.06); }
 
-    .content-grid { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .content-grid { display: block; max-width: 1200px; margin: 0 auto; }
     .sidebar {
       position: sticky;
       top: 24px;
@@ -744,6 +760,234 @@
       .gpc-overlay, .gpc-overlay-inner { transition: opacity 200ms linear; transform: none !important; }
       .gpc-overlay-inner svg * { animation: none !important; }
     }
+    /* === TOP PROGRESS RAIL (replaces left sidebar) === */
+    .journey-rail {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin: 0 auto 28px;
+      max-width: 1200px;
+      background: var(--rail-bg);
+      border: 1px solid var(--rail-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: saturate(160%) blur(8px);
+      transition: box-shadow var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+    }
+    .journey-rail.is-stuck { box-shadow: var(--shadow-md); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+    .journey-rail-inner { padding: 22px 28px 24px; }
+    .journey-rail-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 14px; }
+    .journey-rail-eyebrow { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .journey-rail-title { margin: 6px 0 0; font-size: 22px; font-weight: 700; letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); color: var(--black); }
+    .journey-rail-summary { text-align: right; }
+    .journey-rail-percent { font-size: 28px; font-weight: 700; line-height: 1; color: var(--black); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
+    .journey-rail-percent-label { margin-top: 4px; font-size: 11px; font-weight: 600; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .journey-rail-bar {
+      position: relative;
+      height: 6px;
+      background: var(--gray-2);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .journey-rail-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), #ff5060);
+      border-radius: 999px;
+      transition: width 720ms var(--ease-out);
+    }
+    .journey-rail-fill.success { background: linear-gradient(90deg, var(--success), #3ccf89); }
+    .journey-rail-segments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .rail-segment {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 14px 16px;
+      background: transparent;
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+      transition: border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+    }
+    .rail-segment:hover { border-color: var(--gray-4); transform: translateY(var(--hover-lift)); box-shadow: var(--shadow-sm); }
+    .rail-segment:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+    .rail-segment.is-active { border-color: var(--red); background: linear-gradient(180deg, #fff8f8, #ffffff); }
+    .rail-segment.is-active::before { content: ""; position: absolute; left: 16px; right: 16px; bottom: -1px; height: 2px; background: var(--red); border-radius: 2px; }
+    .rail-segment.is-complete { border-color: var(--success-border); background: linear-gradient(180deg, #f8fdfb, #ffffff); }
+    .rail-segment.is-complete .rail-seg-dot { background: var(--success); border-color: var(--success); color: #fff; }
+    .rail-segment.is-complete.is-active::before { background: var(--success); }
+    .rail-seg-row { display: flex; align-items: center; gap: 10px; }
+    .rail-seg-dot {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+      border-radius: 999px;
+      border: 1.5px solid var(--gray-4);
+      background: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800;
+      color: var(--gray-6);
+      transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+    }
+    .rail-segment.is-active .rail-seg-dot:not(.is-complete) { border-color: var(--red); color: var(--red); }
+    .rail-seg-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .rail-seg-title { font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: -0.005em; }
+    .rail-seg-percent { margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--gray-6); font-variant-numeric: tabular-nums; }
+    .rail-segment.is-complete .rail-seg-percent { color: #067647; }
+    .rail-segment.is-active .rail-seg-percent { color: var(--red); }
+    .rail-segment.is-active.is-complete .rail-seg-percent { color: #067647; }
+
+    @media (max-width: 768px) {
+      .journey-rail { margin: 0 12px 20px; border-radius: var(--radius-md); }
+      .journey-rail-inner { padding: 16px 16px 18px; }
+      .journey-rail-header { gap: 12px; margin-bottom: 10px; }
+      .journey-rail-title { font-size: 16px; }
+      .journey-rail-percent { font-size: 22px; }
+      .journey-rail-segments { grid-template-columns: 1fr; gap: 8px; }
+      .rail-segment { padding: 12px 14px; }
+      .rail-segment:not(.is-active) { display: none; }
+      .rail-segment.is-active { display: flex; }
+      .journey-rail.is-expanded .rail-segment { display: flex; }
+      .rail-expand-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        margin-top: 8px;
+        padding: 8px;
+        background: transparent;
+        border: 1px dashed var(--gray-3);
+        border-radius: var(--radius-sm);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-6);
+        cursor: pointer;
+      }
+    }
+    @media (min-width: 769px) {
+      .rail-expand-btn { display: none; }
+    }
+
+    /* === SAAS TUTORIAL OVERLAY === */
+    .tutorial-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 240ms var(--ease-out);
+    }
+    .tutorial-overlay.is-active { opacity: 1; pointer-events: auto; }
+    .tutorial-spotlight {
+      position: absolute;
+      border-radius: 16px;
+      box-shadow: 0 0 0 9999px rgba(17, 19, 28, 0.62);
+      pointer-events: none;
+      transition: top 360ms var(--ease-out-expo), left 360ms var(--ease-out-expo), width 360ms var(--ease-out-expo), height 360ms var(--ease-out-expo);
+    }
+    .tutorial-spotlight.is-centered {
+      box-shadow: 0 0 0 9999px rgba(17, 19, 28, 0.72);
+      top: 50%; left: 50%; width: 0; height: 0;
+    }
+    .tutorial-tooltip {
+      position: absolute;
+      max-width: 360px;
+      width: calc(100vw - 32px);
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      box-shadow: 0 24px 64px rgba(17, 19, 28, 0.32), 0 4px 12px rgba(17, 19, 28, 0.18);
+      padding: 22px 22px 18px;
+      transition: top 360ms var(--ease-out-expo), left 360ms var(--ease-out-expo), opacity 240ms var(--ease-out);
+      opacity: 1;
+    }
+    .tutorial-tooltip-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .tutorial-step-counter { font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--red); }
+    .tutorial-skip-btn {
+      background: transparent;
+      border: 0;
+      font: inherit;
+      font-size: 12px;
+      color: var(--gray-6);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+    }
+    .tutorial-skip-btn:hover { background: var(--gray-1); color: var(--black); }
+    .tutorial-tooltip-title { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); color: var(--black); }
+    .tutorial-tooltip-body { margin: 8px 0 0; font-size: 14px; line-height: var(--leading-body); color: #475467; }
+    .tutorial-tooltip-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    .tutorial-progress-dots { display: flex; gap: 6px; }
+    .tutorial-progress-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--gray-3); transition: background var(--motion-fast) var(--ease-out), width var(--motion-fast) var(--ease-out); }
+    .tutorial-progress-dot.is-active { background: var(--red); width: 18px; }
+    .tutorial-progress-dot.is-complete { background: var(--gray-5); }
+    .tutorial-controls { display: flex; gap: 8px; }
+    .tutorial-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-3);
+      background: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--black);
+      cursor: pointer;
+      transition: background var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+    }
+    .tutorial-btn:hover { background: var(--gray-1); border-color: var(--gray-4); transform: translateY(var(--hover-lift)); }
+    .tutorial-btn-primary {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+    .tutorial-btn-primary:hover { background: var(--red-strong); border-color: var(--red-strong); }
+    .tutorial-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* Connector arrow on tooltip */
+    .tutorial-tooltip::before {
+      content: "";
+      position: absolute;
+      width: 16px; height: 16px;
+      background: #fff;
+      transform: rotate(45deg);
+      box-shadow: -2px -2px 4px rgba(17,19,28,0.04);
+    }
+    .tutorial-tooltip[data-placement="bottom"]::before { top: -8px; left: 32px; }
+    .tutorial-tooltip[data-placement="top"]::before { bottom: -8px; left: 32px; box-shadow: 2px 2px 4px rgba(17,19,28,0.04); }
+    .tutorial-tooltip[data-placement="center"]::before { display: none; }
+
+    @media (max-width: 768px) {
+      .tutorial-tooltip { max-width: calc(100vw - 24px); padding: 18px 18px 16px; }
+      .tutorial-tooltip-title { font-size: 17px; }
+      .tutorial-tooltip-body { font-size: 13px; }
+    }
+
+    /* Footer with restart-tutorial link */
+    .page-footer {
+      max-width: 1200px;
+      margin: 48px auto 32px;
+      padding: 24px 28px;
+      text-align: center;
+      color: var(--gray-6);
+      font-size: 13px;
+    }
+    .page-footer a {
+      color: var(--gray-8);
+      text-decoration: underline;
+      text-decoration-color: var(--gray-3);
+      text-underline-offset: 3px;
+      transition: color var(--motion-fast) var(--ease-out), text-decoration-color var(--motion-fast) var(--ease-out);
+    }
+    .page-footer a:hover { color: var(--red); text-decoration-color: var(--red); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tutorial-overlay, .tutorial-spotlight, .tutorial-tooltip { transition: none !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -757,21 +1001,14 @@
             <span class="accent-box" style="width:20px;height:40px;opacity:.05;align-self:flex-end"></span>
           </div>
           <div class="pill-row">
-            <span class="pill">Wireframe</span>
-            <span class="pill red">Balanced review build</span>
-            <span class="pill">Prototype</span>
+            <span class="pill" style="background:var(--success-bg); border-color:var(--success-border); color:#067647;">Welcome aboard</span>
           </div>
-          <p class="eyebrow"</p>
+          <p class="eyebrow"></p>
           <h1 class="hero-title">Great Starts Here</h1>
-          <p class="hero-subtitle">Welcome to Accelerate — this page is your one-stop guide to confidently launch your Trust Index™ survey, complete your Certification application, and find the right resources at the right time.</p>
+          <p class="hero-subtitle">Your one-stop guide to confidently launch your Trust Index™ survey, complete your Certification application, and find the right resources at every step.</p>
           <div class="button-row">
-            <button class="btn-primary js-tap-only" type="button">Primary onboarding action <span aria-hidden="true">→</span></button>
-            <button class="btn-secondary js-tap-only" type="button">Secondary resource</button>
-          </div>
-          <div class="hero-meta-grid">
-            <div class="meta-card hero-meta-card"><div class="meta-label">Architecture</div><div class="meta-value">Single onboarding page + inline audience variations</div></div>
-            <div class="meta-card hero-meta-card"><div class="meta-label">Progress UX</div><div class="meta-value">Sticky rail + phase completion states</div></div>
-            <div class="meta-card hero-meta-card"><div class="meta-label">Review mode</div><div class="meta-value">Wireframe-ready with light placeholder cues</div></div>
+            <button class="btn-primary js-tap-only" type="button">Start onboarding <span aria-hidden="true">→</span></button>
+            <button class="btn-secondary js-tap-only" type="button">Watch overview</button>
           </div>
         </div>
         <div class="hero-media">
@@ -906,8 +1143,8 @@
 </svg>
           </div>
           <div class="media-meta-grid">
-            <div class="meta-card"><div class="meta-label">Current phase</div><div class="meta-value" id="currentPhaseLabel">Before you launch</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">The rail below updates as the reviewer scrolls through the page.</p></div>
-            <div class="meta-card"><div class="meta-label">Support line</div><div class="meta-value">Questions along the way?</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Reach out to your Customer Success Manager or explore the Knowledge Base.</p></div>
+            <div class="meta-card"><div class="meta-label">Current phase</div><div class="meta-value" id="currentPhaseLabel">Before you launch</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Your active phase updates automatically as you scroll.</p></div>
+            <div class="meta-card"><div class="meta-label">Need help?</div><div class="meta-value">We're here for you</div><p class="results-copy" style="margin-top:8px;font-size:14px;line-height:1.6;">Reach out to your Customer Success Manager or browse the Knowledge Base.</p></div>
           </div>
         </div>
       </div>
@@ -915,27 +1152,29 @@
 
     <section class="mobile-tabs reveal"><div class="mobile-tab-row" id="mobileTabs"></div></section>
 
-    <div class="content-grid">
-      <aside class="sidebar reveal">
-        <div class="sidebar-inner">
-          <div class="sidebar-accent accent-group" aria-hidden="true">
-            <span class="accent-box" style="width:16px;height:16px;opacity:.16"></span>
-            <span class="accent-box" style="width:40px;height:16px;opacity:.08"></span>
+    <!-- TOP PROGRESS RAIL (sticky) -->
+    <section class="journey-rail reveal" id="journeyRail" aria-label="Onboarding progress">
+      <div class="journey-rail-inner">
+        <div class="journey-rail-header">
+          <div>
+            <p class="journey-rail-eyebrow">Your progress</p>
+            <h2 class="journey-rail-title">Track your onboarding journey</h2>
           </div>
-          <div class="sidebar-header">
-            <p class="eyebrow" style="letter-spacing:.18em">Progress rail</p>
-            <h3 class="sidebar-title">Onboarding journey</h3>
-            <p class="sidebar-copy">The rail reflects both the phase currently being viewed and the phases that have already been completed.</p>
+          <div class="journey-rail-summary">
+            <div class="journey-rail-percent" id="journeyProgressLabel">0%</div>
+            <div class="journey-rail-percent-label">Complete</div>
           </div>
-          <div class="progress-card">
-            <div class="progress-row"><span>Journey progress</span><span id="journeyProgressLabel">0%</span></div>
-            <div class="progress-bar"><div class="progress-fill" id="journeyProgressFill" style="width:0%"></div></div>
-            <p class="progress-note">Completion states are preserved. Scroll position updates the viewed phase without overpowering completed phases.</p>
-          </div>
-          <div class="sidebar-nav" id="sidebarNav"></div>
-          <div class="sidebar-note"><div class="meta-label">Interaction model</div><p class="sidebar-note-copy" style="margin-top:8px;">Phase navigation and checkboxes update the page state. Other buttons are safe tap interactions for review.</p></div>
         </div>
-      </aside>
+        <div class="journey-rail-bar"><div class="journey-rail-fill" id="journeyProgressFill" style="width:0%"></div></div>
+        <div class="journey-rail-segments" id="railSegments" role="tablist"></div>
+        <button class="rail-expand-btn" type="button" id="railExpandBtn" aria-expanded="false">
+          <span id="railExpandLabel">Show all phases</span>
+          <span aria-hidden="true">▾</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="content-grid">
       <main class="main" id="mainContent"></main>
     </div>
 
@@ -1093,6 +1332,31 @@
 
   </div>
 
+  <!-- Page footer with restart-tutorial link -->
+  <footer class="page-footer">
+    <p>Need a refresher? <a href="#" id="restartTutorialLink">Restart tutorial</a></p>
+  </footer>
+
+  <!-- SaaS-style tutorial overlay (rendered above page) -->
+  <div class="tutorial-overlay" id="tutorialOverlay" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle" aria-describedby="tutorialBody">
+    <div class="tutorial-spotlight" id="tutorialSpotlight" aria-hidden="true"></div>
+    <div class="tutorial-tooltip" id="tutorialTooltip" data-placement="bottom">
+      <div class="tutorial-tooltip-header">
+        <div class="tutorial-step-counter" id="tutorialStepCounter">Step 1 of 5</div>
+        <button class="tutorial-skip-btn" type="button" id="tutorialSkipBtn">Skip tour</button>
+      </div>
+      <h3 class="tutorial-tooltip-title" id="tutorialTitle">Title</h3>
+      <p class="tutorial-tooltip-body" id="tutorialBody">Body</p>
+      <div class="tutorial-tooltip-footer">
+        <div class="tutorial-progress-dots" id="tutorialProgressDots"></div>
+        <div class="tutorial-controls">
+          <button class="tutorial-btn" type="button" id="tutorialBackBtn">Back</button>
+          <button class="tutorial-btn tutorial-btn-primary" type="button" id="tutorialNextBtn">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const phases = [
       {
@@ -1178,7 +1442,10 @@
     const els = {
       pageRoot: document.getElementById('pageRoot'),
       main: document.getElementById('mainContent'),
-      sidebarNav: document.getElementById('sidebarNav'),
+      railSegments: document.getElementById('railSegments'),
+      railExpandBtn: document.getElementById('railExpandBtn'),
+      railExpandLabel: document.getElementById('railExpandLabel'),
+      journeyRail: document.getElementById('journeyRail'),
       mobileTabs: document.getElementById('mobileTabs'),
       currentPhaseLabel: document.getElementById('currentPhaseLabel'),
       journeyLabel: document.getElementById('journeyProgressLabel'),
@@ -1231,23 +1498,19 @@
     function phaseButtonHTML(phase) {
       const isComplete = phaseComplete(phase.id);
       const isCurrent = state.viewedPhase === phase.id;
-      const classes = [
-        'phase-button',
-        isComplete ? 'complete' : '',
-        (!isComplete && isCurrent) ? 'active' : '',
-        (isComplete && isCurrent) ? 'current-complete' : ''
-      ].filter(Boolean).join(' ');
+      const pct = phaseCompletionPercent(phase.id);
+      const cls = ['rail-segment', isComplete ? 'is-complete' : '', isCurrent ? 'is-active' : ''].filter(Boolean).join(' ');
+      const dotContent = isComplete ? '✓' : (phase.eyebrow.split(' ')[1] || '');
       return `
-        <button class="${classes}" type="button" data-phase="${phase.id}">
-          <div class="phase-button-row">
-            <span class="phase-dot"></span>
+        <button class="${cls}" type="button" role="tab" aria-selected="${isCurrent ? 'true' : 'false'}" data-phase="${phase.id}">
+          <div class="rail-seg-row">
+            <span class="rail-seg-dot">${dotContent}</span>
             <div>
-              <div class="phase-eyebrow">${phase.eyebrow}</div>
-              <div class="phase-button-title">${phase.title}</div>
-              <div class="phase-button-copy">${phase.blurb}</div>
-              ${isComplete ? '<div class="phase-chip" style="margin-top:10px;">Complete</div>' : ''}
+              <div class="rail-seg-eyebrow">${phase.eyebrow}</div>
+              <div class="rail-seg-title">${phase.title}</div>
             </div>
           </div>
+          <div class="rail-seg-percent">${pct}% complete</div>
         </button>
       `;
     }
@@ -1463,7 +1726,7 @@
     }
 
     function renderRail() {
-      els.sidebarNav.innerHTML = phases.map(phaseButtonHTML).join('');
+      els.railSegments.innerHTML = phases.map(phaseButtonHTML).join('');
       els.mobileTabs.innerHTML = phases.map(mobileTabHTML).join('');
       const current = phases.find(p => p.id === state.viewedPhase) || phases[0];
       els.currentPhaseLabel.textContent = current.title;
@@ -1471,6 +1734,11 @@
       els.journeyLabel.textContent = `${progress}%`;
       els.journeyFill.style.width = `${progress}%`;
       els.journeyFill.classList.toggle('success', progress === 100);
+      // Update mobile expand label based on whether more than just-active is visible
+      if (els.railExpandLabel) {
+        const expanded = els.journeyRail.classList.contains('is-expanded');
+        els.railExpandLabel.textContent = expanded ? 'Collapse phases' : 'Show all phases';
+      }
       pulse(els.journeyFill);
     }
 
@@ -1490,7 +1758,7 @@
     }
 
     function attachStaticEvents() {
-      els.sidebarNav.addEventListener('click', (event) => {
+      els.railSegments.addEventListener('click', (event) => {
         const button = event.target.closest('[data-phase]');
         if (!button) return;
         setViewedPhase(button.dataset.phase, true);
@@ -1501,6 +1769,22 @@
         if (!button) return;
         setViewedPhase(button.dataset.phase, true);
       });
+
+      // Mobile: expand/collapse all phases in rail
+      if (els.railExpandBtn) {
+        els.railExpandBtn.addEventListener('click', () => {
+          const expanded = els.journeyRail.classList.toggle('is-expanded');
+          els.railExpandBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+          els.railExpandLabel.textContent = expanded ? 'Collapse phases' : 'Show all phases';
+        });
+      }
+
+      // Sticky shadow when rail scrolls to top
+      const stickyObserver = new IntersectionObserver(
+        ([e]) => els.journeyRail.classList.toggle('is-stuck', e.intersectionRatio < 1),
+        { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+      );
+      stickyObserver.observe(els.journeyRail);
 
       els.main.addEventListener('click', (event) => {
         const moduleToggle = event.target.closest('[data-module-toggle]');
@@ -1618,11 +1902,16 @@
     function toggleModule(key) {
       const module = state.modules[key];
       if (!module) return;
+      const wasJourneyComplete = journeyComplete();
       const wasChecked = module.checked;
       module.checked = !module.checked;
       module.justCompleted = !wasChecked && module.checked;
       renderAll(false);
       if (!wasChecked && module.checked) checkPhaseCompletion(key.split('-')[0]);
+      // Fire celebration only on the transition incomplete → complete
+      if (!wasJourneyComplete && journeyComplete()) {
+        window.dispatchEvent(new CustomEvent('gpc:journey-complete'));
+      }
     }
 
     function renderAll(withReveal = true) {
@@ -1875,11 +2164,224 @@
         }
       });
 
-      // Trigger 4s after DOM is ready
+      // Trigger when journey transitions from incomplete → complete (fires once per session)
+      var alreadyFired = false;
+      window.addEventListener('gpc:journey-complete', function() {
+        if (alreadyFired) return;
+        alreadyFired = true;
+        // Small delay so the user feels the satisfying click → then the celebration
+        setTimeout(showCelebration, 350);
+      });
+
+      // ===== SAAS TUTORIAL OVERLAY =====
+      var TUTORIAL_FLAG = 'gpc.tutorialSeen.v1';
+      var tutorialEls = {
+        overlay: document.getElementById('tutorialOverlay'),
+        spotlight: document.getElementById('tutorialSpotlight'),
+        tooltip: document.getElementById('tutorialTooltip'),
+        counter: document.getElementById('tutorialStepCounter'),
+        title: document.getElementById('tutorialTitle'),
+        body: document.getElementById('tutorialBody'),
+        dots: document.getElementById('tutorialProgressDots'),
+        skipBtn: document.getElementById('tutorialSkipBtn'),
+        backBtn: document.getElementById('tutorialBackBtn'),
+        nextBtn: document.getElementById('tutorialNextBtn')
+      };
+      var restartLink = document.getElementById('restartTutorialLink');
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var tourSteps = [
+        {
+          anchor: '.hero-shell',
+          title: 'Welcome to Accelerate',
+          body: "This is your one-stop guide to launching your Trust Index™ survey and earning Certification. Let's take a quick look around — it'll only take a minute.",
+          placement: 'bottom'
+        },
+        {
+          anchor: '#journeyRail',
+          title: 'Track your progress',
+          body: 'Three phases guide you from setup through results. Click a phase to jump there, or scroll — your active phase updates automatically.',
+          placement: 'bottom'
+        },
+        {
+          anchor: '#before',
+          title: 'Work through each phase',
+          body: 'Each phase contains modules with everything you need: guides, templates, and resources curated for that stage of your onboarding.',
+          placement: 'bottom'
+        },
+        {
+          anchor: '.module-card',
+          title: 'Check things off as you go',
+          body: 'Tap the checkbox on any module when you complete it. Your progress is saved as you go.',
+          placement: 'bottom'
+        },
+        {
+          anchor: null, // centered, no anchor
+          title: "You're ready to begin",
+          body: "Complete all 16 modules across the three phases and you'll see a special celebration. Ready to get started?",
+          placement: 'center',
+          finalAction: 'finish'
+        }
+      ];
+
+      var currentStep = 0;
+
+      function findAnchor(selector) {
+        if (!selector) return null;
+        return document.querySelector(selector);
+      }
+
+      function positionTutorial(stepIndex, scrollAttempt) {
+        scrollAttempt = scrollAttempt || 0;
+        var step = tourSteps[stepIndex];
+        var anchor = findAnchor(step.anchor);
+
+        if (!anchor || step.placement === 'center') {
+          // Centered: hide spotlight, center tooltip
+          tutorialEls.spotlight.classList.add('is-centered');
+          tutorialEls.spotlight.style.top = '50%';
+          tutorialEls.spotlight.style.left = '50%';
+          tutorialEls.spotlight.style.width = '0px';
+          tutorialEls.spotlight.style.height = '0px';
+          var tw = tutorialEls.tooltip.offsetWidth;
+          var th = tutorialEls.tooltip.offsetHeight;
+          tutorialEls.tooltip.style.top = ((window.innerHeight - th) / 2) + 'px';
+          tutorialEls.tooltip.style.left = ((window.innerWidth - tw) / 2) + 'px';
+          tutorialEls.tooltip.setAttribute('data-placement', 'center');
+          return;
+        }
+
+        var rect = anchor.getBoundingClientRect();
+        // Mid-visible test: any meaningful portion of anchor in viewport (cap recursion at 1)
+        var midVisible = rect.bottom > 100 && rect.top < window.innerHeight - 100;
+        if (!midVisible && scrollAttempt < 1) {
+          anchor.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+          setTimeout(function() { positionTutorial(stepIndex, scrollAttempt + 1); }, prefersReducedMotion ? 0 : 380);
+          return;
+        }
+
+        // Use only the on-screen portion for spotlight (clip to viewport)
+        var clipTop = Math.max(rect.top, 0);
+        var clipLeft = Math.max(rect.left, 0);
+        var clipBottom = Math.min(rect.bottom, window.innerHeight);
+        var clipRight = Math.min(rect.right, window.innerWidth);
+        var pad = 8;
+
+        tutorialEls.spotlight.classList.remove('is-centered');
+        tutorialEls.spotlight.style.top = (clipTop - pad) + 'px';
+        tutorialEls.spotlight.style.left = (clipLeft - pad) + 'px';
+        tutorialEls.spotlight.style.width = (clipRight - clipLeft + pad * 2) + 'px';
+        tutorialEls.spotlight.style.height = (clipBottom - clipTop + pad * 2) + 'px';
+
+        // Tooltip placement: prefer below, else above, else centered fallback
+        var tooltipH = tutorialEls.tooltip.offsetHeight;
+        var tooltipW = tutorialEls.tooltip.offsetWidth;
+        var spaceBelow = window.innerHeight - clipBottom;
+        var spaceAbove = clipTop;
+        var placement, top;
+        if (spaceBelow > tooltipH + 24) { placement = 'bottom'; top = clipBottom + 14; }
+        else if (spaceAbove > tooltipH + 24) { placement = 'top'; top = clipTop - tooltipH - 14; }
+        else { placement = 'center'; top = (window.innerHeight - tooltipH) / 2; }
+        tutorialEls.tooltip.setAttribute('data-placement', placement);
+
+        var leftRaw = (placement === 'center') ? (window.innerWidth - tooltipW) / 2 : clipLeft;
+        var left = Math.max(12, Math.min(leftRaw, window.innerWidth - tooltipW - 12));
+        tutorialEls.tooltip.style.top = top + 'px';
+        tutorialEls.tooltip.style.left = left + 'px';
+      }
+
+      function renderTutorialDots() {
+        tutorialEls.dots.innerHTML = tourSteps.map(function(_, i) {
+          var cls = 'tutorial-progress-dot';
+          if (i < currentStep) cls += ' is-complete';
+          if (i === currentStep) cls += ' is-active';
+          return '<span class="' + cls + '"></span>';
+        }).join('');
+      }
+
+      function renderTutorialStep() {
+        var step = tourSteps[currentStep];
+        tutorialEls.counter.textContent = 'Step ' + (currentStep + 1) + ' of ' + tourSteps.length;
+        tutorialEls.title.textContent = step.title;
+        tutorialEls.body.textContent = step.body;
+        tutorialEls.backBtn.disabled = (currentStep === 0);
+        tutorialEls.nextBtn.textContent = (currentStep === tourSteps.length - 1) ? 'Finish' : 'Next';
+        renderTutorialDots();
+        positionTutorial(currentStep);
+      }
+
+      function startTutorial() {
+        currentStep = 0;
+        tutorialEls.overlay.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+        renderTutorialStep();
+      }
+
+      function endTutorial(triggerCelebration) {
+        tutorialEls.overlay.classList.remove('is-active');
+        document.body.style.overflow = '';
+        try { localStorage.setItem(TUTORIAL_FLAG, '1'); } catch (e) {}
+        if (triggerCelebration) {
+          // Fire celebration as the natural conclusion
+          setTimeout(function() {
+            window.dispatchEvent(new CustomEvent('gpc:journey-complete'));
+          }, 240);
+        }
+      }
+
+      function nextStep() {
+        if (currentStep === tourSteps.length - 1) {
+          // Final step — finish + trigger celebration
+          // Reset alreadyFired so the celebration definitely shows even if user briefly toggled before
+          alreadyFired = false;
+          endTutorial(true);
+        } else {
+          currentStep++;
+          renderTutorialStep();
+        }
+      }
+
+      function prevStep() {
+        if (currentStep > 0) {
+          currentStep--;
+          renderTutorialStep();
+        }
+      }
+
+      tutorialEls.skipBtn.addEventListener('click', function() { endTutorial(false); });
+      tutorialEls.nextBtn.addEventListener('click', nextStep);
+      tutorialEls.backBtn.addEventListener('click', prevStep);
+      // Esc to skip
+      document.addEventListener('keydown', function(e) {
+        if (!tutorialEls.overlay.classList.contains('is-active')) return;
+        if (e.key === 'Escape') endTutorial(false);
+        else if (e.key === 'ArrowRight' || e.key === 'Enter') nextStep();
+        else if (e.key === 'ArrowLeft') prevStep();
+      });
+      // Reposition on resize
+      window.addEventListener('resize', function() {
+        if (tutorialEls.overlay.classList.contains('is-active')) positionTutorial(currentStep);
+      });
+      // Restart tutorial link
+      restartLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        try { localStorage.removeItem(TUTORIAL_FLAG); } catch(_) {}
+        startTutorial();
+      });
+
+      // Auto-start on first load
+      function maybeStartTutorial() {
+        var seen = false;
+        try { seen = localStorage.getItem(TUTORIAL_FLAG) === '1'; } catch (e) {}
+        if (!seen) {
+          // Small delay so reveal animations land before tutorial appears
+          setTimeout(startTutorial, prefersReducedMotion ? 0 : 800);
+        }
+      }
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() { setTimeout(showCelebration, 4000); });
+        document.addEventListener('DOMContentLoaded', maybeStartTutorial);
       } else {
-        setTimeout(showCelebration, 4000);
+        maybeStartTutorial();
       }
     })();
   </script>
