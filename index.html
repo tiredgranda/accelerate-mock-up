@@ -690,31 +690,87 @@
     .module-note { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
     .module-note-copy { margin-top: 8px; font-size: 13px; }
 
-    .module-checkbox { border: 0; background: transparent; padding: 0; flex: 0 0 auto; margin-top: 2px; }
+    .module-checkbox { border: 0; background: transparent; padding: 0; flex: 0 0 auto; margin-top: 2px; cursor: pointer; position: relative; }
+    .module-checkbox:focus-visible { outline: 0; }
+    .module-checkbox:focus-visible .checkbox-ui { outline: 2px solid var(--red); outline-offset: 3px; }
     .checkbox-ui {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 999px;
-      border: 1.5px solid #c7d1cf;
-      background: white;
+      border: 1.5px dashed #b8c2c0;
+      background: #f7faf9;
       box-shadow: 0 3px 8px rgba(17,19,28,0.04);
-      transition: transform var(--motion-checkbox) var(--ease-soft), border-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), background-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), box-shadow var(--motion-checkbox) var(--ease-standard);
+      transition: transform var(--motion-checkbox) var(--ease-soft), border-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), border-style calc(var(--motion-checkbox) - 100ms) var(--ease-standard), background-color calc(var(--motion-checkbox) - 100ms) var(--ease-standard), box-shadow var(--motion-checkbox) var(--ease-standard);
+      position: relative;
     }
-    .module-checkbox:hover .checkbox-ui { border-color: var(--red); box-shadow: 0 0 0 5px rgba(255,22,40,0.08), 0 6px 14px rgba(17,19,28,0.06); transform: translateY(-1px); }
-    .module-checkbox.checked .checkbox-ui { border-color: var(--success); background: var(--success); box-shadow: 0 0 0 5px rgba(18,183,106,0.08), 0 10px 18px rgba(18,183,106,0.12); transform: scale(1.03); }
+    /* Faint preview check inside the empty checkbox — hints at the action without overwhelming the rest state */
+    .checkbox-ui::after {
+      content: "";
+      position: absolute;
+      width: 11px;
+      height: 6px;
+      border-left: 2px solid #b8c2c0;
+      border-bottom: 2px solid #b8c2c0;
+      transform: rotate(-45deg) translate(1px, -1px);
+      opacity: 0;
+      transition: opacity var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
+    }
+    .module-checkbox:hover .checkbox-ui {
+      border-color: var(--red);
+      border-style: solid;
+      background: #fff;
+      box-shadow: 0 0 0 5px rgba(255,22,40,0.10), 0 6px 14px rgba(17,19,28,0.06);
+      transform: translateY(-1px);
+    }
+    .module-checkbox:hover .checkbox-ui::after { opacity: 1; border-color: var(--red); }
+    .module-checkbox.checked .checkbox-ui {
+      border-color: var(--success);
+      border-style: solid;
+      background: var(--success);
+      box-shadow: 0 0 0 5px rgba(18,183,106,0.08), 0 10px 18px rgba(18,183,106,0.12);
+      transform: scale(1.03);
+    }
+    .module-checkbox.checked .checkbox-ui::after { opacity: 0; }
     .checkbox-check {
       color: white;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 800;
       line-height: 1;
       transform: scale(0.55);
       opacity: 0;
       transition: transform calc(var(--motion-checkbox) - 80ms) var(--ease-out), opacity calc(var(--motion-checkbox) - 160ms) var(--ease-standard);
+      position: relative;
+      z-index: 1;
     }
     .module-checkbox.checked .checkbox-check { transform: scale(1); opacity: 1; }
+    /* Floating "Mark complete" hint label on hover */
+    .checkbox-hint {
+      position: absolute;
+      top: 50%;
+      right: calc(100% + 10px);
+      transform: translateY(-50%) translateX(4px);
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      color: var(--red);
+      background: #fff;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,22,40,0.20);
+      box-shadow: 0 4px 12px rgba(17,19,28,0.08);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+    }
+    .module-checkbox:hover .checkbox-hint, .module-checkbox:focus-visible .checkbox-hint {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+    .module-checkbox.checked .checkbox-hint { display: none; }
 
     .module-copy { margin-top: 12px; font-size: 14px; }
     .module-actions { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -1847,7 +1903,8 @@
           <div class="module-content">
             <div class="module-title-row">
               <h4 class="module-title">${module.title}</h4>
-              <button class="module-checkbox ${checked ? 'checked' : ''}" type="button" data-module-toggle="${key}" aria-pressed="${checked ? 'true' : 'false'}" aria-label="${checked ? 'Mark module incomplete' : 'Mark module complete'}">
+              <button class="module-checkbox ${checked ? 'checked' : ''}" type="button" data-module-toggle="${key}" aria-pressed="${checked ? 'true' : 'false'}" aria-label="${checked ? 'Mark module incomplete' : 'Mark module complete'}" title="${checked ? 'Mark this module incomplete' : 'Click to mark this module complete'}">
+                <span class="checkbox-hint">${checked ? '' : 'Mark complete'}</span>
                 <span class="checkbox-ui"><span class="checkbox-check">✓</span></span>
               </button>
             </div>
@@ -2530,7 +2587,7 @@
           placement: 'bottom'
         },
         {
-          anchor: '#before',
+          anchor: '#before .section-head',
           title: 'Work through each phase',
           body: 'Each phase contains modules with everything you need: guides, templates, and resources curated for that stage of your onboarding.',
           placement: 'bottom'
@@ -2583,29 +2640,49 @@
           return;
         }
 
-        var rect = anchor.getBoundingClientRect();
         // Force-reveal all ancestor .reveal elements so the highlight has visible content
         var node = anchor;
         while (node && node !== document.body) {
           if (node.classList && node.classList.contains('reveal')) node.classList.add('is-visible');
           node = node.parentElement;
         }
-        // Also reveal direct .reveal children inside the anchor
         if (anchor.querySelectorAll) {
           anchor.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
         }
-        // Mid-visible test: any meaningful portion of anchor in viewport (cap recursion at 1)
-        var midVisible = rect.bottom > 100 && rect.top < window.innerHeight - 100;
-        if (!midVisible && scrollAttempt < 1) {
-          anchor.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-          setTimeout(function() { positionTutorial(stepIndex, scrollAttempt + 1); }, prefersReducedMotion ? 0 : 380);
-          return;
+
+        // Initial rect — used to decide if we need to scroll
+        var rect = anchor.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var midVisible = rect.bottom > 100 && rect.top < vh - 100;
+
+        // If anchor isn't comfortably visible, scroll INSTANTLY so the rect is fresh
+        // (smooth scroll caused race conditions where the spotlight was positioned mid-scroll).
+        // For very tall elements we want the TOP visible (so the user sees the start of it);
+        // for normal-size elements we center.
+        if (!midVisible) {
+          var anchorH = rect.height;
+          var blockMode = anchorH > vh * 0.7 ? 'start' : 'center';
+          anchor.scrollIntoView({ behavior: 'instant', block: blockMode });
+          // Add some padding under the sticky rail when anchor is at top of viewport
+          if (blockMode === 'start') {
+            window.scrollBy({ top: -120, behavior: 'instant' });
+          }
+          rect = anchor.getBoundingClientRect();
         }
 
-        // Use only the on-screen portion for spotlight (clip to viewport)
-        var clipTop = Math.max(rect.top, 0);
+        // For elements taller than the viewport — clamp the spotlight to a meaningful chunk
+        // (the top of the element + about 60% of viewport height) so the tooltip has room below.
+        var spotlightTop = rect.top;
+        var spotlightBottom = rect.bottom;
+        var maxSpotlightHeight = Math.min(rect.height, vh * 0.55);
+        if (rect.height > vh * 0.7) {
+          spotlightTop = Math.max(rect.top, 0);
+          spotlightBottom = spotlightTop + maxSpotlightHeight;
+        }
+
+        var clipTop = Math.max(spotlightTop, 0);
         var clipLeft = Math.max(rect.left, 0);
-        var clipBottom = Math.min(rect.bottom, window.innerHeight);
+        var clipBottom = Math.min(spotlightBottom, vh);
         var clipRight = Math.min(rect.right, window.innerWidth);
         var pad = 8;
 
@@ -2615,22 +2692,42 @@
         tutorialEls.spotlight.style.width = (clipRight - clipLeft + pad * 2) + 'px';
         tutorialEls.spotlight.style.height = (clipBottom - clipTop + pad * 2) + 'px';
 
-        // Tooltip placement: prefer below, else above, else centered fallback
+        // Tooltip placement: prefer below, then above, then beside, then centered
         var tooltipH = tutorialEls.tooltip.offsetHeight;
         var tooltipW = tutorialEls.tooltip.offsetWidth;
-        var spaceBelow = window.innerHeight - clipBottom;
+        var spaceBelow = vh - clipBottom;
         var spaceAbove = clipTop;
-        var placement, top;
-        if (spaceBelow > tooltipH + 24) { placement = 'bottom'; top = clipBottom + 14; }
-        else if (spaceAbove > tooltipH + 24) { placement = 'top'; top = clipTop - tooltipH - 14; }
-        else { placement = 'center'; top = (window.innerHeight - tooltipH) / 2; }
-        // Hard clamp to viewport — guarantees tooltip is always visible even if smooth scroll
-        // hasn't finished by the time positionTutorial runs.
-        top = Math.max(12, Math.min(top, window.innerHeight - tooltipH - 12));
-        tutorialEls.tooltip.setAttribute('data-placement', placement);
+        var spaceRight = window.innerWidth - clipRight;
+        var spaceLeft = clipLeft;
+        var placement, top, leftRaw;
 
-        var leftRaw = (placement === 'center') ? (window.innerWidth - tooltipW) / 2 : clipLeft;
+        if (spaceBelow > tooltipH + 24) {
+          placement = 'bottom';
+          top = clipBottom + 14;
+          leftRaw = clipLeft;
+        } else if (spaceAbove > tooltipH + 24) {
+          placement = 'top';
+          top = clipTop - tooltipH - 14;
+          leftRaw = clipLeft;
+        } else if (spaceRight > tooltipW + 24) {
+          // Beside (right of element) — keeps anchor visible without overlap
+          placement = 'right';
+          top = Math.max(12, Math.min(clipTop, vh - tooltipH - 12));
+          leftRaw = clipRight + 14;
+        } else if (spaceLeft > tooltipW + 24) {
+          placement = 'left';
+          top = Math.max(12, Math.min(clipTop, vh - tooltipH - 12));
+          leftRaw = clipLeft - tooltipW - 14;
+        } else {
+          placement = 'center';
+          top = (vh - tooltipH) / 2;
+          leftRaw = (window.innerWidth - tooltipW) / 2;
+        }
+
+        // Hard clamp to viewport — defense in depth
+        top = Math.max(12, Math.min(top, vh - tooltipH - 12));
         var left = Math.max(12, Math.min(leftRaw, window.innerWidth - tooltipW - 12));
+        tutorialEls.tooltip.setAttribute('data-placement', placement);
         tutorialEls.tooltip.style.top = top + 'px';
         tutorialEls.tooltip.style.left = left + 'px';
       }
