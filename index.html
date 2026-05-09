@@ -474,6 +474,13 @@
 
     .main { display: grid; gap: 24px; }
     .section-shell, .addons-shell, .final-journey-shell, .review-notes-shell { position: relative; isolation: isolate; }
+    .section-shell, .final-journey-shell, .addons-shell { scroll-margin-top: 16px; }
+    @media (min-width: 1024px) {
+      .section-shell, .final-journey-shell, .addons-shell { scroll-margin-top: 296px; }
+    }
+    @media (max-width: 1023px) {
+      .section-shell, .final-journey-shell, .addons-shell { scroll-margin-top: 200px; }
+    }
     .section-shell.phase-complete::before {
       content: "";
       position: absolute;
@@ -776,20 +783,20 @@
       transition: box-shadow var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
     }
     .journey-rail.is-stuck { box-shadow: var(--shadow-md); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
-    .journey-rail-inner { padding: 22px 28px 24px; }
-    .journey-rail-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 14px; }
-    .journey-rail-eyebrow { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
-    .journey-rail-title { margin: 6px 0 0; font-size: 22px; font-weight: 700; letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); color: var(--black); }
+    .journey-rail-inner { padding: 28px 36px 32px; }
+    .journey-rail-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+    .journey-rail-eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .journey-rail-title { margin: 8px 0 0; font-size: clamp(24px, 3vw, 30px); font-weight: 700; letter-spacing: var(--tracking-tight); line-height: var(--leading-snug); color: var(--black); }
     .journey-rail-summary { text-align: right; }
-    .journey-rail-percent { font-size: 28px; font-weight: 700; line-height: 1; color: var(--black); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
-    .journey-rail-percent-label { margin-top: 4px; font-size: 11px; font-weight: 600; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .journey-rail-percent { font-size: 36px; font-weight: 700; line-height: 1; color: var(--black); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
+    .journey-rail-percent-label { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
     .journey-rail-bar {
       position: relative;
-      height: 6px;
+      height: 8px;
       background: var(--gray-2);
       border-radius: 999px;
       overflow: hidden;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
     .journey-rail-fill {
       height: 100%;
@@ -798,13 +805,13 @@
       transition: width 720ms var(--ease-out);
     }
     .journey-rail-fill.success { background: linear-gradient(90deg, var(--success), #3ccf89); }
-    .journey-rail-segments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .journey-rail-segments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .rail-segment {
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      padding: 14px 16px;
+      gap: 6px;
+      padding: 18px 20px;
       background: transparent;
       border: 1px solid var(--gray-3);
       border-radius: var(--radius-sm);
@@ -816,26 +823,26 @@
     .rail-segment:hover { border-color: var(--gray-4); transform: translateY(var(--hover-lift)); box-shadow: var(--shadow-sm); }
     .rail-segment:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
     .rail-segment.is-active { border-color: var(--red); background: linear-gradient(180deg, #fff8f8, #ffffff); }
-    .rail-segment.is-active::before { content: ""; position: absolute; left: 16px; right: 16px; bottom: -1px; height: 2px; background: var(--red); border-radius: 2px; }
+    .rail-segment.is-active::before { content: ""; position: absolute; left: 20px; right: 20px; bottom: -1px; height: 2px; background: var(--red); border-radius: 2px; }
     .rail-segment.is-complete { border-color: var(--success-border); background: linear-gradient(180deg, #f8fdfb, #ffffff); }
     .rail-segment.is-complete .rail-seg-dot { background: var(--success); border-color: var(--success); color: #fff; }
     .rail-segment.is-complete.is-active::before { background: var(--success); }
-    .rail-seg-row { display: flex; align-items: center; gap: 10px; }
+    .rail-seg-row { display: flex; align-items: center; gap: 12px; }
     .rail-seg-dot {
-      width: 22px; height: 22px;
+      width: 28px; height: 28px;
       flex-shrink: 0;
       border-radius: 999px;
       border: 1.5px solid var(--gray-4);
       background: #fff;
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800;
+      font-size: 12px; font-weight: 800;
       color: var(--gray-6);
       transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out);
     }
     .rail-segment.is-active .rail-seg-dot:not(.is-complete) { border-color: var(--red); color: var(--red); }
-    .rail-seg-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
-    .rail-seg-title { font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: -0.005em; }
-    .rail-seg-percent { margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--gray-6); font-variant-numeric: tabular-nums; }
+    .rail-seg-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: #98A2B3; }
+    .rail-seg-title { font-size: 16px; font-weight: 700; color: var(--black); letter-spacing: -0.01em; }
+    .rail-seg-percent { margin-top: 4px; font-size: 13px; font-weight: 600; color: var(--gray-6); font-variant-numeric: tabular-nums; }
     .rail-segment.is-complete .rail-seg-percent { color: #067647; }
     .rail-segment.is-active .rail-seg-percent { color: var(--red); }
     .rail-segment.is-active.is-complete .rail-seg-percent { color: #067647; }
@@ -1008,7 +1015,7 @@
           <h1 class="hero-title">Great Starts Here</h1>
           <p class="hero-subtitle">Your one-stop guide to confidently launch your Trust Index™ survey, complete your Certification application, and find the right resources at every step.</p>
           <div class="button-row">
-            <button class="btn-primary js-tap-only" type="button">Start onboarding <span aria-hidden="true">→</span></button>
+            <button class="btn-primary" type="button" id="startOnboardingBtn">Start onboarding <span aria-hidden="true">→</span></button>
             <button class="btn-secondary js-tap-only" type="button">Watch overview</button>
           </div>
         </div>
@@ -1672,22 +1679,14 @@
         return `
           <section class="section-shell ${complete ? 'phase-complete' : ''} reveal" id="${phase.id}">
             <div class="section-head reveal">
-              <div class="section-head-grid">
-                <div>
-                  <p class="eyebrow" style="letter-spacing:.2em">${phase.eyebrow}</p>
-                  <div class="section-title-row">
-                    <h2 class="section-title">${phase.title}</h2>
-                    ${complete ? '<span class="pill success">Complete</span>' : ''}
-                  </div>
-                  <p class="section-copy">${phase.blurb}</p>
-                  ${state.phaseBanners[phase.id] ? '<div class="phase-complete-banner">✓ Phase complete — ready for next step</div>' : ''}
+              <div>
+                <p class="eyebrow" style="letter-spacing:.2em">${phase.eyebrow}</p>
+                <div class="section-title-row">
+                  <h2 class="section-title">${phase.title}</h2>
+                  ${complete ? '<span class="pill success">Complete</span>' : ''}
                 </div>
-                <div class="phase-progress-box ${complete ? 'complete' : ''} reveal">
-                  <div class="phase-progress-row"><span>Phase progress</span><span>${completion}%</span></div>
-                  <div class="progress-bar"><div class="progress-fill ${completion ? 'is-active' : ''} ${complete ? 'success' : ''}" style="width:${completion}%"></div></div>
-                  <button class="sync-link" type="button" data-phase="${phase.id}">Jump to this phase</button>
-                  ${complete ? '<div class="phase-chip" style="margin-top:12px;">Ready for next step</div>' : ''}
-                </div>
+                <p class="section-copy">${phase.blurb}</p>
+                ${state.phaseBanners[phase.id] ? '<div class="phase-complete-banner">✓ Phase complete — ready for next step</div>' : ''}
               </div>
             </div>
             <div class="section-body reveal">
@@ -1786,6 +1785,18 @@
         { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
       );
       stickyObserver.observe(els.journeyRail);
+
+      // Wire up "Start onboarding" — scroll to first phase
+      const startBtn = document.getElementById('startOnboardingBtn');
+      if (startBtn) {
+        startBtn.addEventListener('click', () => {
+          const firstPhase = document.getElementById(phases[0].id);
+          if (firstPhase) {
+            firstPhase.scrollIntoView({ behavior: state.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+            setViewedPhase(phases[0].id, false);
+          }
+        });
+      }
 
       els.main.addEventListener('click', (event) => {
         const moduleToggle = event.target.closest('[data-module-toggle]');
